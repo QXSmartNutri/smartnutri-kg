@@ -1,77 +1,89 @@
 {
   "$schema": "https://smartnutri.org/schemas/standards",
-  "version": "1.0.0",
-  "description": "Đơn vị đo lường chuẩn cho từng loại nutrient trong SmartNutri KG",
+  "version": "1.1.0",
+  "description": "Đơn vị đo lường chuẩn cho toàn bộ nutrient trong SmartNutri KG",
+  "source": "IOM Dietary Reference Intakes",
   "units": {
     "mass": {
-      "g":  { "label": "gram",      "factor_to_mg": 1000 },
-      "mg": { "label": "milligram", "factor_to_mg": 1 },
-      "μg": { "label": "microgram", "factor_to_mg": 0.001 },
+      "g":  { "label": "gram",      "factor_to_mg": 1000   },
+      "mg": { "label": "milligram", "factor_to_mg": 1      },
+      "μg": { "label": "microgram", "factor_to_mg": 0.001  },
       "ng": { "label": "nanogram",  "factor_to_mg": 0.000001 }
     },
+    "energy": {
+      "kcal": { "label": "Kilocalorie", "factor_to_kJ": 4.184 },
+      "kJ":   { "label": "Kilojoule",   "factor_to_kJ": 1     }
+    },
     "activity": {
-      "IU":   { "label": "International Unit",         "note": "Vitamin A, D, E" },
-      "RAE":  { "label": "Retinol Activity Equivalent", "note": "Vitamin A" },
-      "NE":   { "label": "Niacin Equivalent",           "note": "Vitamin B3" },
-      "DFE":  { "label": "Dietary Folate Equivalent",   "note": "Vitamin B9" },
-      "kcal": { "label": "Kilocalorie",                 "note": "Energy" },
-      "kJ":   { "label": "Kilojoule",                   "note": "Energy" }
+      "RAE": { "label": "Retinol Activity Equivalent", "note": "Vitamin A"  },
+      "NE":  { "label": "Niacin Equivalent",           "note": "Vitamin B3" },
+      "DFE": { "label": "Dietary Folate Equivalent",   "note": "Vitamin B9" },
+      "IU":  { "label": "International Unit",          "note": "Vitamin A, D, E (cũ)" }
     }
   },
-  "nutrient_default_units": {
+  "nutrient_units": {
     "energy": {
-      "NUT_energy": "kcal"
+      "NUT_energy": { "unit": "kcal", "alt_unit": "kJ" }
     },
     "macronutrients": {
-      "NUT_carbohydrate_total": "g",
-      "NUT_sugar_total":        "g",
-      "NUT_starch":             "g",
-      "NUT_fiber":              "g",
-      "NUT_protein":            "g",
-      "NUT_fat_total":          "g"
+      "NUT_carbohydrate_total": { "unit": "g" },
+      "NUT_sugar_total":        { "unit": "g" },
+      "NUT_starch":             { "unit": "g" },
+      "NUT_fiber":              { "unit": "g" },
+      "NUT_protein":            { "unit": "g" },
+      "NUT_fat_total":          { "unit": "g" }
     },
     "vitamins": {
-      "NUT_vitamin_a":   "μg RAE",
-      "NUT_vitamin_d":   "μg",
-      "NUT_vitamin_e":   "mg",
-      "NUT_vitamin_k":   "μg",
-      "NUT_vitamin_c":   "mg",
-      "NUT_vitamin_b1":  "mg",
-      "NUT_vitamin_b2":  "mg",
-      "NUT_vitamin_b3":  "mg NE",
-      "NUT_vitamin_b4":  "mg",
-      "NUT_vitamin_b5":  "mg",
-      "NUT_vitamin_b6":  "mg",
-      "NUT_vitamin_b7":  "μg",
-      "NUT_vitamin_b9":  "μg DFE",
-      "NUT_vitamin_b12": "μg"
+      "NUT_vitamin_a":   { "unit": "μg RAE" },
+      "NUT_vitamin_d":   { "unit": "μg"     },
+      "NUT_vitamin_e":   { "unit": "mg"     },
+      "NUT_vitamin_k":   { "unit": "μg"     },
+      "NUT_vitamin_c":   { "unit": "mg"     },
+      "NUT_vitamin_b1":  { "unit": "mg"     },
+      "NUT_vitamin_b2":  { "unit": "mg"     },
+      "NUT_vitamin_b3":  { "unit": "mg NE"  },
+      "NUT_vitamin_b5":  { "unit": "mg"     },
+      "NUT_vitamin_b6":  { "unit": "mg"     },
+      "NUT_vitamin_b7":  { "unit": "μg"     },
+      "NUT_vitamin_b9":  { "unit": "μg DFE" },
+      "NUT_vitamin_b12": { "unit": "μg"     }
     },
     "minerals": {
-      "NUT_calcium":    "mg",
-      "NUT_iron":       "mg",
-      "NUT_magnesium":  "mg",
-      "NUT_phosphorus": "mg",
-      "NUT_potassium":  "mg",
-      "NUT_sodium":     "mg",
-      "NUT_zinc":       "mg",
-      "NUT_copper":     "mg",
-      "NUT_manganese":  "mg",
-      "NUT_selenium":   "μg",
-      "NUT_iodine":     "μg",
-      "NUT_chromium":   "μg",
-      "NUT_molybdenum": "μg",
-      "NUT_fluoride":   "mg"
+      "NUT_calcium":    { "unit": "mg" },
+      "NUT_iron":       { "unit": "mg" },
+      "NUT_magnesium":  { "unit": "mg" },
+      "NUT_phosphorus": { "unit": "mg" },
+      "NUT_potassium":  { "unit": "mg" },
+      "NUT_sodium":     { "unit": "mg" },
+      "NUT_zinc":       { "unit": "mg" },
+      "NUT_copper":     { "unit": "mg" },
+      "NUT_manganese":  { "unit": "mg" },
+      "NUT_selenium":   { "unit": "μg" },
+      "NUT_iodine":     { "unit": "μg" },
+      "NUT_chromium":   { "unit": "μg" },
+      "NUT_molybdenum": { "unit": "μg" },
+      "NUT_sulfur":     { "unit": "mg" },
+      "NUT_chloride":   { "unit": "mg" },
+      "NUT_fluoride":   { "unit": "mg" }
     },
     "amino_acids_eaa": {
-      "NUT_histidine":     "mg",
-      "NUT_isoleucine":    "mg",
-      "NUT_leucine":       "mg",
-      "NUT_lysine":        "mg",
-      "NUT_methionine":    "mg",
-      "NUT_phenylalanine": "mg",
-      "NUT_threonine":     "mg",
-      "NUT_tryptophan":    "mg",
-      "NUT_valine":        "mg"
+      "NUT_histidine":     { "unit": "mg", "alt_unit": "mg/kg/day" },
+      "NUT_isoleucine":    { "unit": "mg", "alt_unit": "mg/kg/day" },
+      "NUT_leucine":       { "unit": "mg", "alt_unit": "mg/kg/day" },
+      "NUT_lysine":        { "unit": "mg", "alt_unit": "mg/kg/day" },
+      "NUT_methionine":    { "unit": "mg", "alt_unit": "mg/kg/day", "note": "Tính chung với Cysteine" },
+      "NUT_phenylalanine": { "unit": "mg", "alt_unit": "mg/kg/day", "note": "Tính chung với Tyrosine" },
+      "NUT_threonine":     { "unit": "mg", "alt_unit": "mg/kg/day" },
+      "NUT_tryptophan":    { "unit": "mg", "alt_unit": "mg/kg/day" },
+      "NUT_valine":        { "unit": "mg", "alt_unit": "mg/kg/day" }
     }
+  },
+  "summary": {
+    "energy": 1,
+    "macronutrients": 6,
+    "vitamins": 13,
+    "minerals": 16,
+    "amino_acids_eaa": 9,
+    "total": 45
   }
 }
