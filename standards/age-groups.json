@@ -1,1 +1,30 @@
-
+{
+  "$schema": "https://smartnutri.org/schemas/standards",
+  "version": "1.1.0",
+  "description": "Định nghĩa nhóm tuổi chuẩn theo IOM/WHO. Trẻ sơ sinh <1 tuổi dùng AI riêng — không nằm trong bảng RDA/UL.",
+  "source": "Institute of Medicine (IOM) Dietary Reference Intakes",
+  "age_groups": [
+    { "id": "AG_CHILD_1_3Y",   "label_vi": "Trẻ 1–3 tuổi",                        "label_en": "Children 1–3 years",          "min_years": 1,  "max_years": 3,  "sex": "ALL" },
+    { "id": "AG_CHILD_4_8Y",   "label_vi": "Trẻ 4–8 tuổi",                        "label_en": "Children 4–8 years",          "min_years": 4,  "max_years": 8,  "sex": "ALL" },
+    { "id": "AG_CHILD_9_13Y",  "label_vi": "Trẻ 9–13 tuổi",                       "label_en": "Children 9–13 years",         "min_years": 9,  "max_years": 13, "sex": "ALL" },
+    { "id": "AG_TEEN_14_18Y_M","label_vi": "Nam 14–18 tuổi",                       "label_en": "Males 14–18 years",           "min_years": 14, "max_years": 18, "sex": "M"   },
+    { "id": "AG_TEEN_14_18Y_F","label_vi": "Nữ 14–18 tuổi",                        "label_en": "Females 14–18 years",         "min_years": 14, "max_years": 18, "sex": "F"   },
+    { "id": "AG_ADULT_19_30Y_M","label_vi": "Nam 19–30 tuổi",                      "label_en": "Males 19–30 years",           "min_years": 19, "max_years": 30, "sex": "M"   },
+    { "id": "AG_ADULT_19_30Y_F","label_vi": "Nữ 19–30 tuổi",                       "label_en": "Females 19–30 years",         "min_years": 19, "max_years": 30, "sex": "F"   },
+    { "id": "AG_ADULT_31_50Y_M","label_vi": "Nam 31–50 tuổi",                      "label_en": "Males 31–50 years",           "min_years": 31, "max_years": 50, "sex": "M"   },
+    { "id": "AG_ADULT_31_50Y_F","label_vi": "Nữ 31–50 tuổi",                       "label_en": "Females 31–50 years",         "min_years": 31, "max_years": 50, "sex": "F"   },
+    { "id": "AG_ADULT_51_70Y_M","label_vi": "Nam 51–70 tuổi",                      "label_en": "Males 51–70 years",           "min_years": 51, "max_years": 70, "sex": "M"   },
+    { "id": "AG_ADULT_51_70Y_F","label_vi": "Nữ 51–70 tuổi",                       "label_en": "Females 51–70 years",         "min_years": 51, "max_years": 70, "sex": "F"   },
+    { "id": "AG_ELDER_70Y_M",  "label_vi": "Nam > 70 tuổi",                        "label_en": "Males > 70 years",            "min_years": 71, "max_years": null,"sex": "M"  },
+    { "id": "AG_ELDER_70Y_F",  "label_vi": "Nữ > 70 tuổi",                         "label_en": "Females > 70 years",          "min_years": 71, "max_years": null,"sex": "F"  },
+    { "id": "AG_PREGNANT",     "label_vi": "Phụ nữ mang thai (19–50 tuổi)",        "label_en": "Pregnant women (19–50 years)","min_years": 19, "max_years": 50, "sex": "F", "special": true },
+    { "id": "AG_LACTATING",    "label_vi": "Phụ nữ cho con bú (19–50 tuổi)",       "label_en": "Lactating women (19–50 years)","min_years": 19,"max_years": 50, "sex": "F", "special": true }
+  ],
+  "total": 15,
+  "note": "Trẻ sơ sinh 0–6 tháng và 7–12 tháng dùng AI riêng — không có RDA/UL từ thực phẩm.",
+  "sex_codes": {
+    "M": "Nam (Male)",
+    "F": "Nữ (Female)",
+    "ALL": "Tất cả (All)"
+  }
+}
