@@ -1,1 +1,254 @@
-
+{
+  "$schema": "https://smartnutri.org/schemas/standards",
+  "version": "1.1.0",
+  "description": "Tolerable Upper Intake Level (UL) theo IOM — 15 nhóm tuổi, 45 nutrients.",
+  "source": "Institute of Medicine. Dietary Reference Intakes. National Academies Press.",
+  "legend": {
+    "UL": "Tolerable Upper Intake Level — ngưỡng tối đa an toàn, vượt quá có nguy cơ độc tính",
+    "null": "Chưa xác định UL — không có bằng chứng độc tính ở liều cao từ thực phẩm"
+  },
+  "age_groups": [
+    "AG_CHILD_1_3Y","AG_CHILD_4_8Y","AG_CHILD_9_13Y",
+    "AG_TEEN_14_18Y_M","AG_TEEN_14_18Y_F",
+    "AG_ADULT_19_30Y_M","AG_ADULT_19_30Y_F",
+    "AG_ADULT_31_50Y_M","AG_ADULT_31_50Y_F",
+    "AG_ADULT_51_70Y_M","AG_ADULT_51_70Y_F",
+    "AG_ELDER_70Y_M","AG_ELDER_70Y_F",
+    "AG_PREGNANT","AG_LACTATING"
+  ],
+  "nutrients": {
+    "macronutrients": {
+      "NUT_carbohydrate_total": { "ul": null, "note": "Không có UL" },
+      "NUT_sugar_total":        { "ul": null, "note": "WHO: <10% tổng năng lượng — không phải UL chính thức" },
+      "NUT_starch":             { "ul": null, "note": "Không có UL" },
+      "NUT_fiber":              { "ul": null, "note": "Không có UL từ thực phẩm" },
+      "NUT_protein":            { "ul": null, "note": "Không có UL chính thức — thận trọng >2g/kg/day" },
+      "NUT_fat_total":          { "ul": null, "note": "Không có UL — AMDR: 20–35% năng lượng" }
+    },
+    "vitamins": {
+      "NUT_vitamin_a": {
+        "unit": "μg/day", "note": "UL tính theo Preformed Vitamin A (Retinol) — không áp dụng cho Beta-carotene",
+        "values": {
+          "AG_CHILD_1_3Y": 600, "AG_CHILD_4_8Y": 900, "AG_CHILD_9_13Y": 1700,
+          "AG_TEEN_14_18Y_M": 2800, "AG_TEEN_14_18Y_F": 2800,
+          "AG_ADULT_19_30Y_M": 3000, "AG_ADULT_19_30Y_F": 3000,
+          "AG_ADULT_31_50Y_M": 3000, "AG_ADULT_31_50Y_F": 3000,
+          "AG_ADULT_51_70Y_M": 3000, "AG_ADULT_51_70Y_F": 3000,
+          "AG_ELDER_70Y_M": 3000, "AG_ELDER_70Y_F": 3000,
+          "AG_PREGNANT": 2800, "AG_LACTATING": 2800 }},
+      "NUT_vitamin_d": {
+        "unit": "μg/day",
+        "values": {
+          "AG_CHILD_1_3Y": 63, "AG_CHILD_4_8Y": 75, "AG_CHILD_9_13Y": 100,
+          "AG_TEEN_14_18Y_M": 100, "AG_TEEN_14_18Y_F": 100,
+          "AG_ADULT_19_30Y_M": 100, "AG_ADULT_19_30Y_F": 100,
+          "AG_ADULT_31_50Y_M": 100, "AG_ADULT_31_50Y_F": 100,
+          "AG_ADULT_51_70Y_M": 100, "AG_ADULT_51_70Y_F": 100,
+          "AG_ELDER_70Y_M": 100, "AG_ELDER_70Y_F": 100,
+          "AG_PREGNANT": 100, "AG_LACTATING": 100 }},
+      "NUT_vitamin_e": {
+        "unit": "mg/day", "note": "UL chỉ áp dụng cho alpha-tocopherol từ bổ sung",
+        "values": {
+          "AG_CHILD_1_3Y": 200, "AG_CHILD_4_8Y": 300, "AG_CHILD_9_13Y": 600,
+          "AG_TEEN_14_18Y_M": 800, "AG_TEEN_14_18Y_F": 800,
+          "AG_ADULT_19_30Y_M": 1000, "AG_ADULT_19_30Y_F": 1000,
+          "AG_ADULT_31_50Y_M": 1000, "AG_ADULT_31_50Y_F": 1000,
+          "AG_ADULT_51_70Y_M": 1000, "AG_ADULT_51_70Y_F": 1000,
+          "AG_ELDER_70Y_M": 1000, "AG_ELDER_70Y_F": 1000,
+          "AG_PREGNANT": 800, "AG_LACTATING": 800 }},
+      "NUT_vitamin_k":   { "ul": null, "note": "Chưa xác định UL — không có bằng chứng độc tính từ thực phẩm" },
+      "NUT_vitamin_c": {
+        "unit": "mg/day",
+        "values": {
+          "AG_CHILD_1_3Y": 400, "AG_CHILD_4_8Y": 650, "AG_CHILD_9_13Y": 1200,
+          "AG_TEEN_14_18Y_M": 1800, "AG_TEEN_14_18Y_F": 1800,
+          "AG_ADULT_19_30Y_M": 2000, "AG_ADULT_19_30Y_F": 2000,
+          "AG_ADULT_31_50Y_M": 2000, "AG_ADULT_31_50Y_F": 2000,
+          "AG_ADULT_51_70Y_M": 2000, "AG_ADULT_51_70Y_F": 2000,
+          "AG_ELDER_70Y_M": 2000, "AG_ELDER_70Y_F": 2000,
+          "AG_PREGNANT": 1800, "AG_LACTATING": 1800 }},
+      "NUT_vitamin_b1":  { "ul": null, "note": "Không có UL — không có bằng chứng độc tính từ thực phẩm" },
+      "NUT_vitamin_b2":  { "ul": null, "note": "Không có UL — không có bằng chứng độc tính từ thực phẩm" },
+      "NUT_vitamin_b3": {
+        "unit": "mg/day", "note": "UL tính theo Niacin tổng hợp — không áp dụng cho Niacin từ thực phẩm",
+        "values": {
+          "AG_CHILD_1_3Y": 10, "AG_CHILD_4_8Y": 15, "AG_CHILD_9_13Y": 20,
+          "AG_TEEN_14_18Y_M": 30, "AG_TEEN_14_18Y_F": 30,
+          "AG_ADULT_19_30Y_M": 35, "AG_ADULT_19_30Y_F": 35,
+          "AG_ADULT_31_50Y_M": 35, "AG_ADULT_31_50Y_F": 35,
+          "AG_ADULT_51_70Y_M": 35, "AG_ADULT_51_70Y_F": 35,
+          "AG_ELDER_70Y_M": 35, "AG_ELDER_70Y_F": 35,
+          "AG_PREGNANT": 30, "AG_LACTATING": 30 }},
+      "NUT_vitamin_b5":  { "ul": null, "note": "Không có UL" },
+      "NUT_vitamin_b6": {
+        "unit": "mg/day",
+        "values": {
+          "AG_CHILD_1_3Y": 30, "AG_CHILD_4_8Y": 40, "AG_CHILD_9_13Y": 60,
+          "AG_TEEN_14_18Y_M": 80, "AG_TEEN_14_18Y_F": 80,
+          "AG_ADULT_19_30Y_M": 100, "AG_ADULT_19_30Y_F": 100,
+          "AG_ADULT_31_50Y_M": 100, "AG_ADULT_31_50Y_F": 100,
+          "AG_ADULT_51_70Y_M": 100, "AG_ADULT_51_70Y_F": 100,
+          "AG_ELDER_70Y_M": 100, "AG_ELDER_70Y_F": 100,
+          "AG_PREGNANT": 80, "AG_LACTATING": 80 }},
+      "NUT_vitamin_b7":  { "ul": null, "note": "Không có UL" },
+      "NUT_vitamin_b9": {
+        "unit": "μg/day", "note": "UL tính theo Folic acid tổng hợp — không áp dụng cho Folate từ thực phẩm",
+        "values": {
+          "AG_CHILD_1_3Y": 300, "AG_CHILD_4_8Y": 400, "AG_CHILD_9_13Y": 600,
+          "AG_TEEN_14_18Y_M": 800, "AG_TEEN_14_18Y_F": 800,
+          "AG_ADULT_19_30Y_M": 1000, "AG_ADULT_19_30Y_F": 1000,
+          "AG_ADULT_31_50Y_M": 1000, "AG_ADULT_31_50Y_F": 1000,
+          "AG_ADULT_51_70Y_M": 1000, "AG_ADULT_51_70Y_F": 1000,
+          "AG_ELDER_70Y_M": 1000, "AG_ELDER_70Y_F": 1000,
+          "AG_PREGNANT": 800, "AG_LACTATING": 800 }},
+      "NUT_vitamin_b12": { "ul": null, "note": "Không có UL — không có bằng chứng độc tính" }
+    },
+    "minerals": {
+      "NUT_calcium": {
+        "unit": "mg/day",
+        "values": {
+          "AG_CHILD_1_3Y": 2500, "AG_CHILD_4_8Y": 2500, "AG_CHILD_9_13Y": 3000,
+          "AG_TEEN_14_18Y_M": 3000, "AG_TEEN_14_18Y_F": 3000,
+          "AG_ADULT_19_30Y_M": 2500, "AG_ADULT_19_30Y_F": 2500,
+          "AG_ADULT_31_50Y_M": 2500, "AG_ADULT_31_50Y_F": 2500,
+          "AG_ADULT_51_70Y_M": 2000, "AG_ADULT_51_70Y_F": 2000,
+          "AG_ELDER_70Y_M": 2000, "AG_ELDER_70Y_F": 2000,
+          "AG_PREGNANT": 3000, "AG_LACTATING": 3000 }},
+      "NUT_iron": {
+        "unit": "mg/day",
+        "values": {
+          "AG_CHILD_1_3Y": 40, "AG_CHILD_4_8Y": 40, "AG_CHILD_9_13Y": 40,
+          "AG_TEEN_14_18Y_M": 45, "AG_TEEN_14_18Y_F": 45,
+          "AG_ADULT_19_30Y_M": 45, "AG_ADULT_19_30Y_F": 45,
+          "AG_ADULT_31_50Y_M": 45, "AG_ADULT_31_50Y_F": 45,
+          "AG_ADULT_51_70Y_M": 45, "AG_ADULT_51_70Y_F": 45,
+          "AG_ELDER_70Y_M": 45, "AG_ELDER_70Y_F": 45,
+          "AG_PREGNANT": 45, "AG_LACTATING": 45 }},
+      "NUT_magnesium": {
+        "unit": "mg/day", "note": "UL chỉ áp dụng cho Magnesium từ bổ sung — không từ thực phẩm",
+        "values": {
+          "AG_CHILD_1_3Y": 65, "AG_CHILD_4_8Y": 110, "AG_CHILD_9_13Y": 350,
+          "AG_TEEN_14_18Y_M": 350, "AG_TEEN_14_18Y_F": 350,
+          "AG_ADULT_19_30Y_M": 350, "AG_ADULT_19_30Y_F": 350,
+          "AG_ADULT_31_50Y_M": 350, "AG_ADULT_31_50Y_F": 350,
+          "AG_ADULT_51_70Y_M": 350, "AG_ADULT_51_70Y_F": 350,
+          "AG_ELDER_70Y_M": 350, "AG_ELDER_70Y_F": 350,
+          "AG_PREGNANT": 350, "AG_LACTATING": 350 }},
+      "NUT_phosphorus": {
+        "unit": "mg/day",
+        "values": {
+          "AG_CHILD_1_3Y": 3000, "AG_CHILD_4_8Y": 3000, "AG_CHILD_9_13Y": 4000,
+          "AG_TEEN_14_18Y_M": 4000, "AG_TEEN_14_18Y_F": 4000,
+          "AG_ADULT_19_30Y_M": 4000, "AG_ADULT_19_30Y_F": 4000,
+          "AG_ADULT_31_50Y_M": 4000, "AG_ADULT_31_50Y_F": 4000,
+          "AG_ADULT_51_70Y_M": 4000, "AG_ADULT_51_70Y_F": 4000,
+          "AG_ELDER_70Y_M": 3000, "AG_ELDER_70Y_F": 3000,
+          "AG_PREGNANT": 3500, "AG_LACTATING": 4000 }},
+      "NUT_potassium": { "ul": null, "note": "Không có UL từ thực phẩm" },
+      "NUT_sodium": {
+        "unit": "mg/day", "note": "CDRR — Chronic Disease Risk Reduction intake",
+        "values": {
+          "AG_CHILD_1_3Y": 1200, "AG_CHILD_4_8Y": 1500, "AG_CHILD_9_13Y": 1800,
+          "AG_TEEN_14_18Y_M": 2300, "AG_TEEN_14_18Y_F": 2300,
+          "AG_ADULT_19_30Y_M": 2300, "AG_ADULT_19_30Y_F": 2300,
+          "AG_ADULT_31_50Y_M": 2300, "AG_ADULT_31_50Y_F": 2300,
+          "AG_ADULT_51_70Y_M": 2300, "AG_ADULT_51_70Y_F": 2300,
+          "AG_ELDER_70Y_M": 2300, "AG_ELDER_70Y_F": 2300,
+          "AG_PREGNANT": 2300, "AG_LACTATING": 2300 }},
+      "NUT_zinc": {
+        "unit": "mg/day",
+        "values": {
+          "AG_CHILD_1_3Y": 7, "AG_CHILD_4_8Y": 12, "AG_CHILD_9_13Y": 23,
+          "AG_TEEN_14_18Y_M": 34, "AG_TEEN_14_18Y_F": 34,
+          "AG_ADULT_19_30Y_M": 40, "AG_ADULT_19_30Y_F": 40,
+          "AG_ADULT_31_50Y_M": 40, "AG_ADULT_31_50Y_F": 40,
+          "AG_ADULT_51_70Y_M": 40, "AG_ADULT_51_70Y_F": 40,
+          "AG_ELDER_70Y_M": 40, "AG_ELDER_70Y_F": 40,
+          "AG_PREGNANT": 34, "AG_LACTATING": 34 }},
+      "NUT_copper": {
+        "unit": "μg/day",
+        "values": {
+          "AG_CHILD_1_3Y": 1000, "AG_CHILD_4_8Y": 3000, "AG_CHILD_9_13Y": 5000,
+          "AG_TEEN_14_18Y_M": 8000, "AG_TEEN_14_18Y_F": 8000,
+          "AG_ADULT_19_30Y_M": 10000, "AG_ADULT_19_30Y_F": 10000,
+          "AG_ADULT_31_50Y_M": 10000, "AG_ADULT_31_50Y_F": 10000,
+          "AG_ADULT_51_70Y_M": 10000, "AG_ADULT_51_70Y_F": 10000,
+          "AG_ELDER_70Y_M": 10000, "AG_ELDER_70Y_F": 10000,
+          "AG_PREGNANT": 8000, "AG_LACTATING": 8000 }},
+      "NUT_manganese": {
+        "unit": "mg/day",
+        "values": {
+          "AG_CHILD_1_3Y": 2, "AG_CHILD_4_8Y": 3, "AG_CHILD_9_13Y": 6,
+          "AG_TEEN_14_18Y_M": 9, "AG_TEEN_14_18Y_F": 9,
+          "AG_ADULT_19_30Y_M": 11, "AG_ADULT_19_30Y_F": 11,
+          "AG_ADULT_31_50Y_M": 11, "AG_ADULT_31_50Y_F": 11,
+          "AG_ADULT_51_70Y_M": 11, "AG_ADULT_51_70Y_F": 11,
+          "AG_ELDER_70Y_M": 11, "AG_ELDER_70Y_F": 11,
+          "AG_PREGNANT": 9, "AG_LACTATING": 9 }},
+      "NUT_selenium": {
+        "unit": "μg/day",
+        "values": {
+          "AG_CHILD_1_3Y": 90, "AG_CHILD_4_8Y": 150, "AG_CHILD_9_13Y": 280,
+          "AG_TEEN_14_18Y_M": 400, "AG_TEEN_14_18Y_F": 400,
+          "AG_ADULT_19_30Y_M": 400, "AG_ADULT_19_30Y_F": 400,
+          "AG_ADULT_31_50Y_M": 400, "AG_ADULT_31_50Y_F": 400,
+          "AG_ADULT_51_70Y_M": 400, "AG_ADULT_51_70Y_F": 400,
+          "AG_ELDER_70Y_M": 400, "AG_ELDER_70Y_F": 400,
+          "AG_PREGNANT": 400, "AG_LACTATING": 400 }},
+      "NUT_iodine": {
+        "unit": "μg/day",
+        "values": {
+          "AG_CHILD_1_3Y": 200, "AG_CHILD_4_8Y": 300, "AG_CHILD_9_13Y": 600,
+          "AG_TEEN_14_18Y_M": 900, "AG_TEEN_14_18Y_F": 900,
+          "AG_ADULT_19_30Y_M": 1100, "AG_ADULT_19_30Y_F": 1100,
+          "AG_ADULT_31_50Y_M": 1100, "AG_ADULT_31_50Y_F": 1100,
+          "AG_ADULT_51_70Y_M": 1100, "AG_ADULT_51_70Y_F": 1100,
+          "AG_ELDER_70Y_M": 1100, "AG_ELDER_70Y_F": 1100,
+          "AG_PREGNANT": 900, "AG_LACTATING": 900 }},
+      "NUT_chromium":   { "ul": null, "note": "Không có UL" },
+      "NUT_molybdenum": {
+        "unit": "μg/day",
+        "values": {
+          "AG_CHILD_1_3Y": 300, "AG_CHILD_4_8Y": 600, "AG_CHILD_9_13Y": 1100,
+          "AG_TEEN_14_18Y_M": 1700, "AG_TEEN_14_18Y_F": 1700,
+          "AG_ADULT_19_30Y_M": 2000, "AG_ADULT_19_30Y_F": 2000,
+          "AG_ADULT_31_50Y_M": 2000, "AG_ADULT_31_50Y_F": 2000,
+          "AG_ADULT_51_70Y_M": 2000, "AG_ADULT_51_70Y_F": 2000,
+          "AG_ELDER_70Y_M": 2000, "AG_ELDER_70Y_F": 2000,
+          "AG_PREGNANT": 1700, "AG_LACTATING": 1700 }},
+      "NUT_sulfur":   { "ul": null, "note": "Không có UL chính thức từ IOM" },
+      "NUT_chloride": {
+        "unit": "mg/day",
+        "values": {
+          "AG_CHILD_1_3Y": 2300, "AG_CHILD_4_8Y": 2900, "AG_CHILD_9_13Y": 3400,
+          "AG_TEEN_14_18Y_M": 3600, "AG_TEEN_14_18Y_F": 3600,
+          "AG_ADULT_19_30Y_M": 3600, "AG_ADULT_19_30Y_F": 3600,
+          "AG_ADULT_31_50Y_M": 3600, "AG_ADULT_31_50Y_F": 3600,
+          "AG_ADULT_51_70Y_M": 3600, "AG_ADULT_51_70Y_F": 3600,
+          "AG_ELDER_70Y_M": 3600, "AG_ELDER_70Y_F": 3600,
+          "AG_PREGNANT": 3600, "AG_LACTATING": 3600 }},
+      "NUT_fluoride": {
+        "unit": "mg/day",
+        "values": {
+          "AG_CHILD_1_3Y": 1.3, "AG_CHILD_4_8Y": 2.2, "AG_CHILD_9_13Y": 10,
+          "AG_TEEN_14_18Y_M": 10, "AG_TEEN_14_18Y_F": 10,
+          "AG_ADULT_19_30Y_M": 10, "AG_ADULT_19_30Y_F": 10,
+          "AG_ADULT_31_50Y_M": 10, "AG_ADULT_31_50Y_F": 10,
+          "AG_ADULT_51_70Y_M": 10, "AG_ADULT_51_70Y_F": 10,
+          "AG_ELDER_70Y_M": 10, "AG_ELDER_70Y_F": 10,
+          "AG_PREGNANT": 10, "AG_LACTATING": 10 }}
+    },
+    "amino_acids_eaa": {
+      "note": "Không có UL chính thức cho EAAs từ thực phẩm",
+      "NUT_histidine":     { "ul": null },
+      "NUT_isoleucine":    { "ul": null },
+      "NUT_leucine":       { "ul": null },
+      "NUT_lysine":        { "ul": null },
+      "NUT_methionine":    { "ul": null },
+      "NUT_phenylalanine": { "ul": null },
+      "NUT_threonine":     { "ul": null },
+      "NUT_tryptophan":    { "ul": null },
+      "NUT_valine":        { "ul": null }
+    }
+  }
+}
