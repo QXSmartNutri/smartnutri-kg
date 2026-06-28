@@ -1,1 +1,77 @@
-
+{
+  "$schema": "https://smartnutri.org/schemas/standards",
+  "version": "1.0.0",
+  "description": "Đơn vị đo lường chuẩn cho từng loại nutrient trong SmartNutri KG",
+  "units": {
+    "mass": {
+      "g":  { "label": "gram",      "factor_to_mg": 1000 },
+      "mg": { "label": "milligram", "factor_to_mg": 1 },
+      "μg": { "label": "microgram", "factor_to_mg": 0.001 },
+      "ng": { "label": "nanogram",  "factor_to_mg": 0.000001 }
+    },
+    "activity": {
+      "IU":   { "label": "International Unit",         "note": "Vitamin A, D, E" },
+      "RAE":  { "label": "Retinol Activity Equivalent", "note": "Vitamin A" },
+      "NE":   { "label": "Niacin Equivalent",           "note": "Vitamin B3" },
+      "DFE":  { "label": "Dietary Folate Equivalent",   "note": "Vitamin B9" },
+      "kcal": { "label": "Kilocalorie",                 "note": "Energy" },
+      "kJ":   { "label": "Kilojoule",                   "note": "Energy" }
+    }
+  },
+  "nutrient_default_units": {
+    "energy": {
+      "NUT_energy": "kcal"
+    },
+    "macronutrients": {
+      "NUT_carbohydrate_total": "g",
+      "NUT_sugar_total":        "g",
+      "NUT_starch":             "g",
+      "NUT_fiber":              "g",
+      "NUT_protein":            "g",
+      "NUT_fat_total":          "g"
+    },
+    "vitamins": {
+      "NUT_vitamin_a":   "μg RAE",
+      "NUT_vitamin_d":   "μg",
+      "NUT_vitamin_e":   "mg",
+      "NUT_vitamin_k":   "μg",
+      "NUT_vitamin_c":   "mg",
+      "NUT_vitamin_b1":  "mg",
+      "NUT_vitamin_b2":  "mg",
+      "NUT_vitamin_b3":  "mg NE",
+      "NUT_vitamin_b4":  "mg",
+      "NUT_vitamin_b5":  "mg",
+      "NUT_vitamin_b6":  "mg",
+      "NUT_vitamin_b7":  "μg",
+      "NUT_vitamin_b9":  "μg DFE",
+      "NUT_vitamin_b12": "μg"
+    },
+    "minerals": {
+      "NUT_calcium":    "mg",
+      "NUT_iron":       "mg",
+      "NUT_magnesium":  "mg",
+      "NUT_phosphorus": "mg",
+      "NUT_potassium":  "mg",
+      "NUT_sodium":     "mg",
+      "NUT_zinc":       "mg",
+      "NUT_copper":     "mg",
+      "NUT_manganese":  "mg",
+      "NUT_selenium":   "μg",
+      "NUT_iodine":     "μg",
+      "NUT_chromium":   "μg",
+      "NUT_molybdenum": "μg",
+      "NUT_fluoride":   "mg"
+    },
+    "amino_acids_eaa": {
+      "NUT_histidine":     "mg",
+      "NUT_isoleucine":    "mg",
+      "NUT_leucine":       "mg",
+      "NUT_lysine":        "mg",
+      "NUT_methionine":    "mg",
+      "NUT_phenylalanine": "mg",
+      "NUT_threonine":     "mg",
+      "NUT_tryptophan":    "mg",
+      "NUT_valine":        "mg"
+    }
+  }
+}
