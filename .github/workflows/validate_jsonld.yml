@@ -1,1 +1,180 @@
+name: Validate JSON & JSON-LD
 
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/jsonld/**/*.jsonld'
+      - 'standards/**/*.json'
+      - 'schemas/**/*.json'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'data/jsonld/**/*.jsonld'
+      - 'standards/**/*.json'
+      - 'schemas/**/*.json'
+  workflow_dispatch:
+
+jobs:
+  validate-json-syntax:
+    name: "✅ JSON Syntax Check"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate all JSON files (syntax)
+        run: |
+          echo "=== Checking JSON syntax for all .json files ==="
+          FAIL=0
+          for f in $(find standards/ schemas/ -name "*.json"); do
+            if node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" 2>/dev/null; then
+              echo "✅  $f"
+            else
+              echo "❌  $f — Invalid JSON"
+              FAIL=1
+            fi
+          done
+          if [ $FAIL -eq 1 ]; then
+            echo ""
+            echo "❌ JSON syntax errors found. Please fix before merging."
+            exit 1
+          fi
+          echo ""
+          echo "✅ All JSON files are syntactically valid."
+
+      - name: Validate all JSON-LD files (syntax)
+        run: |
+          echo "=== Checking JSON syntax for all .jsonld files ==="
+          FAIL=0
+          for f in $(find data/jsonld/ -name "*.jsonld"); do
+            if node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" 2>/dev/null; then
+              echo "✅  $f"
+            else
+              echo "❌  $f — Invalid JSON-LD"
+              FAIL=1
+            fi
+          done
+          if [ $FAIL -eq 1 ]; then
+            echo ""
+            echo "❌ JSON-LD syntax errors found."
+            exit 1
+          fi
+          echo ""
+          echo "✅ All JSON-LD files are syntactically valid."
+
+  validate-jsonld-structure:
+    name: "🔍 JSON-LD Structure Check"
+    runs-on: ubuntu-latest
+    needs: validate-json-syntax
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run validate-jsonld.js
+        run: |
+          echo "=== SmartNutri JSON-LD Structure Validator ==="
+          if [ -f "tests/data/validate-jsonld.js" ]; then
+            node tests/data/validate-jsonld.js
+          else
+            echo "⚠️  tests/data/validate-jsonld.js not found — skipping"
+          fi
+
+  validate-standards-schema:
+    name: "📋 Standards Schema Check"
+    runs-on: ubuntu-latest
+    needs: validate-json-syntax
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check required fields in standards files
+        run: |
+          echo "=== Checking required fields in standards/ ==="
+          FAIL=0
+          REQUIRED_FILES=(
+            "standards/entity-ids.md"
+            "standards/nutrient-units.json"
+            "standards/age-groups.json"
+            "standards/nutrient-rda.json"
+            "standards/nutrient-ul.json"
+            "standards/nutrient-dv.json"
+            "standards/evidence-levels.json"
+            "standards/languages.json"
+            "standards/categories.json"
+          )
+          for f in "${REQUIRED_FILES[@]}"; do
+            if [ -f "$f" ]; then
+              echo "✅  $f — exists"
+            else
+              echo "❌  $f — MISSING"
+              FAIL=1
+            fi
+          done
+          if [ $FAIL -eq 1 ]; then
+            echo ""
+            echo "❌ Required standards files missing."
+            exit 1
+          fi
+          echo ""
+          echo "✅ All required standards files present."
+
+      - name: Validate version field in JSON standards
+        run: |
+          echo "=== Checking version field in standards/*.json ==="
+          FAIL=0
+          for f in $(find standards/ -name "*.json"); do
+            VERSION=$(node -e "
+              try {
+                const d = JSON.parse(require('fs').readFileSync('$f','utf8'));
+                console.log(d.version || 'MISSING');
+              } catch(e) { console.log('PARSE_ERROR'); }
+            ")
+            if [ "$VERSION" = "MISSING" ]; then
+              echo "⚠️   $f — missing version field"
+            elif [ "$VERSION" = "PARSE_ERROR" ]; then
+              echo "❌  $f — parse error"
+              FAIL=1
+            else
+              echo "✅  $f — version: $VERSION"
+            fi
+          done
+          if [ $FAIL -eq 1 ]; then exit 1; fi
+
+  summary:
+    name: "📊 Validation Summary"
+    runs-on: ubuntu-latest
+    needs: [validate-json-syntax, validate-jsonld-structure, validate-standards-schema]
+    if: always()
+    steps:
+      - name: Print summary
+        run: |
+          echo "=================================="
+          echo "  SmartNutri KG — Validation Summary"
+          echo "=================================="
+          echo "JSON Syntax:      ${{ needs.validate-json-syntax.result }}"
+          echo "JSON-LD Structure: ${{ needs.validate-jsonld-structure.result }}"
+          echo "Standards Schema:  ${{ needs.validate-standards-schema.result }}"
+          echo ""
+          if [ "${{ needs.validate-json-syntax.result }}" = "success" ] && \
+             [ "${{ needs.validate-standards-schema.result }}" = "success" ]; then
+            echo "✅ Core validations passed!"
+          else
+            echo "❌ Some validations failed. Check logs above."
+            exit 1
+          fi
