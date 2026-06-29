@@ -1,1 +1,278 @@
+name: Deploy GitHub Pages
 
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/viewer/**'
+      - 'data/jsonld/**'
+      - 'standards/**'
+      - 'ontology/**'
+      - 'README.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: "🏗️ Build GitHub Pages"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate before build
+        run: |
+          echo "=== Pre-build Validation ==="
+          FAIL=0
+
+          # Check viewer files exist
+          REQUIRED_VIEWER=(
+            "src/viewer/index.html"
+            "src/viewer/app.js"
+            "src/viewer/graph.js"
+            "src/viewer/data-loader.js"
+            "src/viewer/style.css"
+          )
+          for f in "${REQUIRED_VIEWER[@]}"; do
+            if [ -f "$f" ]; then
+              echo "✅  $f"
+            else
+              echo "❌  $f — MISSING"
+              FAIL=1
+            fi
+          done
+
+          if [ $FAIL -eq 1 ]; then
+            echo "❌ Required viewer files missing. Cannot deploy."
+            exit 1
+          fi
+          echo "✅ All required files present."
+
+      - name: Build site structure
+        run: |
+          echo "=== Building Site ==="
+          mkdir -p _site
+
+          # Copy viewer as root app
+          cp -r src/viewer/. _site/
+          echo "✅ Viewer copied to _site/"
+
+          # Copy data for viewer to load
+          mkdir -p _site/data/jsonld
+          cp -r data/jsonld/. _site/data/jsonld/
+          echo "✅ JSON-LD data copied"
+
+          # Copy standards (for reference)
+          mkdir -p _site/standards
+          cp standards/*.json _site/standards/ 2>/dev/null || true
+          echo "✅ Standards copied"
+
+          # Copy ontology
+          mkdir -p _site/ontology
+          cp -r ontology/. _site/ontology/ 2>/dev/null || true
+          echo "✅ Ontology copied"
+
+          # Generate site manifest
+          node - << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+
+          function countFiles(dir, ext) {
+            let count = 0;
+            if (!fs.existsSync(dir)) return 0;
+            function walk(d) {
+              fs.readdirSync(d).forEach(f => {
+                const full = path.join(d, f);
+                if (fs.statSync(full).isDirectory()) walk(full);
+                else if (f.endsWith(ext)) count++;
+              });
+            }
+            walk(dir);
+            return count;
+          }
+
+          const manifest = {
+            name: "SmartNutri Knowledge Graph",
+            version: "1.0.0",
+            built: new Date().toISOString(),
+            stats: {
+              jsonld_files:    countFiles('data/jsonld', '.jsonld'),
+              standards_files: countFiles('standards', '.json'),
+              ontology_files:  countFiles('ontology', '.ttl'),
+              schema_files:    countFiles('schemas', '.json'),
+              logic_files:     countFiles('logic', '.json')
+            },
+            data_folders: {
+              phase1: ['nutrients','foods','herbs','bioactives','toxic'],
+              phase2: ['diseases','symptoms'],
+              phase3: ['drugs','brands'],
+              phase4: ['anatomy/systems','anatomy/organs','anatomy/tissues','anatomy/cells'],
+              phase5: ['metabolism/processes','metabolism/pathways']
+            },
+            urls: {
+              viewer:    "https://QXSmartNutri.github.io/smartnutri-kg/",
+              github:    "https://github.com/QXSmartNutri/smartnutri-kg",
+              standards: "https://QXSmartNutri.github.io/smartnutri-kg/standards/"
+            }
+          };
+
+          fs.writeFileSync(
+            '_site/manifest.json',
+            JSON.stringify(manifest, null, 2)
+          );
+          console.log('✅ manifest.json generated');
+          console.log('   JSON-LD files:', manifest.stats.jsonld_files);
+          console.log('   Standards:    ', manifest.stats.standards_files);
+          console.log('   Ontology:     ', manifest.stats.ontology_files);
+          EOF
+
+      - name: Generate data index
+        run: |
+          echo "=== Generating Data Index ==="
+          node - << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+
+          const index = {
+            generated: new Date().toISOString(),
+            datasets: {}
+          };
+
+          const FOLDERS = [
+            'nutrients','foods','herbs','bioactives','toxic',
+            'diseases','symptoms','drugs','brands',
+            'anatomy/systems','anatomy/organs',
+            'anatomy/tissues','anatomy/cells',
+            'metabolism/processes','metabolism/pathways'
+          ];
+
+          FOLDERS.forEach(folder => {
+            const dir = path.join('data/jsonld', folder);
+            if (!fs.existsSync(dir)) {
+              index.datasets[folder] = { status: 'pending', count: 0, files: [] };
+              return;
+            }
+            const files = fs.readdirSync(dir)
+              .filter(f => f.endsWith('.jsonld'))
+              .map(f => ({
+                name: f,
+                path: `data/jsonld/${folder}/${f}`,
+                url:  `./data/jsonld/${folder}/${f}`
+              }));
+            index.datasets[folder] = {
+              status: files.length > 0 ? 'active' : 'empty',
+              count: files.length,
+              files: files
+            };
+          });
+
+          fs.writeFileSync(
+            '_site/data/index.json',
+            JSON.stringify(index, null, 2)
+          );
+          console.log('✅ data/index.json generated');
+
+          // Summary
+          const active = Object.values(index.datasets).filter(d => d.status === 'active').length;
+          const pending = Object.values(index.datasets).filter(d => d.status === 'pending').length;
+          console.log('   Active folders: ', active);
+          console.log('   Pending folders:', pending);
+          EOF
+
+      - name: Create 404 page
+        run: |
+          cat > _site/404.html << 'HTML'
+          <!DOCTYPE html>
+          <html lang="vi">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>404 — SmartNutri KG</title>
+            <style>
+              body {
+                background: #0d1117;
+                color: #e6edf3;
+                font-family: 'SF Mono', monospace;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                margin: 0;
+                flex-direction: column;
+                gap: 16px;
+              }
+              h1 { color: #58a6ff; font-size: 48px; margin: 0; }
+              p  { color: #8b949e; font-size: 14px; }
+              a  { color: #58a6ff; text-decoration: none; }
+              a:hover { text-decoration: underline; }
+            </style>
+          </head>
+          <body>
+            <h1>⬡ 404</h1>
+            <p>Trang không tồn tại trong SmartNutri Knowledge Graph.</p>
+            <a href="/">← Về trang chính</a>
+          </body>
+          </html>
+          HTML
+          echo "✅ 404 page created"
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '_site'
+
+  deploy:
+    name: "🚀 Deploy to GitHub Pages"
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  notify:
+    name: "📣 Deployment Summary"
+    runs-on: ubuntu-latest
+    needs: [build, deploy]
+    if: always()
+    steps:
+      - name: Print deployment summary
+        run: |
+          echo "=============================================="
+          echo "  SmartNutri KG — Deployment Summary"
+          echo "  $(date -u +'%Y-%m-%d %H:%M UTC')"
+          echo "=============================================="
+          echo ""
+          echo "Build:  ${{ needs.build.result }}"
+          echo "Deploy: ${{ needs.deploy.result }}"
+          echo ""
+          if [ "${{ needs.deploy.result }}" = "success" ]; then
+            echo "✅ Deployment successful!"
+            echo ""
+            echo "🌐 Live URLs:"
+            echo "   Viewer:    https://QXSmartNutri.github.io/smartnutri-kg/"
+            echo "   Manifest:  https://QXSmartNutri.github.io/smartnutri-kg/manifest.json"
+            echo "   Data Index:https://QXSmartNutri.github.io/smartnutri-kg/data/index.json"
+          else
+            echo "❌ Deployment failed. Check logs above."
+            exit 1
+          fi
