@@ -1,1 +1,87 @@
-
+{
+  "$schema": "https://smartnutri.org/schemas/standards",
+  "version": "1.1.0",
+  "description": "DRI Tables — Bảng tổng hợp tham chiếu nhanh toàn bộ Dietary Reference Intakes. Chi tiết xem nutrient-rda.json, nutrient-ul.json, nutrient-dv.json.",
+  "source": "Institute of Medicine. Dietary Reference Intakes. National Academies Press.",
+  "files": {
+    "rda_ai":  "standards/nutrient-rda.json",
+    "ul":      "standards/nutrient-ul.json",
+    "dv":      "standards/nutrient-dv.json",
+    "amdr":    "standards/nutrient_amdr.json",
+    "units":   "standards/nutrient-units.json",
+    "age_groups": "standards/age-groups.json"
+  },
+  "summary_table": {
+    "description": "Bảng tóm tắt nhanh — type (RDA/AI) và có UL hay không cho từng nutrient",
+    "nutrients": {
+      "energy": {
+        "NUT_energy": { "type": "EER", "has_ul": false, "has_dv": true,  "unit": "kcal" }
+      },
+      "macronutrients": {
+        "NUT_carbohydrate_total": { "type": "RDA", "has_ul": false, "has_dv": true,  "unit": "g" },
+        "NUT_sugar_total":        { "type": null,  "has_ul": false, "has_dv": true,  "unit": "g",  "note": "WHO: <10%E" },
+        "NUT_starch":             { "type": null,  "has_ul": false, "has_dv": false, "unit": "g"  },
+        "NUT_fiber":              { "type": "AI",  "has_ul": false, "has_dv": true,  "unit": "g"  },
+        "NUT_protein":            { "type": "RDA", "has_ul": false, "has_dv": true,  "unit": "g"  },
+        "NUT_fat_total":          { "type": "AMDR","has_ul": false, "has_dv": true,  "unit": "g"  }
+      },
+      "vitamins": {
+        "NUT_vitamin_a":   { "type": "RDA", "has_ul": true,  "has_dv": true,  "unit": "μg RAE" },
+        "NUT_vitamin_d":   { "type": "RDA", "has_ul": true,  "has_dv": true,  "unit": "μg"     },
+        "NUT_vitamin_e":   { "type": "RDA", "has_ul": true,  "has_dv": true,  "unit": "mg"     },
+        "NUT_vitamin_k":   { "type": "AI",  "has_ul": false, "has_dv": true,  "unit": "μg"     },
+        "NUT_vitamin_c":   { "type": "RDA", "has_ul": true,  "has_dv": true,  "unit": "mg"     },
+        "NUT_vitamin_b1":  { "type": "RDA", "has_ul": false, "has_dv": true,  "unit": "mg"     },
+        "NUT_vitamin_b2":  { "type": "RDA", "has_ul": false, "has_dv": true,  "unit": "mg"     },
+        "NUT_vitamin_b3":  { "type": "RDA", "has_ul": true,  "has_dv": true,  "unit": "mg NE"  },
+        "NUT_vitamin_b5":  { "type": "AI",  "has_ul": false, "has_dv": true,  "unit": "mg"     },
+        "NUT_vitamin_b6":  { "type": "RDA", "has_ul": true,  "has_dv": true,  "unit": "mg"     },
+        "NUT_vitamin_b7":  { "type": "AI",  "has_ul": false, "has_dv": true,  "unit": "μg"     },
+        "NUT_vitamin_b9":  { "type": "RDA", "has_ul": true,  "has_dv": true,  "unit": "μg DFE" },
+        "NUT_vitamin_b12": { "type": "RDA", "has_ul": false, "has_dv": true,  "unit": "μg"     }
+      },
+      "minerals": {
+        "NUT_calcium":    { "type": "RDA", "has_ul": true,  "has_dv": true,  "unit": "mg" },
+        "NUT_iron":       { "type": "RDA", "has_ul": true,  "has_dv": true,  "unit": "mg" },
+        "NUT_magnesium":  { "type": "RDA", "has_ul": true,  "has_dv": true,  "unit": "mg", "note": "UL chỉ từ bổ sung" },
+        "NUT_phosphorus": { "type": "RDA", "has_ul": true,  "has_dv": true,  "unit": "mg" },
+        "NUT_potassium":  { "type": "AI",  "has_ul": false, "has_dv": true,  "unit": "mg" },
+        "NUT_sodium":     { "type": "AI",  "has_ul": true,  "has_dv": true,  "unit": "mg", "note": "UL = CDRR" },
+        "NUT_zinc":       { "type": "RDA", "has_ul": true,  "has_dv": true,  "unit": "mg" },
+        "NUT_copper":     { "type": "RDA", "has_ul": true,  "has_dv": true,  "unit": "μg" },
+        "NUT_manganese":  { "type": "AI",  "has_ul": true,  "has_dv": true,  "unit": "mg" },
+        "NUT_selenium":   { "type": "RDA", "has_ul": true,  "has_dv": true,  "unit": "μg" },
+        "NUT_iodine":     { "type": "RDA", "has_ul": true,  "has_dv": true,  "unit": "μg" },
+        "NUT_chromium":   { "type": "AI",  "has_ul": false, "has_dv": true,  "unit": "μg" },
+        "NUT_molybdenum": { "type": "RDA", "has_ul": true,  "has_dv": true,  "unit": "μg" },
+        "NUT_sulfur":     { "type": "AI",  "has_ul": false, "has_dv": false, "unit": "mg", "note": "Không có DRI chính thức" },
+        "NUT_chloride":   { "type": "AI",  "has_ul": true,  "has_dv": true,  "unit": "mg" },
+        "NUT_fluoride":   { "type": "AI",  "has_ul": true,  "has_dv": true,  "unit": "mg" }
+      },
+      "amino_acids_eaa": {
+        "NUT_histidine":     { "type": "RDA", "has_ul": false, "has_dv": false, "unit": "mg/kg/day" },
+        "NUT_isoleucine":    { "type": "RDA", "has_ul": false, "has_dv": false, "unit": "mg/kg/day" },
+        "NUT_leucine":       { "type": "RDA", "has_ul": false, "has_dv": false, "unit": "mg/kg/day" },
+        "NUT_lysine":        { "type": "RDA", "has_ul": false, "has_dv": false, "unit": "mg/kg/day" },
+        "NUT_methionine":    { "type": "RDA", "has_ul": false, "has_dv": false, "unit": "mg/kg/day", "note": "+ Cysteine" },
+        "NUT_phenylalanine": { "type": "RDA", "has_ul": false, "has_dv": false, "unit": "mg/kg/day", "note": "+ Tyrosine" },
+        "NUT_threonine":     { "type": "RDA", "has_ul": false, "has_dv": false, "unit": "mg/kg/day" },
+        "NUT_tryptophan":    { "type": "RDA", "has_ul": false, "has_dv": false, "unit": "mg/kg/day" },
+        "NUT_valine":        { "type": "RDA", "has_ul": false, "has_dv": false, "unit": "mg/kg/day" }
+      }
+    }
+  },
+  "totals": {
+    "energy": 1,
+    "macronutrients": 6,
+    "vitamins": 13,
+    "minerals": 16,
+    "amino_acids_eaa": 9,
+    "total_nutrients": 45,
+    "age_groups": 15,
+    "has_rda": 28,
+    "has_ai": 15,
+    "has_ul": 20,
+    "no_ul": 25
+  }
+}
