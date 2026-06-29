@@ -1,1 +1,126 @@
-
+{
+  "$schema": "https://smartnutri.org/schemas/standards",
+  "version": "1.1.0",
+  "description": "Glycemic Index (GI) và Glycemic Load (GL) — bảng phân loại và ngưỡng chuẩn dùng trong SmartNutri KG",
+  "source": "Atkinson FS, Foster-Powell K, Brand-Miller JC. International Tables of Glycemic Index and Glycemic Load Values. Diabetes Care. 2008. | University of Sydney GI Database.",
+  "reference_food": "Glucose = 100 (hoặc White bread = 100 tùy hệ thống)",
+  "standard_used": "Glucose = 100",
+  "gi_classification": {
+    "description": "Phân loại GI theo ngưỡng quốc tế",
+    "levels": [
+      {
+        "id": "GI_LOW",
+        "label_vi": "GI thấp",
+        "label_en": "Low GI",
+        "min": 0,
+        "max": 55,
+        "color": "#3fb950",
+        "note": "Hấp thu chậm — ít tăng đường huyết đột ngột"
+      },
+      {
+        "id": "GI_MEDIUM",
+        "label_vi": "GI trung bình",
+        "label_en": "Medium GI",
+        "min": 56,
+        "max": 69,
+        "color": "#e3b341",
+        "note": "Hấp thu vừa phải"
+      },
+      {
+        "id": "GI_HIGH",
+        "label_vi": "GI cao",
+        "label_en": "High GI",
+        "min": 70,
+        "max": 100,
+        "color": "#f85149",
+        "note": "Hấp thu nhanh — tăng đường huyết nhanh"
+      }
+    ]
+  },
+  "gl_classification": {
+    "description": "Glycemic Load = (GI × lượng carb trong khẩu phần g) / 100",
+    "formula": "GL = (GI × carbohydrate_g) / 100",
+    "levels": [
+      {
+        "id": "GL_LOW",
+        "label_vi": "GL thấp",
+        "label_en": "Low GL",
+        "min": 0,
+        "max": 10,
+        "color": "#3fb950",
+        "note": "Tác động thấp lên đường huyết"
+      },
+      {
+        "id": "GL_MEDIUM",
+        "label_vi": "GL trung bình",
+        "label_en": "Medium GL",
+        "min": 11,
+        "max": 19,
+        "color": "#e3b341",
+        "note": "Tác động vừa phải lên đường huyết"
+      },
+      {
+        "id": "GL_HIGH",
+        "label_vi": "GL cao",
+        "label_en": "High GL",
+        "min": 20,
+        "max": null,
+        "color": "#f85149",
+        "note": "Tác động cao lên đường huyết"
+      }
+    ]
+  },
+  "daily_gl_targets": {
+    "description": "Tổng GL mục tiêu trong ngày theo nhóm đối tượng",
+    "unit": "GL/day",
+    "targets": [
+      { "population": "Người bình thường",      "min": 80,  "max": 120 },
+      { "population": "Đái tháo đường type 2",  "min": null,"max": 80  },
+      { "population": "Tiền đái tháo đường",    "min": null,"max": 100 },
+      { "population": "Giảm cân",               "min": null,"max": 80  },
+      { "population": "Vận động viên",          "min": 120, "max": 180 }
+    ]
+  },
+  "gi_reference_foods": {
+    "description": "GI tham chiếu của một số thực phẩm phổ biến",
+    "note": "Giá trị GI có thể thay đổi theo phương pháp chế biến, độ chín, và cá thể",
+    "foods": [
+      { "name_vi": "Glucose",          "name_en": "Glucose",          "gi": 100, "gl_per_100g": null, "category": "reference" },
+      { "name_vi": "Bánh mì trắng",    "name_en": "White bread",      "gi": 75,  "gl_per_100g": 37,   "category": "grain" },
+      { "name_vi": "Cơm trắng",        "name_en": "White rice",       "gi": 73,  "gl_per_100g": 57,   "category": "grain" },
+      { "name_vi": "Cơm gạo lứt",      "name_en": "Brown rice",       "gi": 68,  "gl_per_100g": 50,   "category": "grain" },
+      { "name_vi": "Bánh mì đen",      "name_en": "Whole grain bread","gi": 51,  "gl_per_100g": 24,   "category": "grain" },
+      { "name_vi": "Yến mạch",         "name_en": "Oatmeal",          "gi": 55,  "gl_per_100g": 30,   "category": "grain" },
+      { "name_vi": "Khoai tây luộc",   "name_en": "Boiled potato",    "gi": 78,  "gl_per_100g": 14,   "category": "vegetable" },
+      { "name_vi": "Khoai lang luộc",  "name_en": "Boiled sweet potato","gi": 63,"gl_per_100g": 11,   "category": "vegetable" },
+      { "name_vi": "Cà rốt",           "name_en": "Carrot",           "gi": 39,  "gl_per_100g": 3,    "category": "vegetable" },
+      { "name_vi": "Táo",              "name_en": "Apple",            "gi": 36,  "gl_per_100g": 5,    "category": "fruit" },
+      { "name_vi": "Chuối chín",       "name_en": "Ripe banana",      "gi": 62,  "gl_per_100g": 14,   "category": "fruit" },
+      { "name_vi": "Xoài",             "name_en": "Mango",            "gi": 51,  "gl_per_100g": 8,    "category": "fruit" },
+      { "name_vi": "Dưa hấu",          "name_en": "Watermelon",       "gi": 76,  "gl_per_100g": 4,    "category": "fruit" },
+      { "name_vi": "Đậu lăng",         "name_en": "Lentils",          "gi": 32,  "gl_per_100g": 5,    "category": "legume" },
+      { "name_vi": "Đậu đen",          "name_en": "Black beans",      "gi": 30,  "gl_per_100g": 7,    "category": "legume" },
+      { "name_vi": "Sữa nguyên kem",   "name_en": "Whole milk",       "gi": 39,  "gl_per_100g": 3,    "category": "dairy" },
+      { "name_vi": "Sữa chua không đường","name_en": "Plain yogurt",  "gi": 35,  "gl_per_100g": 2,    "category": "dairy" },
+      { "name_vi": "Nước ngọt có ga",  "name_en": "Soft drink",       "gi": 65,  "gl_per_100g": 7,    "category": "beverage" },
+      { "name_vi": "Mật ong",          "name_en": "Honey",            "gi": 61,  "gl_per_100g": 51,   "category": "sweetener" },
+      { "name_vi": "Đường trắng",      "name_en": "White sugar",      "gi": 65,  "gl_per_100g": 65,   "category": "sweetener" }
+    ]
+  },
+  "factors_affecting_gi": {
+    "decrease_gi": [
+      "Chế biến ít (tối thiểu) — nguyên hạt thay vì xay",
+      "Nấu chín vừa (al dente) thay vì quá mềm",
+      "Thêm chất béo và protein vào bữa ăn",
+      "Thêm chất xơ hòa tan (beta-glucan, pectin)",
+      "Thêm acid (giấm, chanh, lên men)",
+      "Cơm nguội (tinh bột kháng tăng lên khi làm lạnh)"
+    ],
+    "increase_gi": [
+      "Nghiền, xay nhỏ thực phẩm",
+      "Nấu quá chín / nhừ",
+      "Độ chín cao (trái cây chín)",
+      "Thêm đường đơn"
+    ]
+  }
+}
