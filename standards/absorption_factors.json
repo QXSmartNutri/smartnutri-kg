@@ -1,1 +1,365 @@
-
+{
+  "$schema": "https://smartnutri.org/schemas/standards",
+  "version": "2.0.0",
+  "description": "Hệ số hấp thu toàn diện — 39 mục tiêu cho mọi nutrient. Dùng để AI tạo thực đơn tối ưu.",
+  "source": "IOM DRI, FAO/WHO, PubMed, UniProt, KEGG, PharmGKB",
+  "_schema_definition": {
+    "description": "Định nghĩa 39 mục tiêu chuẩn cho mỗi nutrient/form",
+    "fields": {
+      "base_absorption_factor":     "Hệ số hấp thu cơ bản (0–1) trong điều kiện bình thường",
+      "enhancers":                  "Yếu tố tăng cường hấp thu — thực phẩm, chất dinh dưỡng, điều kiện",
+      "inhibitors":                 "Yếu tố ức chế hấp thu",
+      "food_matrix_modifiers":      "Ảnh hưởng của cấu trúc thực phẩm (tế bào, màng, liên kết protein-lipid)",
+      "food_processing_effects":    "Ảnh hưởng của chế biến (nấu, xay, lên men, sấy, đông lạnh)",
+      "physiological_modifiers":    "Yếu tố sinh lý cá thể (tuổi, giới, thai kỳ, BMI, trạng thái dinh dưỡng)",
+      "disease_modifiers":          "Bệnh lý ảnh hưởng đến hấp thu (Celiac, Crohn, tắc mật, CKD...)",
+      "drug_interactions":          "Thuốc ảnh hưởng đến hấp thu nutrient",
+      "gut_microbiome_effects":     "Vi khuẩn đường ruột ảnh hưởng đến hấp thu và chuyển hóa",
+      "homeostatic_regulation":     "Cơ chế điều hòa nội môi (tăng/giảm hấp thu theo tình trạng cơ thể)",
+      "dietary_modifiers":          "Chế độ ăn tổng thể ảnh hưởng (Vegan, Mediterranean, Low-fat...)",
+      "absorption_site":            "Vị trí hấp thu chính trong đường tiêu hóa",
+      "transporters":               "Protein vận chuyển qua màng tế bào",
+      "digestive_requirements":     "Yêu cầu tiêu hóa (acid dạ dày, enzyme, muối mật...)",
+      "evidence":                   "Mức độ bằng chứng khoa học (A/B/C/D)",
+      "scientific_metadata":        "Metadata khoa học (DOI, nghiên cứu tham chiếu)",
+      "co_ingested_foods":          "Thực phẩm ăn kèm ảnh hưởng đến hấp thu",
+      "digestion_phase":            "Giai đoạn tiêu hóa (miệng, dạ dày, tá tràng, ruột non, đại tràng)",
+      "release_factor":             "Hệ số giải phóng khỏi ma trận thực phẩm trước khi hấp thu",
+      "genetic_modifiers":          "Gene ảnh hưởng đến hấp thu và chuyển hóa (SNP, variant)",
+      "epigenetic_modifiers":       "Yếu tố ngoại di truyền (methylation, histone acetylation)",
+      "circadian_modifiers":        "Ảnh hưởng nhịp sinh học — thời điểm tốt nhất để hấp thu",
+      "kinetics":                   "Động học hấp thu (Tmax, Cmax, T½, AUC)",
+      "storage_compartment":        "Nơi dự trữ trong cơ thể và thời gian dự trữ",
+      "distribution_compartment":   "Phân phối đến các mô/cơ quan đích",
+      "excretion_pathways":         "Con đường thải trừ (thận, mật, phân, mồ hôi)",
+      "biomarkers":                 "Biomarker đánh giá tình trạng nutrient trong cơ thể",
+      "functional_markers":         "Marker chức năng (enzyme, protein phụ thuộc nutrient)",
+      "toxicity_thresholds":        "Ngưỡng độc tính và triệu chứng thừa",
+      "ontology_mapping":           "Ánh xạ sang các hệ thống ontology bên ngoài (ChEBI, KEGG, PubChem)",
+      "interaction_network":        "Mạng lưới tương tác với nutrients khác",
+      "pathways":                   "Con đường sinh học liên quan (KEGG Pathway, Reactome)",
+      "microbiome_profile":         "Hệ vi sinh vật đường ruột ảnh hưởng đến hấp thu",
+      "genome_profile":             "Biến thể gene liên quan (GWAS, PharmGKB)",
+      "metabolome_profile":         "Chất chuyển hóa liên quan trong metabolome",
+      "proteome_profile":           "Protein liên quan trong proteome",
+      "transcriptome_profile":      "Gene expression liên quan",
+      "wearable_data":              "Dữ liệu từ thiết bị đeo (CGM, HRV, sleep) ảnh hưởng đến hấp thu",
+      "environmental_exposure":     "Yếu tố môi trường (UVB, ô nhiễm, nhiệt độ) ảnh hưởng đến nutrient"
+    }
+  },
+  "nutrients": {
+    "NUT_vitamin_k": {
+      "label_vi": "Vitamin K",
+      "label_en": "Vitamin K",
+      "status": "complete",
+      "forms": {
+        "k1_raw_vegetables": {
+          "label_vi": "K1 từ rau sống",
+          "label_en": "K1 from raw vegetables",
+          "base_absorption_factor": 0.08,
+          "range": "0.05–0.10",
+          "enhancers": [
+            { "factor": "Chất béo trong bữa ăn (>5g)", "effect": "+3–5 lần", "evidence": "A" },
+            { "factor": "Nhai kỹ", "effect": "Phá vỡ thành tế bào rau — +10–20%", "evidence": "B" }
+          ],
+          "inhibitors": [
+            { "factor": "Orlistat", "effect": "Giảm hấp thu lipid → giảm K1", "evidence": "A" },
+            { "factor": "Cholestyramine", "effect": "Gắn muối mật → giảm nhũ hóa → giảm K1", "evidence": "A" },
+            { "factor": "Tắc mật", "effect": "Hấp thu gần 0 khi không có muối mật", "evidence": "A" }
+          ],
+          "food_matrix_modifiers": [
+            { "modifier": "Màng thylakoid lục lạp", "effect": "K1 gắn chặt — giảm sinh khả dụng nghiêm trọng", "factor": 0.3 },
+            { "modifier": "Tế bào thực vật nguyên vẹn", "effect": "Rào cản vật lý — cần phá vỡ trước khi hấp thu", "factor": 0.5 }
+          ],
+          "food_processing_effects": [
+            { "process": "Nấu chín", "effect": "+2–3 lần so với rau sống", "new_factor": 0.22 },
+            { "process": "Xay/nghiền nhỏ", "effect": "+1.5–2 lần — phá vỡ tế bào", "new_factor": 0.15 },
+            { "process": "Nấu chín + dầu", "effect": "Tối ưu — +5–8 lần so với rau sống", "new_factor": 0.40 },
+            { "process": "Đông lạnh", "effect": "Ít ảnh hưởng đến hàm lượng K1", "new_factor": 0.08 }
+          ],
+          "physiological_modifiers": [
+            { "condition": "Người cao tuổi (>70)", "effect": "Giảm tiết acid dạ dày → giảm hấp thu", "factor_modifier": 0.8 },
+            { "condition": "Béo phì (BMI >30)", "effect": "Dự trữ trong mô mỡ tăng", "factor_modifier": 1.0 },
+            { "condition": "Trẻ sơ sinh", "effect": "Đường ruột vô khuẩn + ít muối mật → hấp thu rất thấp", "factor_modifier": 0.3 }
+          ],
+          "disease_modifiers": [
+            { "disease": "Celiac disease", "effect": "Tổn thương nhung mao → giảm hấp thu K1 30–50%", "evidence": "A" },
+            { "disease": "Crohn's disease", "effect": "Kém hấp thu lipid → giảm K1", "evidence": "A" },
+            { "disease": "Tắc mật", "effect": "Không nhũ hóa được → hấp thu gần 0", "evidence": "A" },
+            { "disease": "Cystic fibrosis", "effect": "Thiếu lipase tụy → giảm hấp thu K1", "evidence": "B" }
+          ],
+          "drug_interactions": [
+            { "drug": "Warfarin", "drug_id": "DRUG_20260601_000001", "mechanism": "Ức chế VKORC1 → ngăn tái chế K1", "effect": "Giảm hiệu quả K1", "evidence": "A" },
+            { "drug": "Cholestyramine", "drug_id": "DRUG_20260601_000002", "mechanism": "Gắn muối mật", "effect": "Giảm hấp thu K1 40–60%", "evidence": "A" },
+            { "drug": "Orlistat", "drug_id": "DRUG_20260601_000003", "mechanism": "Ức chế lipase tụy", "effect": "Giảm hấp thu K1 30–40%", "evidence": "A" },
+            { "drug": "Kháng sinh phổ rộng dài ngày", "mechanism": "Tiêu diệt vi khuẩn đường ruột", "effect": "Giảm tổng hợp K2 nội sinh", "evidence": "B" }
+          ],
+          "gut_microbiome_effects": [
+            { "bacteria": "Bacteroides fragilis", "effect": "Tổng hợp MK-10, MK-11 tại đại tràng", "contribution": "10–20% nhu cầu K hàng ngày" },
+            { "bacteria": "Bifidobacterium", "effect": "Tổng hợp MK-8, MK-9", "contribution": "5–10%" },
+            { "bacteria": "E. coli", "effect": "Tổng hợp MK-8", "contribution": "3–5%" }
+          ],
+          "homeostatic_regulation": {
+            "mechanism": "Chu trình tái chế Vitamin K (VKORC1 enzyme)",
+            "storage_duration": "1–2 tuần (cạn kiệt nhanh nếu không cung cấp)",
+            "adaptive_response": "Không có cơ chế điều hòa hấp thu theo nhu cầu rõ ràng như Fe hay Ca"
+          },
+          "dietary_modifiers": [
+            { "diet": "Chế độ ăn nghèo chất béo (<20g fat/day)", "effect": "Giảm hấp thu K1 nghiêm trọng" },
+            { "diet": "Mediterranean diet", "effect": "Dầu olive + rau xanh — tối ưu hấp thu K1" },
+            { "diet": "Vegan", "effect": "Chủ yếu K1 từ rau — hấp thu tốt nếu đủ chất béo" }
+          ],
+          "absorption_site": {
+            "primary": "Ruột non (tá tràng & hỗng tràng)",
+            "secondary": "Đại tràng (K2 từ vi khuẩn — hấp thu thụ động, hiệu quả thấp hơn)",
+            "mechanism": "Khuếch tán thụ động & vận chuyển qua SR-BI, NPC1L1"
+          },
+          "transporters": [
+            { "name": "SR-BI (Scavenger Receptor class B type I)", "role": "Vận chuyển chính qua màng Enterocyte", "evidence": "A" },
+            { "name": "NPC1L1", "role": "Vận chuyển phụ (chia sẻ với Cholesterol & Vitamin E)", "evidence": "B" },
+            { "name": "MTP (Microsomal Triglyceride Transfer Protein)", "role": "Đóng gói vào Chylomicron để xuất ra bạch mạch", "evidence": "A" }
+          ],
+          "digestive_requirements": {
+            "bile_salts": { "required": true, "role": "Nhũ hóa lipid — tạo Micelle chứa K1" },
+            "pancreatic_lipase": { "required": true, "role": "Phân giải triglyceride trong thức ăn" },
+            "gastric_acid": { "required": true, "role": "Phá vỡ cấu trúc thực phẩm, giải phóng K1" },
+            "dietary_fat": { "required": true, "minimum_g_per_meal": 3, "optimal_g_per_meal": 10 }
+          },
+          "evidence": "A",
+          "scientific_metadata": {
+            "key_studies": [
+              { "author": "Gijsbers BL et al.", "year": 1996, "finding": "Fat enhances K1 absorption 5-fold from vegetables" },
+              { "author": "Garber AK et al.", "year": 1999, "finding": "Cooking increases K1 bioavailability 2–3 fold" }
+            ],
+            "review_articles": ["PMID:8838863", "PMID:10589992"]
+          },
+          "co_ingested_foods": [
+            { "food": "Dầu olive, dầu thực vật", "effect": "+300–500% hấp thu K1", "recommended_amount": "5–15ml/bữa" },
+            { "food": "Bơ (Avocado)", "effect": "+200–400% — giàu chất béo tốt", "recommended_amount": "1/2 quả/bữa" },
+            { "food": "Hạt (Nuts, Seeds)", "effect": "+100–200%", "recommended_amount": "30g/bữa" }
+          ],
+          "digestion_phase": {
+            "mouth": { "action": "Nhai nghiền phá vỡ tế bào rau — giải phóng một phần K1", "release_factor": 0.2 },
+            "stomach": { "action": "HCl + Pepsin tách K1 khỏi protein-lipid phức hợp", "release_factor": 0.5 },
+            "duodenum": { "action": "Muối mật + Lipase tụy + Protease tụy → phá vỡ màng thylakoid → giải phóng K1 tự do", "release_factor": 0.9, "note": "Bước quyết định sinh khả dụng K1" },
+            "small_intestine": { "action": "Hấp thu qua SR-BI → Chylomicron → Bạch mạch", "absorption_efficiency": 0.08 },
+            "colon": { "action": "Vi khuẩn tổng hợp K2 MK-8→13 — hấp thu thụ động", "contribution": "10–20% nhu cầu K" }
+          ],
+          "release_factor": 0.30,
+          "genetic_modifiers": [
+            { "gene": "VKORC1", "variant": "1639G>A (rs9923231)", "effect": "Giảm hoạt tính VKORC1 → tăng nhạy cảm với Warfarin", "frequency": "37–41% người châu Á" },
+            { "gene": "CYP4F2", "variant": "V433M (rs2108622)", "effect": "Giảm dị hóa Vitamin K → cần ít K hơn để đạt đủ", "frequency": "30–37% người châu Âu" },
+            { "gene": "GGCX", "variant": "Multiple SNPs", "effect": "Ảnh hưởng γ-carboxylation Gla-proteins", "evidence": "B" }
+          ],
+          "epigenetic_modifiers": [
+            { "modifier": "Methylation của gen VKORC1", "effect": "Ảnh hưởng biểu hiện VKORC1 — liên quan đến đáp ứng Warfarin", "evidence": "C" }
+          ],
+          "circadian_modifiers": {
+            "optimal_timing": "Bữa ăn có chất béo (trưa hoặc tối)",
+            "note": "K1 là vitamin tan trong dầu — hấp thu tốt nhất khi ăn cùng bữa có chất béo, không phụ thuộc nhiều vào nhịp circadian",
+            "evidence": "C"
+          },
+          "kinetics": {
+            "Tmax_hours": "2–4",
+            "T_half_plasma_hours": "1–2",
+            "T_half_liver_days": 2,
+            "bioavailability_range": "0.05–0.10",
+            "transport": "Chylomicron → LDL → Liver"
+          },
+          "storage_compartment": {
+            "liver": { "amount": "Nhỏ", "duration": "~2 ngày", "note": "Dự trữ ngắn hạn — cạn kiệt trong 1–2 tuần" },
+            "adipose": { "amount": "Rất ít K1", "duration": "~1 tuần" }
+          },
+          "distribution_compartment": {
+            "primary": "Gan (γ-carboxylation yếu tố đông máu)",
+            "secondary": ["Xương (K2 MK-7 — Osteocalcin)", "Thành mạch (K2 MK-7 — MGP)", "Não (MK-4 — Gas6)"],
+            "transport_proteins": ["LDL", "HDL", "VLDL"]
+          },
+          "excretion_pathways": {
+            "bile_feces": { "percentage": 40, "note": "Con đường chính — qua mật → phân" },
+            "urine": { "percentage": 20, "note": "Dạng chuyển hóa (axit carboxylic)" },
+            "note": "Không tích lũy độc tính đáng kể từ thực phẩm"
+          },
+          "biomarkers": [
+            { "marker": "Serum Phylloquinone (K1)", "unit": "nmol/L", "normal_range": "0.22–4.88", "note": "Phản ánh intake gần đây, không phản ánh dự trữ lâu dài" },
+            { "marker": "Plasma MK-7", "unit": "nmol/L", "normal_range": "0.5–5.0", "note": "Phản ánh K2 từ Natto và bổ sung" },
+            { "marker": "des-γ-carboxyprothrombin (PIVKA-II)", "unit": "mAU/mL", "note": "Tăng khi thiếu K — marker nhạy và đặc hiệu" },
+            { "marker": "ucOsteocalcin (%)", "note": "% Osteocalcin chưa được carboxylate — tăng khi thiếu K2" },
+            { "marker": "ucMGP", "unit": "nmol/L", "note": "Matrix Gla-Protein chưa carboxylate — tăng khi thiếu K2" }
+          ],
+          "functional_markers": [
+            { "marker": "PT/INR", "note": "Kéo dài khi thiếu K nghiêm trọng — đông máu bị ảnh hưởng" },
+            { "marker": "Mật độ xương (BMD)", "note": "Giảm dần khi thiếu K2 mạn tính" },
+            { "marker": "Vôi hóa động mạch (CAC score)", "note": "Tăng khi thiếu K2 — MGP không hoạt động" }
+          ],
+          "toxicity_thresholds": {
+            "ul": null,
+            "ul_note": "Không có UL chính thức cho K1/K2 từ thực phẩm",
+            "k3_warning": "K3 (Menadione) gây độc tế bào gan, tán huyết ở liều cao — không dùng cho người",
+            "warfarin_interaction": "K1/K2 liều cao có thể giảm hiệu quả Warfarin → nguy cơ huyết khối"
+          },
+          "ontology_mapping": {
+            "chebi": "CHEBI:28382 (Vitamin K1), CHEBI:16509 (Vitamin K2)",
+            "pubchem": "CID:5284607 (Phylloquinone)",
+            "kegg_compound": "C00360 (Vitamin K1)",
+            "wikidata": "Q407635",
+            "hmdb": "HMDB0003555"
+          },
+          "interaction_network": {
+            "synergistic": [
+              { "nutrient": "Vitamin D", "effect": "Phối hợp tối ưu chuyển hóa Canxi vào xương" },
+              { "nutrient": "Calcium", "effect": "K2 (Osteocalcin) gắn Ca vào xương — cần đủ cả hai" },
+              { "nutrient": "Magnesium", "effect": "Đồng yếu tố trong quá trình carboxylation" }
+            ],
+            "antagonistic": [
+              { "nutrient": "Vitamin E liều cao (>1000mg)", "effect": "Cạnh tranh hấp thu — giảm K1" },
+              { "nutrient": "Vitamin A liều cao", "effect": "Có thể ức chế γ-carboxylation" }
+            ]
+          },
+          "pathways": [
+            { "pathway": "Vitamin K cycle", "kegg_id": "map00130", "note": "VKORC1 tái chế Vitamin K epoxide → Vitamin K hydroquinone" },
+            { "pathway": "γ-carboxylation of Gla-proteins", "kegg_id": "map04610", "note": "GGCX enzyme — carboxylate Gla-proteins (Osteocalcin, MGP, Prothrombin...)" },
+            { "pathway": "Blood coagulation", "kegg_id": "map04610", "note": "Yếu tố II, VII, IX, X cần K để hoạt hóa" }
+          ],
+          "microbiome_profile": {
+            "producers": [
+              { "bacteria": "Bacteroides fragilis", "product": "MK-10, MK-11", "abundance_required": "High Bacteroides" },
+              { "bacteria": "Bacteroides vulgatus", "product": "MK-10, MK-11" },
+              { "bacteria": "Eubacterium lentum", "product": "MK-8, MK-9" },
+              { "bacteria": "Bifidobacterium spp.", "product": "MK-8, MK-9" },
+              { "bacteria": "Lactobacillus spp.", "product": "MK-10" },
+              { "bacteria": "E. coli", "product": "MK-8" }
+            ],
+            "dysbiosis_effect": "Giảm đa dạng vi khuẩn → giảm sản xuất K2 nội sinh",
+            "antibiotic_effect": "Kháng sinh phổ rộng → giảm K2 từ vi khuẩn 50–90%"
+          },
+          "genome_profile": {
+            "key_genes": [
+              { "gene": "VKORC1", "function": "Vitamin K epoxide reductase — tái chế K", "chr": "16p11.2" },
+              { "gene": "CYP4F2", "function": "Dị hóa Vitamin K", "chr": "19p13.12" },
+              { "gene": "GGCX", "function": "γ-glutamyl carboxylase — hoạt hóa Gla-proteins", "chr": "2p12" },
+              { "gene": "UBIAD1", "function": "Tổng hợp MK-4 nội sinh từ K1/K3", "chr": "1p36.22" }
+            ]
+          },
+          "metabolome_profile": {
+            "key_metabolites": [
+              { "metabolite": "Vitamin K1 epoxide", "role": "Sản phẩm sau γ-carboxylation — cần VKORC1 tái chế" },
+              { "metabolite": "MK-4 (Menaquinone-4)", "role": "Tổng hợp nội sinh từ K1 qua UBIAD1 tại não, tinh hoàn, tụy" },
+              { "metabolite": "5C- và 7C-arachidonic acid metabolites", "role": "Sản phẩm dị hóa K qua CYP4F2" }
+            ]
+          },
+          "proteome_profile": {
+            "gla_proteins": [
+              { "protein": "Prothrombin (Factor II)", "function": "Đông máu", "organ": "Gan" },
+              { "protein": "Factor VII, IX, X", "function": "Đông máu", "organ": "Gan" },
+              { "protein": "Protein C, S, Z", "function": "Chống đông", "organ": "Gan" },
+              { "protein": "Osteocalcin (BGP)", "function": "Gắn Canxi vào xương", "organ": "Xương" },
+              { "protein": "MGP (Matrix Gla-Protein)", "function": "Ngăn vôi hóa mạch", "organ": "Thành mạch" },
+              { "protein": "Gas6", "function": "Bảo vệ thần kinh, tín hiệu tế bào", "organ": "Não, Thận" },
+              { "protein": "Periostin", "function": "Tái tạo xương, tim mạch", "organ": "Xương, Tim" }
+            ]
+          },
+          "transcriptome_profile": {
+            "regulated_genes": [
+              { "gene": "GGCX", "regulation": "Upregulated khi có đủ Vitamin K", "evidence": "B" },
+              { "gene": "VKORC1", "regulation": "Feedback regulation theo mức K", "evidence": "B" }
+            ]
+          },
+          "wearable_data": {
+            "relevant_metrics": [
+              { "metric": "CGM (Continuous Glucose Monitor)", "relevance": "Vitamin K2 cải thiện insulin sensitivity — theo dõi đáp ứng đường huyết" },
+              { "metric": "Heart rate variability (HRV)", "relevance": "Gián tiếp phản ánh sức khỏe tim mạch — K2 bảo vệ mạch máu" }
+            ],
+            "note": "Wearable data giúp cá nhân hóa khuyến nghị K — đặc biệt cho người kháng insulin"
+          },
+          "environmental_exposure": {
+            "uv_light": { "relevance": "Không ảnh hưởng trực tiếp (khác với Vitamin D)", "note": "K1 nhạy cảm với ánh sáng — bảo quản thực phẩm giàu K1 tránh ánh sáng trực tiếp" },
+            "temperature": { "effect": "Nấu ở nhiệt độ cao (>200°C) giảm K1 20–30%", "evidence": "B" },
+            "oxidation": { "effect": "K1 nhạy cảm với oxy — bảo quản trong điều kiện kín", "evidence": "B" },
+            "soil_quality": { "relevance": "Hàm lượng K1 trong rau phụ thuộc loại đất và phân bón", "evidence": "C" }
+          }
+        },
+        "k2_mk7_natto": {
+          "label_vi": "K2 MK-7 từ Natto",
+          "label_en": "K2 MK-7 from Natto",
+          "base_absorption_factor": 0.75,
+          "range": "0.70–0.80",
+          "enhancers": [
+            { "factor": "Chất béo trong bữa ăn", "effect": "Cần thiết — tan trong dầu", "evidence": "A" }
+          ],
+          "inhibitors": [
+            { "factor": "Warfarin", "effect": "Không giảm hấp thu nhưng cạnh tranh tác dụng", "evidence": "A" }
+          ],
+          "food_matrix_modifiers": [
+            { "modifier": "Protein đậu nành lên men", "effect": "K2 MK-7 nằm tự do trong lipid — hấp thu tốt hơn K1 nhiều", "factor": 1.5 }
+          ],
+          "food_processing_effects": [
+            { "process": "Lên men (Bacillus subtilis natto)", "effect": "Tổng hợp MK-7 — không có trước khi lên men", "new_factor": 0.75 }
+          ],
+          "kinetics": {
+            "Tmax_hours": "4–6",
+            "T_half_plasma_hours": "72–96",
+            "note": "T½ rất dài — dùng 1 lần/ngày hoặc ít hơn vẫn hiệu quả"
+          },
+          "storage_compartment": {
+            "adipose": { "amount": "Cao hơn K1 nhiều", "duration": "Vài tuần đến vài tháng" },
+            "liver": { "amount": "Trung bình", "duration": "~1 tuần" }
+          },
+          "distribution_compartment": {
+            "primary": "Xương (Osteocalcin activation)",
+            "secondary": ["Thành mạch (MGP activation)", "Gan"],
+            "transport_proteins": ["LDL", "HDL"]
+          },
+          "biomarkers": [
+            { "marker": "Plasma MK-7", "unit": "nmol/L", "normal_range": "0.5–5.0" },
+            { "marker": "ucOsteocalcin (%)", "note": "Giảm khi MK-7 đủ" },
+            { "marker": "ucMGP", "note": "Giảm khi MK-7 đủ" }
+          ],
+          "evidence": "A",
+          "status": "complete"
+        }
+      }
+    },
+    "NUT_vitamin_d": { "label_vi": "Vitamin D", "status": "pending", "note": "Sẽ bổ sung Phase 1.1" },
+    "NUT_vitamin_a": { "label_vi": "Vitamin A", "status": "pending", "note": "Sẽ bổ sung Phase 1.1" },
+    "NUT_vitamin_e": { "label_vi": "Vitamin E", "status": "pending", "note": "Sẽ bổ sung Phase 1.1" },
+    "NUT_vitamin_c": { "label_vi": "Vitamin C", "status": "pending", "note": "Sẽ bổ sung Phase 1.1" },
+    "NUT_vitamin_b1": { "label_vi": "Vitamin B1 (Thiamine)", "status": "pending" },
+    "NUT_vitamin_b2": { "label_vi": "Vitamin B2 (Riboflavin)", "status": "pending" },
+    "NUT_vitamin_b3": { "label_vi": "Vitamin B3 (Niacin)", "status": "pending" },
+    "NUT_vitamin_b5": { "label_vi": "Vitamin B5 (Pantothenic acid)", "status": "pending" },
+    "NUT_vitamin_b6": { "label_vi": "Vitamin B6 (Pyridoxine)", "status": "pending" },
+    "NUT_vitamin_b7": { "label_vi": "Vitamin B7 (Biotin)", "status": "pending" },
+    "NUT_vitamin_b9": { "label_vi": "Vitamin B9 (Folate)", "status": "pending" },
+    "NUT_vitamin_b12": { "label_vi": "Vitamin B12 (Cobalamin)", "status": "pending" },
+    "NUT_calcium":    { "label_vi": "Calcium", "status": "pending" },
+    "NUT_iron":       { "label_vi": "Iron", "status": "pending" },
+    "NUT_magnesium":  { "label_vi": "Magnesium", "status": "pending" },
+    "NUT_zinc":       { "label_vi": "Zinc", "status": "pending" },
+    "NUT_selenium":   { "label_vi": "Selenium", "status": "pending" },
+    "NUT_iodine":     { "label_vi": "Iodine", "status": "pending" },
+    "NUT_phosphorus": { "label_vi": "Phosphorus", "status": "pending" },
+    "NUT_potassium":  { "label_vi": "Potassium", "status": "pending" },
+    "NUT_sodium":     { "label_vi": "Sodium", "status": "pending" },
+    "NUT_copper":     { "label_vi": "Copper", "status": "pending" },
+    "NUT_manganese":  { "label_vi": "Manganese", "status": "pending" },
+    "NUT_chromium":   { "label_vi": "Chromium", "status": "pending" },
+    "NUT_molybdenum": { "label_vi": "Molybdenum", "status": "pending" },
+    "NUT_fluoride":   { "label_vi": "Fluoride", "status": "pending" },
+    "NUT_sulfur":     { "label_vi": "Sulfur", "status": "pending" },
+    "NUT_chloride":   { "label_vi": "Chloride", "status": "pending" },
+    "NUT_protein":    { "label_vi": "Protein", "status": "pending" },
+    "NUT_carbohydrate_total": { "label_vi": "Carbohydrate", "status": "pending" },
+    "NUT_fiber":      { "label_vi": "Dietary Fiber", "status": "pending" },
+    "NUT_fat_total":  { "label_vi": "Total Fat", "status": "pending" },
+    "NUT_histidine":  { "label_vi": "Histidine (EAA)", "status": "pending" },
+    "NUT_isoleucine": { "label_vi": "Isoleucine (EAA)", "status": "pending" },
+    "NUT_leucine":    { "label_vi": "Leucine (EAA)", "status": "pending" },
+    "NUT_lysine":     { "label_vi": "Lysine (EAA)", "status": "pending" },
+    "NUT_methionine": { "label_vi": "Methionine (EAA)", "status": "pending" },
+    "NUT_phenylalanine": { "label_vi": "Phenylalanine (EAA)", "status": "pending" },
+    "NUT_threonine":  { "label_vi": "Threonine (EAA)", "status": "pending" },
+    "NUT_tryptophan": { "label_vi": "Tryptophan (EAA)", "status": "pending" },
+    "NUT_valine":     { "label_vi": "Valine (EAA)", "status": "pending" }
+  }
+            }
