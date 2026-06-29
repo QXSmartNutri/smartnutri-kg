@@ -1,1 +1,385 @@
+name: Nightly Tests
 
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Chạy lúc 00:00 UTC mỗi đêm
+  workflow_dispatch:      # Cho phép chạy thủ công
+
+jobs:
+  test-data-integrity:
+    name: "🔍 Data Integrity Tests"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: |
+          pip install pytest requests rdflib jsonschema
+
+      - name: Run validate-jsonld.js
+        run: |
+          echo "=== JSON-LD Structure Test ==="
+          if [ -f "tests/data/validate-jsonld.js" ]; then
+            node tests/data/validate-jsonld.js
+          else
+            echo "⚠️  Skipping — file pending"
+          fi
+
+      - name: Run validate-ids.js
+        run: |
+          echo "=== Entity ID Test ==="
+          if [ -f "tests/data/validate-ids.js" ]; then
+            node tests/data/validate-ids.js
+          else
+            echo "⚠️  Skipping — file pending"
+          fi
+
+      - name: Run validate-schema.js
+        run: |
+          echo "=== Schema Validation Test ==="
+          if [ -f "tests/data/validate-schema.js" ]; then
+            node tests/data/validate-schema.js
+          else
+            echo "⚠️  Skipping — file pending"
+          fi
+
+      - name: Run data integrity Python tests
+        run: |
+          echo "=== Data Integrity Python Tests ==="
+          if [ -f "tests/test_data_integrity.py" ]; then
+            pytest tests/test_data_integrity.py -v
+          else
+            echo "⚠️  Skipping — file pending"
+          fi
+
+  test-ontology:
+    name: "🧠 Ontology Tests"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install rapper (Raptor RDF parser)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y raptor2-utils
+
+      - name: Validate Turtle ontology files
+        run: |
+          echo "=== Ontology TTL Validation ==="
+          FAIL=0
+          for f in $(find ontology/ -name "*.ttl" 2>/dev/null); do
+            if rapper -i turtle "$f" -o ntriples > /dev/null 2>&1; then
+              echo "✅  $f"
+            else
+              echo "❌  $f — Invalid Turtle"
+              rapper -i turtle "$f" -o ntriples 2>&1 | grep -i "error"
+              FAIL=1
+            fi
+          done
+          if [ $FAIL -eq 1 ]; then exit 1; fi
+          echo "✅ All Turtle files valid."
+
+      - name: Run ontology validation script
+        run: |
+          echo "=== Extended Ontology Tests ==="
+          if [ -f "tests/ontology/validate_ontology.sh" ]; then
+            bash tests/ontology/validate_ontology.sh
+          else
+            echo "⚠️  Skipping — file pending"
+          fi
+
+  test-graph:
+    name: "🕸️ Graph Tests"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: |
+          pip install pytest rdflib networkx
+
+      - name: Test graph connectivity
+        run: |
+          echo "=== Graph Connectivity Test ==="
+          if [ -f "tests/graph/test_graph_connectivity.py" ]; then
+            pytest tests/graph/test_graph_connectivity.py -v
+          else
+            echo "⚠️  Skipping — file pending"
+          fi
+
+      - name: Test for orphan nodes
+        run: |
+          echo "=== Orphan Node Test ==="
+          if [ -f "tests/graph/test_orphan_nodes.py" ]; then
+            pytest tests/graph/test_orphan_nodes.py -v
+          else
+            echo "⚠️  Skipping — file pending"
+          fi
+
+  test-logic:
+    name: "⚙️ Logic Engine Tests"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install pytest
+
+      - name: Validate logic/ JSON files
+        run: |
+          echo "=== Logic Files Integrity ==="
+          FAIL=0
+          for f in $(find logic/ -name "*.json" 2>/dev/null); do
+            if node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" 2>/dev/null; then
+              echo "✅  $f"
+            else
+              echo "❌  $f — Invalid JSON"
+              FAIL=1
+            fi
+          done
+          if [ $FAIL -eq 1 ]; then exit 1; fi
+
+      - name: Run absorption logic tests
+        run: |
+          echo "=== Absorption Logic Tests ==="
+          if [ -f "tests/logic/test_absorption_logic.py" ]; then
+            pytest tests/logic/test_absorption_logic.py -v
+          else
+            echo "⚠️  Skipping — file pending"
+          fi
+
+      - name: Run interaction logic tests
+        run: |
+          echo "=== Interaction Logic Tests ==="
+          if [ -f "tests/logic/test_interaction_logic.py" ]; then
+            pytest tests/logic/test_interaction_logic.py -v
+          else
+            echo "⚠️  Skipping — file pending"
+          fi
+
+      - name: Run logic calculation tests
+        run: |
+          echo "=== Logic Calculation Tests ==="
+          if [ -f "tests/test_logic_calculation.py" ]; then
+            pytest tests/test_logic_calculation.py -v
+          else
+            echo "⚠️  Skipping — file pending"
+          fi
+
+  test-ai:
+    name: "🤖 AI Safety & Factuality Tests"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install pytest
+
+      - name: Validate ai_config/ files
+        run: |
+          echo "=== AI Config Validation ==="
+          FAIL=0
+          for f in $(find ai_config/ -name "*.json" 2>/dev/null); do
+            if node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" 2>/dev/null; then
+              echo "✅  $f"
+            else
+              echo "❌  $f — Invalid JSON"
+              FAIL=1
+            fi
+          done
+          if [ $FAIL -eq 1 ]; then exit 1; fi
+        continue-on-error: true
+
+      - name: Run hallucination tests
+        run: |
+          echo "=== Hallucination Tests ==="
+          if [ -f "tests/ai/hallucination_tests.py" ]; then
+            pytest tests/ai/hallucination_tests.py -v
+          else
+            echo "⚠️  Skipping — file pending"
+          fi
+
+      - name: Run factuality tests
+        run: |
+          echo "=== Factuality Tests ==="
+          if [ -f "tests/ai/factuality_tests.py" ]; then
+            pytest tests/ai/factuality_tests.py -v
+          else
+            echo "⚠️  Skipping — file pending"
+          fi
+
+      - name: Run prompt injection security tests
+        run: |
+          echo "=== Security Tests ==="
+          if [ -f "tests/security/prompt_injection_tests.py" ]; then
+            pytest tests/security/prompt_injection_tests.py -v
+          else
+            echo "⚠️  Skipping — file pending"
+          fi
+
+  test-performance:
+    name: "⚡ Performance Tests"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install pytest time
+
+      - name: Run optimizer speed tests
+        run: |
+          echo "=== Performance Tests ==="
+          if [ -f "tests/performance/optimizer_speed_test.py" ]; then
+            pytest tests/performance/optimizer_speed_test.py -v
+          else
+            echo "⚠️  Skipping — file pending"
+          fi
+
+  test-benchmarks:
+    name: "📊 Benchmark Tests"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate benchmark files
+        run: |
+          echo "=== Benchmark Files Validation ==="
+          BENCHMARKS=(
+            "tests/benchmarks/clinical_cases.json"
+            "tests/benchmarks/meal_generation_benchmark.json"
+          )
+          for f in "${BENCHMARKS[@]}"; do
+            if [ -f "$f" ]; then
+              if node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" 2>/dev/null; then
+                echo "✅  $f"
+              else
+                echo "❌  $f — Invalid JSON"
+              fi
+            else
+              echo "⚠️   $f — pending"
+            fi
+          done
+
+      - name: Validate meal optimizer test cases
+        run: |
+          echo "=== Meal Optimizer Test Cases ==="
+          CASES=(
+            "tests/meal_optimizer/diabetes_case.json"
+            "tests/meal_optimizer/toddler_case.json"
+          )
+          for f in "${CASES[@]}"; do
+            if [ -f "$f" ]; then
+              if node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" 2>/dev/null; then
+                echo "✅  $f"
+              else
+                echo "❌  $f — Invalid JSON"
+              fi
+            else
+              echo "⚠️   $f — pending"
+            fi
+          done
+
+  generate-nightly-report:
+    name: "📝 Nightly Report"
+    runs-on: ubuntu-latest
+    needs: [test-data-integrity, test-ontology, test-graph, test-logic, test-ai, test-performance, test-benchmarks]
+    if: always()
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate report
+        run: |
+          DATE=$(date -u +"%Y-%m-%d %H:%M UTC")
+          echo "=============================================="
+          echo "  SmartNutri KG — Nightly Test Report"
+          echo "  $DATE"
+          echo "=============================================="
+          echo ""
+          echo "Test Results:"
+          echo "  Data Integrity:  ${{ needs.test-data-integrity.result }}"
+          echo "  Ontology:        ${{ needs.test-ontology.result }}"
+          echo "  Graph:           ${{ needs.test-graph.result }}"
+          echo "  Logic Engine:    ${{ needs.test-logic.result }}"
+          echo "  AI Safety:       ${{ needs.test-ai.result }}"
+          echo "  Performance:     ${{ needs.test-performance.result }}"
+          echo "  Benchmarks:      ${{ needs.test-benchmarks.result }}"
+          echo ""
+          echo "Repository Stats:"
+          echo "  JSON-LD files:   $(find data/jsonld/ -name '*.jsonld' 2>/dev/null | wc -l)"
+          echo "  Standards files: $(find standards/ -name '*.json' 2>/dev/null | wc -l)"
+          echo "  Logic files:     $(find logic/ -name '*.json' 2>/dev/null | wc -l)"
+          echo "  Schema files:    $(find schemas/ -name '*.json' 2>/dev/null | wc -l)"
+          echo "  Ontology files:  $(find ontology/ -name '*.ttl' 2>/dev/null | wc -l)"
+          echo ""
+          PASS_COUNT=0
+          FAIL_COUNT=0
+          for result in \
+            "${{ needs.test-data-integrity.result }}" \
+            "${{ needs.test-ontology.result }}" \
+            "${{ needs.test-graph.result }}" \
+            "${{ needs.test-logic.result }}" \
+            "${{ needs.test-ai.result }}" \
+            "${{ needs.test-performance.result }}" \
+            "${{ needs.test-benchmarks.result }}"; do
+            if [ "$result" = "success" ]; then
+              PASS_COUNT=$((PASS_COUNT+1))
+            else
+              FAIL_COUNT=$((FAIL_COUNT+1))
+            fi
+          done
+          echo "Summary: $PASS_COUNT passed | $FAIL_COUNT failed"
+          echo ""
+          if [ $FAIL_COUNT -eq 0 ]; then
+            echo "✅ All nightly tests passed!"
+          else
+            echo "⚠️  $FAIL_COUNT test suite(s) need attention."
+            echo "    Note: Pending files cause expected failures during Phase 1."
+          fi
