@@ -1,1 +1,164 @@
-
+{
+  "$schema": "https://smartnutri.org/schemas/standards",
+  "version": "1.1.0",
+  "description": "Danh sách chất gây dị ứng thực phẩm chuẩn quốc tế dùng trong SmartNutri KG",
+  "sources": [
+    "FDA Food Allergen Labeling and Consumer Protection Act (FALCPA) 2004 — 9 nhóm chính",
+    "EU Regulation No 1169/2011 — 14 nhóm bắt buộc ghi nhãn",
+    "Codex Alimentarius — FAO/WHO"
+  ],
+  "major_allergens": {
+    "FDA_9": {
+      "label": "FDA Big 9 (Hoa Kỳ)",
+      "note": "Bắt buộc ghi nhãn tại Hoa Kỳ từ 2023",
+      "allergens": [
+        {
+          "id": "ALG_MILK",
+          "label_vi": "Sữa (Milk)",
+          "label_en": "Milk / Dairy",
+          "common_sources_vi": ["Sữa bò", "Phô mai", "Bơ", "Kem", "Sữa chua", "Whey"],
+          "cross_reactive": ["Sữa dê", "Sữa cừu"],
+          "note": "Khác với không dung nạp Lactose — dị ứng Milk là phản ứng miễn dịch với protein sữa"
+        },
+        {
+          "id": "ALG_EGG",
+          "label_vi": "Trứng (Egg)",
+          "label_en": "Egg",
+          "common_sources_vi": ["Trứng gà", "Mayonnaise", "Bánh ngọt", "Mì trứng"],
+          "cross_reactive": ["Trứng vịt", "Trứng cút"],
+          "note": "Protein gây dị ứng chủ yếu trong lòng trắng trứng (Albumin, Ovomucoid)"
+        },
+        {
+          "id": "ALG_FISH",
+          "label_vi": "Cá (Fish)",
+          "label_en": "Fish",
+          "common_sources_vi": ["Cá hồi", "Cá ngừ", "Cá tuyết", "Cá mòi", "Nước mắm"],
+          "cross_reactive": ["Hầu hết các loài cá xương"],
+          "note": "Parvalbumin là protein gây dị ứng chính — bền nhiệt"
+        },
+        {
+          "id": "ALG_SHELLFISH",
+          "label_vi": "Động vật có vỏ (Shellfish)",
+          "label_en": "Crustacean Shellfish",
+          "common_sources_vi": ["Tôm", "Cua", "Tôm hùm", "Mực"],
+          "cross_reactive": ["Các loài giáp xác"],
+          "note": "Tropomyosin là protein gây dị ứng chính"
+        },
+        {
+          "id": "ALG_TREENUTS",
+          "label_vi": "Hạt cây (Tree Nuts)",
+          "label_en": "Tree Nuts",
+          "common_sources_vi": ["Hạnh nhân", "Hạt điều", "Óc chó", "Hồ đào", "Hạt Brazil", "Hạt dẻ", "Hạt thông", "Hạt macadamia"],
+          "cross_reactive": ["Có thể phản ứng chéo giữa các loại hạt"],
+          "note": "Mỗi loại hạt cây là allergen riêng biệt theo FDA 2023"
+        },
+        {
+          "id": "ALG_PEANUT",
+          "label_vi": "Đậu phộng (Peanut)",
+          "label_en": "Peanut",
+          "common_sources_vi": ["Đậu phộng rang", "Bơ đậu phộng", "Dầu đậu phộng", "Satay"],
+          "cross_reactive": ["Đậu nành", "Các loại đậu họ Legume"],
+          "note": "Là Legume (không phải Tree Nut) — allergen riêng biệt"
+        },
+        {
+          "id": "ALG_WHEAT",
+          "label_vi": "Lúa mì (Wheat)",
+          "label_en": "Wheat",
+          "common_sources_vi": ["Bánh mì", "Mì ống", "Bánh ngọt", "Bia", "Tương hoisin"],
+          "cross_reactive": ["Lúa mạch", "Lúa mạch đen"],
+          "note": "Khác với Celiac (nhạy cảm Gluten) — dị ứng Wheat là phản ứng IgE với protein lúa mì"
+        },
+        {
+          "id": "ALG_SOYBEAN",
+          "label_vi": "Đậu nành (Soybean)",
+          "label_en": "Soybean",
+          "common_sources_vi": ["Đậu phụ", "Sữa đậu nành", "Tương đậu nành", "Miso", "Edamame", "Natto"],
+          "cross_reactive": ["Đậu phộng", "Các loại đậu họ Legume"],
+          "note": "Phổ biến ở trẻ em — thường tự khỏi theo tuổi"
+        },
+        {
+          "id": "ALG_SESAME",
+          "label_vi": "Vừng/Mè (Sesame)",
+          "label_en": "Sesame",
+          "common_sources_vi": ["Dầu mè", "Bánh mì vừng", "Hummus (Tahini)", "Bánh Trung Đông"],
+          "cross_reactive": ["Hạt poppy", "Hạt hướng dương"],
+          "note": "Được thêm vào Big 9 từ 2023 (FASTER Act)"
+        }
+      ]
+    },
+    "EU_14": {
+      "label": "EU Big 14 (Châu Âu)",
+      "note": "Bắt buộc ghi nhãn tại EU theo Regulation 1169/2011",
+      "additional_vs_fda": [
+        {
+          "id": "ALG_GLUTEN",
+          "label_vi": "Gluten (Ngũ cốc có Gluten)",
+          "label_en": "Gluten-containing cereals",
+          "common_sources_vi": ["Lúa mì", "Lúa mạch", "Lúa mạch đen", "Yến mạch (có thể nhiễm chéo)"],
+          "note": "Bao gồm Wheat, Barley, Rye, Oat — rộng hơn FDA Wheat allergen"
+        },
+        {
+          "id": "ALG_MOLLUSCS",
+          "label_vi": "Động vật thân mềm (Molluscs)",
+          "label_en": "Molluscs",
+          "common_sources_vi": ["Hàu", "Sò điệp", "Bạch tuộc", "Mực ống", "Ốc"],
+          "note": "EU phân biệt Crustacean và Molluscs — FDA gộp chung vào Shellfish"
+        },
+        {
+          "id": "ALG_MUSTARD",
+          "label_vi": "Mù tạt (Mustard)",
+          "label_en": "Mustard",
+          "common_sources_vi": ["Hạt mù tạt", "Bột mù tạt", "Tương mù tạt", "Curry powder"],
+          "note": "Phổ biến tại châu Âu — không trong FDA list"
+        },
+        {
+          "id": "ALG_CELERY",
+          "label_vi": "Cần tây (Celery)",
+          "label_en": "Celery",
+          "common_sources_vi": ["Thân cần tây", "Hạt cần tây", "Nước rau cần tây", "Soup powder"],
+          "note": "Phổ biến tại châu Âu — không trong FDA list"
+        },
+        {
+          "id": "ALG_LUPIN",
+          "label_vi": "Đậu Lupin",
+          "label_en": "Lupin",
+          "common_sources_vi": ["Hạt Lupin", "Bột Lupin", "Bánh mì Lupin"],
+          "cross_reactive": ["Đậu phộng"],
+          "note": "Phổ biến trong sản phẩm chay châu Âu"
+        },
+        {
+          "id": "ALG_SULPHITES",
+          "label_vi": "Sulphite / SO₂ (>10 ppm)",
+          "label_en": "Sulphur dioxide and sulphites",
+          "common_sources_vi": ["Rượu vang", "Trái cây sấy", "Giấm", "Tôm đông lạnh", "Nước ép trái cây"],
+          "note": "Không phải dị ứng IgE — thường gây phản ứng giả dị ứng ở người nhạy cảm"
+        }
+      ]
+    }
+  },
+  "allergen_severity": {
+    "anaphylaxis_risk": {
+      "label_vi": "Nguy cơ sốc phản vệ cao",
+      "label_en": "High anaphylaxis risk",
+      "allergens": ["ALG_PEANUT", "ALG_TREENUTS", "ALG_SHELLFISH", "ALG_FISH"]
+    },
+    "moderate_risk": {
+      "label_vi": "Nguy cơ trung bình",
+      "label_en": "Moderate risk",
+      "allergens": ["ALG_MILK", "ALG_EGG", "ALG_WHEAT", "ALG_SOYBEAN", "ALG_SESAME"]
+    }
+  },
+  "cross_contamination_threshold": {
+    "note": "Ngưỡng gây phản ứng thay đổi theo từng cá thể",
+    "general_precaution": "Sản phẩm sản xuất trên dây chuyền chung cần ghi nhãn 'May contain...'",
+    "gluten_free_threshold": { "value": 20, "unit": "ppm", "standard": "EU Regulation 41/2009 / FDA Gluten-Free Rule" }
+  },
+  "usage_in_kg": {
+    "note": "Trong SmartNutri KG, mỗi FOOD_ entity có trường sn:containsAllergen",
+    "example": {
+      "@id": "https://smartnutri.org/entity/FOOD_YYYYMMDD_000001",
+      "sn:containsAllergen": ["ALG_GLUTEN", "ALG_EGG"],
+      "sn:mayContainAllergen": ["ALG_MILK"]
+    }
+  }
+}
