@@ -1,1 +1,89 @@
-
+{
+  "$schema": "https://smartnutri.org/schemas/standards",
+  "version": "1.1.0",
+  "description": "55 ngôn ngữ được hỗ trợ trong SmartNutri KG (ISO 639-1)",
+  "primary_language": "vi",
+  "mandatory_languages": ["vi", "en"],
+  "note": "Mọi entity phải có rdfs:label bằng vi & en. Các ngôn ngữ khác bổ sung theo phase.",
+  "supported_languages": [
+    { "code": "vi", "label": "Tiếng Việt",             "label_en": "Vietnamese",            "status": "active",  "phase": 1 },
+    { "code": "en", "label": "English",                 "label_en": "English",               "status": "active",  "phase": 1 },
+    { "code": "zh-Hans", "label": "中文 (简体)",        "label_en": "Chinese (Simplified)",  "status": "planned", "phase": 5 },
+    { "code": "zh-Hant", "label": "中文 (繁體)",        "label_en": "Chinese (Traditional)", "status": "planned", "phase": 5 },
+    { "code": "ja", "label": "日本語",                  "label_en": "Japanese",              "status": "planned", "phase": 5 },
+    { "code": "ko", "label": "한국어",                  "label_en": "Korean",                "status": "planned", "phase": 5 },
+    { "code": "fr", "label": "Français",               "label_en": "French",                "status": "planned", "phase": 5 },
+    { "code": "de", "label": "Deutsch",                "label_en": "German",                "status": "planned", "phase": 5 },
+    { "code": "es", "label": "Español",                "label_en": "Spanish",               "status": "planned", "phase": 5 },
+    { "code": "pt", "label": "Português",              "label_en": "Portuguese",            "status": "planned", "phase": 5 },
+    { "code": "it", "label": "Italiano",               "label_en": "Italian",               "status": "planned", "phase": 5 },
+    { "code": "ru", "label": "Русский",                "label_en": "Russian",               "status": "planned", "phase": 5 },
+    { "code": "th", "label": "ภาษาไทย",               "label_en": "Thai",                  "status": "planned", "phase": 5 },
+    { "code": "id", "label": "Bahasa Indonesia",       "label_en": "Indonesian",            "status": "planned", "phase": 5 },
+    { "code": "hi", "label": "हिन्दी",                "label_en": "Hindi",                 "status": "planned", "phase": 5 },
+    { "code": "ar", "label": "العربية",               "label_en": "Arabic",                "status": "planned", "phase": 5 },
+    { "code": "nl", "label": "Nederlands",             "label_en": "Dutch",                 "status": "planned", "phase": 5 },
+    { "code": "pl", "label": "Polski",                 "label_en": "Polish",                "status": "planned", "phase": 5 },
+    { "code": "tr", "label": "Türkçe",                "label_en": "Turkish",               "status": "planned", "phase": 5 },
+    { "code": "sv", "label": "Svenska",               "label_en": "Swedish",               "status": "planned", "phase": 5 },
+    { "code": "da", "label": "Dansk",                 "label_en": "Danish",                "status": "planned", "phase": 5 },
+    { "code": "fi", "label": "Suomi",                 "label_en": "Finnish",               "status": "planned", "phase": 5 },
+    { "code": "el", "label": "Ελληνικά",              "label_en": "Greek",                 "status": "planned", "phase": 5 },
+    { "code": "cs", "label": "Čeština",               "label_en": "Czech",                 "status": "planned", "phase": 5 },
+    { "code": "ms", "label": "Bahasa Melayu",         "label_en": "Malay",                 "status": "planned", "phase": 5 },
+    { "code": "fil","label": "Filipino",              "label_en": "Filipino",              "status": "planned", "phase": 5 },
+    { "code": "my", "label": "မြန်မာဘာသာ",            "label_en": "Myanmar (Burmese)",     "status": "planned", "phase": 5 },
+    { "code": "km", "label": "ភាសាខ្មែរ",             "label_en": "Khmer",                 "status": "planned", "phase": 5 },
+    { "code": "lo", "label": "ພາສາລາວ",               "label_en": "Lao",                   "status": "planned", "phase": 5 },
+    { "code": "mn", "label": "Монгол",                "label_en": "Mongolian",             "status": "planned", "phase": 5 },
+    { "code": "ne", "label": "नेपाली",                "label_en": "Nepali",                "status": "planned", "phase": 5 },
+    { "code": "si", "label": "සිංහල",                 "label_en": "Sinhala",               "status": "planned", "phase": 5 },
+    { "code": "bn", "label": "বাংলা",                 "label_en": "Bengali",               "status": "planned", "phase": 5 },
+    { "code": "ur", "label": "اردو",                  "label_en": "Urdu",                  "status": "planned", "phase": 5 },
+    { "code": "fa", "label": "فارسی",                 "label_en": "Persian (Farsi)",       "status": "planned", "phase": 5 },
+    { "code": "he", "label": "עברית",                 "label_en": "Hebrew",                "status": "planned", "phase": 5 },
+    { "code": "ka", "label": "ქართული",               "label_en": "Georgian",              "status": "planned", "phase": 5 },
+    { "code": "hy", "label": "Հայերեն",               "label_en": "Armenian",              "status": "planned", "phase": 5 },
+    { "code": "az", "label": "Azərbaycan",            "label_en": "Azerbaijani",           "status": "planned", "phase": 5 },
+    { "code": "kk", "label": "Қазақша",               "label_en": "Kazakh",                "status": "planned", "phase": 5 },
+    { "code": "uk", "label": "Українська",            "label_en": "Ukrainian",             "status": "planned", "phase": 5 },
+    { "code": "ro", "label": "Română",                "label_en": "Romanian",              "status": "planned", "phase": 5 },
+    { "code": "hu", "label": "Magyar",                "label_en": "Hungarian",             "status": "planned", "phase": 5 },
+    { "code": "no", "label": "Norsk",                 "label_en": "Norwegian",             "status": "planned", "phase": 5 },
+    { "code": "sk", "label": "Slovenčina",            "label_en": "Slovak",                "status": "planned", "phase": 5 },
+    { "code": "hr", "label": "Hrvatski",              "label_en": "Croatian",              "status": "planned", "phase": 5 },
+    { "code": "bg", "label": "Български",             "label_en": "Bulgarian",             "status": "planned", "phase": 5 },
+    { "code": "sr", "label": "Српски",                "label_en": "Serbian",               "status": "planned", "phase": 5 },
+    { "code": "sw", "label": "Kiswahili",             "label_en": "Swahili",               "status": "planned", "phase": 5 },
+    { "code": "uz", "label": "Oʻzbekcha",             "label_en": "Uzbek",                 "status": "planned", "phase": 5 },
+    { "code": "am", "label": "አማርኛ",                  "label_en": "Amharic",               "status": "planned", "phase": 5 },
+    { "code": "ha", "label": "Hausa",                 "label_en": "Hausa",                 "status": "planned", "phase": 5 },
+    { "code": "yo", "label": "Yorùbá",               "label_en": "Yoruba",                "status": "planned", "phase": 5 },
+    { "code": "ig", "label": "Igbo",                  "label_en": "Igbo",                  "status": "planned", "phase": 5 },
+    { "code": "zu", "label": "isiZulu",               "label_en": "Zulu",                  "status": "planned", "phase": 5 }
+  ],
+  "total": 55,
+  "label_requirements": {
+    "mandatory": ["vi", "en"],
+    "note": "Mọi entity phải có rdfs:label bằng vi & en. Ngôn ngữ khác bổ sung khi có dữ liệu.",
+    "format_jsonld": [
+      { "@value": "Tên tiếng Việt", "@language": "vi" },
+      { "@value": "English name",   "@language": "en" }
+    ],
+    "format_turtle": "rdfs:label \"Tên tiếng Việt\"@vi , \"English name\"@en ."
+  },
+  "naming_conventions": {
+    "scientific_name": {
+      "field": "sn:scientificName",
+      "note": "Tên khoa học dùng tiếng Latin — không cần @language tag"
+    },
+    "common_name": {
+      "field": "rdfs:label",
+      "note": "Tên thông thường — bắt buộc vi & en"
+    },
+    "synonym": {
+      "field": "skos:altLabel",
+      "note": "Tên đồng nghĩa, tên địa phương — dùng cùng format @language"
+    }
+  }
+    }
