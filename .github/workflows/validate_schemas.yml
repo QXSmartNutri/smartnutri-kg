@@ -1,1 +1,293 @@
+name: Validate Schemas
 
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'schemas/**/*.json'
+      - 'data/jsonld/**/*.jsonld'
+      - 'standards/**/*.json'
+      - 'logic/**/*.json'
+      - 'templates/**/*.json'
+      - 'ai_config/**/*.json'
+      - 'mappings/**/*.json'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'schemas/**/*.json'
+      - 'data/jsonld/**/*.jsonld'
+      - 'standards/**/*.json'
+      - 'logic/**/*.json'
+      - 'templates/**/*.json'
+      - 'ai_config/**/*.json'
+      - 'mappings/**/*.json'
+  workflow_dispatch:
+
+jobs:
+  validate-schema-files:
+    name: "📋 Schema Files Integrity"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check all required schema files exist
+        run: |
+          echo "=== Checking required schema files ==="
+          FAIL=0
+          REQUIRED=(
+            "schemas/food.schema.json"
+            "schemas/herb.schema.json"
+            "schemas/nutrient.schema.json"
+            "schemas/bioactive.schema.json"
+            "schemas/toxic.schema.json"
+            "schemas/disease.schema.json"
+            "schemas/symptom.schema.json"
+            "schemas/drug.schema.json"
+            "schemas/brand.schema.json"
+            "schemas/anatomy.schema.json"
+            "schemas/metabolism.schema.json"
+            "schemas/logic_schema.json"
+            "schemas/mapping_schema.json"
+            "schemas/ai_config_schema.json"
+            "schemas/standard_schema.json"
+          )
+          for f in "${REQUIRED[@]}"; do
+            if [ -f "$f" ]; then
+              echo "✅  $f"
+            else
+              echo "⚠️   $f — not yet created (pending)"
+            fi
+          done
+          echo ""
+          echo "✅ Schema existence check complete."
+
+      - name: Validate schema files are valid JSON
+        run: |
+          echo "=== Validating schema JSON syntax ==="
+          FAIL=0
+          for f in $(find schemas/ -name "*.json" 2>/dev/null); do
+            if node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" 2>/dev/null; then
+              echo "✅  $f"
+            else
+              echo "❌  $f — Invalid JSON"
+              FAIL=1
+            fi
+          done
+          if [ $FAIL -eq 1 ]; then exit 1; fi
+          echo "✅ All schema files are valid JSON."
+
+  validate-jsonld-against-schema:
+    name: "🔍 JSON-LD vs Schema Validation"
+    runs-on: ubuntu-latest
+    needs: validate-schema-files
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run validate-schema.js
+        run: |
+          echo "=== Validating JSON-LD files against schemas ==="
+          if [ -f "tests/data/validate-schema.js" ]; then
+            node tests/data/validate-schema.js
+          else
+            echo "⚠️  tests/data/validate-schema.js not found — skipping"
+          fi
+
+  validate-logic-files:
+    name: "⚙️ Logic Files Validation"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate logic/ JSON files
+        run: |
+          echo "=== Validating logic/ directory JSON files ==="
+          FAIL=0
+          TOTAL=0
+          for f in $(find logic/ -name "*.json" 2>/dev/null); do
+            TOTAL=$((TOTAL+1))
+            if node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" 2>/dev/null; then
+              echo "✅  $f"
+            else
+              echo "❌  $f — Invalid JSON"
+              FAIL=1
+            fi
+          done
+          echo ""
+          echo "Total logic files checked: $TOTAL"
+          if [ $FAIL -eq 1 ]; then
+            echo "❌ Logic file errors found."
+            exit 1
+          fi
+          echo "✅ All logic files valid."
+
+      - name: Validate required logic subfolders
+        run: |
+          echo "=== Checking logic/ subfolders ==="
+          DIRS=(
+            "logic/absorption"
+            "logic/biomarkers"
+            "logic/evidence"
+            "logic/kinetics"
+            "logic/modifiers"
+            "logic/systems_biology"
+          )
+          for d in "${DIRS[@]}"; do
+            if [ -d "$d" ]; then
+              COUNT=$(find "$d" -name "*.json" | wc -l)
+              echo "✅  $d — $COUNT JSON files"
+            else
+              echo "⚠️   $d — not yet created (pending)"
+            fi
+          done
+
+  validate-templates:
+    name: "📄 Templates Validation"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate templates/ JSON files
+        run: |
+          echo "=== Validating templates/ directory ==="
+          FAIL=0
+          REQUIRED_TEMPLATES=(
+            "templates/food_template.json"
+            "templates/herb_template.json"
+            "templates/nutrient_template.json"
+            "templates/bioactive_template.json"
+            "templates/toxic_template.json"
+            "templates/disease_template.json"
+            "templates/drug_template.json"
+            "templates/anatomy_template.json"
+            "templates/metabolism_template.json"
+          )
+          for f in "${REQUIRED_TEMPLATES[@]}"; do
+            if [ -f "$f" ]; then
+              if node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" 2>/dev/null; then
+                echo "✅  $f"
+              else
+                echo "❌  $f — Invalid JSON"
+                FAIL=1
+              fi
+            else
+              echo "⚠️   $f — pending"
+            fi
+          done
+          if [ $FAIL -eq 1 ]; then exit 1; fi
+
+  validate-ai-config:
+    name: "🤖 AI Config Validation"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate ai_config/ JSON files
+        run: |
+          echo "=== Validating ai_config/ directory ==="
+          FAIL=0
+          REQUIRED=(
+            "ai_config/generation_rules.json"
+            "ai_config/safety_rules.json"
+            "ai_config/output_constraints.json"
+            "ai_config/reasoning_rules.json"
+            "ai_config/prompt_templates.json"
+            "ai_config/response_schemas.json"
+            "ai_config/medical_disclaimers.json"
+            "ai_config/clinical_tone_guidelines.json"
+          )
+          for f in "${REQUIRED[@]}"; do
+            if [ -f "$f" ]; then
+              if node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" 2>/dev/null; then
+                echo "✅  $f"
+              else
+                echo "❌  $f — Invalid JSON"
+                FAIL=1
+              fi
+            else
+              echo "⚠️   $f — pending"
+            fi
+          done
+          if [ $FAIL -eq 1 ]; then exit 1; fi
+
+  validate-mappings:
+    name: "🗺️ Mappings Validation"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate mappings/ JSON files
+        run: |
+          echo "=== Validating mappings/ directory ==="
+          FAIL=0
+          for f in $(find mappings/ -name "*.json" 2>/dev/null); do
+            if node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" 2>/dev/null; then
+              echo "✅  $f"
+            else
+              echo "❌  $f — Invalid JSON"
+              FAIL=1
+            fi
+          done
+          if [ $FAIL -eq 1 ]; then exit 1; fi
+          echo "✅ All mapping files valid."
+
+  schema-summary:
+    name: "📊 Schema Validation Summary"
+    runs-on: ubuntu-latest
+    needs: [validate-schema-files, validate-jsonld-against-schema, validate-logic-files, validate-templates, validate-ai-config, validate-mappings]
+    if: always()
+    steps:
+      - name: Print summary
+        run: |
+          echo "============================================"
+          echo "  SmartNutri KG — Schema Validation Summary"
+          echo "============================================"
+          echo "Schema Files:     ${{ needs.validate-schema-files.result }}"
+          echo "JSON-LD vs Schema: ${{ needs.validate-jsonld-against-schema.result }}"
+          echo "Logic Files:      ${{ needs.validate-logic-files.result }}"
+          echo "Templates:        ${{ needs.validate-templates.result }}"
+          echo "AI Config:        ${{ needs.validate-ai-config.result }}"
+          echo "Mappings:         ${{ needs.validate-mappings.result }}"
+          echo ""
+          if [ "${{ needs.validate-schema-files.result }}" = "success" ] && \
+             [ "${{ needs.validate-logic-files.result }}" = "success" ]; then
+            echo "✅ Core schema validations passed!"
+          else
+            echo "❌ Some validations failed. Check logs above."
+            exit 1
+          fi
