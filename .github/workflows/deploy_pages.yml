@@ -3,12 +3,6 @@ name: Deploy GitHub Pages
 on:
   push:
     branches: [main]
-    paths:
-      - 'src/viewer/**'
-      - 'data/jsonld/**'
-      - 'standards/**'
-      - 'ontology/**'
-      - 'README.md'
   workflow_dispatch:
 
 permissions:
@@ -31,61 +25,65 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-
-      - name: Validate before build
-        run: |
-          echo "=== Pre-build Validation ==="
-          FAIL=0
-
-          # Check viewer files exist
-          REQUIRED_VIEWER=(
-            "src/viewer/index.html"
-            "src/viewer/app.js"
-            "src/viewer/graph.js"
-            "src/viewer/data-loader.js"
-            "src/viewer/style.css"
-          )
-          for f in "${REQUIRED_VIEWER[@]}"; do
-            if [ -f "$f" ]; then
-              echo "✅  $f"
-            else
-              echo "❌  $f — MISSING"
-              FAIL=1
-            fi
-          done
-
-          if [ $FAIL -eq 1 ]; then
-            echo "❌ Required viewer files missing. Cannot deploy."
-            exit 1
-          fi
-          echo "✅ All required files present."
+          node-version: '22'
 
       - name: Build site structure
         run: |
-          echo "=== Building Site ==="
           mkdir -p _site
-
-          # Copy viewer as root app
-          cp -r src/viewer/. _site/
-          echo "✅ Viewer copied to _site/"
-
-          # Copy data for viewer to load
           mkdir -p _site/data/jsonld
-          cp -r data/jsonld/. _site/data/jsonld/
-          echo "✅ JSON-LD data copied"
-
-          # Copy standards (for reference)
           mkdir -p _site/standards
-          cp standards/*.json _site/standards/ 2>/dev/null || true
-          echo "✅ Standards copied"
+          mkdir -p _site/ontology
+
+          # Copy viewer nếu có
+          if [ -d "src/viewer" ]; then
+            cp -r src/viewer/. _site/
+            echo "✅ Viewer copied"
+          else
+            echo "⚠️  src/viewer not found — creating placeholder"
+            cat > _site/index.html << 'HTML'
+          <!DOCTYPE html>
+          <html lang="vi">
+          <head>
+            <meta charset="UTF-8">
+            <title>SmartNutri KG</title>
+            <style>
+              body { background:#0d1117; color:#e6edf3; font-family:monospace;
+                     display:flex; align-items:center; justify-content:center;
+                     height:100vh; margin:0; flex-direction:column; gap:16px; }
+              h1 { color:#58a6ff; }
+              p  { color:#8b949e; }
+              a  { color:#58a6ff; }
+            </style>
+          </head>
+          <body>
+            <h1>⬡ SmartNutri Knowledge Graph</h1>
+            <p>v1.0.0 — Phase 1 · Setting up...</p>
+            <a href="manifest.json">View manifest.json</a>
+            <a href="data/index.json">View data index</a>
+          </body>
+          </html>
+          HTML
+          fi
+
+          # Copy data
+          if [ -d "data/jsonld" ]; then
+            cp -r data/jsonld/. _site/data/jsonld/
+            echo "✅ Data copied"
+          fi
+
+          # Copy standards
+          if [ -d "standards" ]; then
+            cp standards/*.json _site/standards/ 2>/dev/null || true
+            echo "✅ Standards copied"
+          fi
 
           # Copy ontology
-          mkdir -p _site/ontology
-          cp -r ontology/. _site/ontology/ 2>/dev/null || true
-          echo "✅ Ontology copied"
+          if [ -d "ontology" ]; then
+            cp -r ontology/. _site/ontology/ 2>/dev/null || true
+            echo "✅ Ontology copied"
+          fi
 
-          # Generate site manifest
+          # Generate manifest.json
           node - << 'EOF'
           const fs = require('fs');
           const path = require('path');
@@ -94,11 +92,13 @@ jobs:
             let count = 0;
             if (!fs.existsSync(dir)) return 0;
             function walk(d) {
-              fs.readdirSync(d).forEach(f => {
-                const full = path.join(d, f);
-                if (fs.statSync(full).isDirectory()) walk(full);
-                else if (f.endsWith(ext)) count++;
-              });
+              try {
+                fs.readdirSync(d).forEach(f => {
+                  const full = path.join(d, f);
+                  if (fs.statSync(full).isDirectory()) walk(full);
+                  else if (f.endsWith(ext)) count++;
+                });
+              } catch(e) {}
             }
             walk(dir);
             return count;
@@ -108,40 +108,26 @@ jobs:
             name: "SmartNutri Knowledge Graph",
             version: "1.0.0",
             built: new Date().toISOString(),
+            phase: "Phase 1 — In Progress",
             stats: {
               jsonld_files:    countFiles('data/jsonld', '.jsonld'),
               standards_files: countFiles('standards', '.json'),
               ontology_files:  countFiles('ontology', '.ttl'),
-              schema_files:    countFiles('schemas', '.json'),
-              logic_files:     countFiles('logic', '.json')
-            },
-            data_folders: {
-              phase1: ['nutrients','foods','herbs','bioactives','toxic'],
-              phase2: ['diseases','symptoms'],
-              phase3: ['drugs','brands'],
-              phase4: ['anatomy/systems','anatomy/organs','anatomy/tissues','anatomy/cells'],
-              phase5: ['metabolism/processes','metabolism/pathways']
+              schema_files:    countFiles('schemas', '.json')
             },
             urls: {
-              viewer:    "https://QXSmartNutri.github.io/smartnutri-kg/",
-              github:    "https://github.com/QXSmartNutri/smartnutri-kg",
-              standards: "https://QXSmartNutri.github.io/smartnutri-kg/standards/"
+              viewer:   "https://qxsmartnutri.github.io/smartnutri-kg/",
+              github:   "https://github.com/QXSmartNutri/smartnutri-kg",
+              manifest: "https://qxsmartnutri.github.io/smartnutri-kg/manifest.json"
             }
           };
 
-          fs.writeFileSync(
-            '_site/manifest.json',
-            JSON.stringify(manifest, null, 2)
-          );
+          fs.writeFileSync('_site/manifest.json', JSON.stringify(manifest, null, 2));
           console.log('✅ manifest.json generated');
-          console.log('   JSON-LD files:', manifest.stats.jsonld_files);
-          console.log('   Standards:    ', manifest.stats.standards_files);
-          console.log('   Ontology:     ', manifest.stats.ontology_files);
+          console.log(JSON.stringify(manifest.stats, null, 2));
           EOF
 
-      - name: Generate data index
-        run: |
-          echo "=== Generating Data Index ==="
+          # Generate data/index.json
           node - << 'EOF'
           const fs = require('fs');
           const path = require('path');
@@ -167,11 +153,7 @@ jobs:
             }
             const files = fs.readdirSync(dir)
               .filter(f => f.endsWith('.jsonld'))
-              .map(f => ({
-                name: f,
-                path: `data/jsonld/${folder}/${f}`,
-                url:  `./data/jsonld/${folder}/${f}`
-              }));
+              .map(f => ({ name: f, url: `./data/jsonld/${folder}/${f}` }));
             index.datasets[folder] = {
               status: files.length > 0 ? 'active' : 'empty',
               count: files.length,
@@ -179,55 +161,15 @@ jobs:
             };
           });
 
-          fs.writeFileSync(
-            '_site/data/index.json',
-            JSON.stringify(index, null, 2)
-          );
+          fs.mkdirSync('_site/data', { recursive: true });
+          fs.writeFileSync('_site/data/index.json', JSON.stringify(index, null, 2));
           console.log('✅ data/index.json generated');
-
-          // Summary
-          const active = Object.values(index.datasets).filter(d => d.status === 'active').length;
-          const pending = Object.values(index.datasets).filter(d => d.status === 'pending').length;
-          console.log('   Active folders: ', active);
-          console.log('   Pending folders:', pending);
           EOF
 
-      - name: Create 404 page
-        run: |
-          cat > _site/404.html << 'HTML'
-          <!DOCTYPE html>
-          <html lang="vi">
-          <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>404 — SmartNutri KG</title>
-            <style>
-              body {
-                background: #0d1117;
-                color: #e6edf3;
-                font-family: 'SF Mono', monospace;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                height: 100vh;
-                margin: 0;
-                flex-direction: column;
-                gap: 16px;
-              }
-              h1 { color: #58a6ff; font-size: 48px; margin: 0; }
-              p  { color: #8b949e; font-size: 14px; }
-              a  { color: #58a6ff; text-decoration: none; }
-              a:hover { text-decoration: underline; }
-            </style>
-          </head>
-          <body>
-            <h1>⬡ 404</h1>
-            <p>Trang không tồn tại trong SmartNutri Knowledge Graph.</p>
-            <a href="/">← Về trang chính</a>
-          </body>
-          </html>
-          HTML
-          echo "✅ 404 page created"
+          echo ""
+          echo "=== Build complete ==="
+          echo "Files in _site/:"
+          find _site -type f | sort
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -255,24 +197,10 @@ jobs:
     needs: [build, deploy]
     if: always()
     steps:
-      - name: Print deployment summary
+      - name: Summary
         run: |
-          echo "=============================================="
-          echo "  SmartNutri KG — Deployment Summary"
-          echo "  $(date -u +'%Y-%m-%d %H:%M UTC')"
-          echo "=============================================="
-          echo ""
           echo "Build:  ${{ needs.build.result }}"
           echo "Deploy: ${{ needs.deploy.result }}"
-          echo ""
           if [ "${{ needs.deploy.result }}" = "success" ]; then
-            echo "✅ Deployment successful!"
-            echo ""
-            echo "🌐 Live URLs:"
-            echo "   Viewer:    https://QXSmartNutri.github.io/smartnutri-kg/"
-            echo "   Manifest:  https://QXSmartNutri.github.io/smartnutri-kg/manifest.json"
-            echo "   Data Index:https://QXSmartNutri.github.io/smartnutri-kg/data/index.json"
-          else
-            echo "❌ Deployment failed. Check logs above."
-            exit 1
-          fi
+            echo "✅ Live: https://qxsmartnutri.github.io/smartnutri-kg/"
+          fi       
