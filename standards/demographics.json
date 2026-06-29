@@ -1,1 +1,74 @@
-
+{
+  "$schema": "https://smartnutri.org/schemas/standards",
+  "version": "1.1.0",
+  "description": "Định nghĩa các nhóm dân số, đặc điểm sinh lý và yếu tố nhân khẩu học dùng trong SmartNutri KG",
+  "source": "IOM, WHO, FAO",
+  "physiological_states": [
+    { "id": "PS_NORMAL",      "label_vi": "Bình thường",          "label_en": "Normal / Healthy" },
+    { "id": "PS_PREGNANT",    "label_vi": "Mang thai",            "label_en": "Pregnant" },
+    { "id": "PS_LACTATING",   "label_vi": "Cho con bú",           "label_en": "Lactating" },
+    { "id": "PS_INFANT",      "label_vi": "Trẻ sơ sinh (<1 tuổi)","label_en": "Infant (<1 year)" },
+    { "id": "PS_CHILD",       "label_vi": "Trẻ em (1–13 tuổi)",  "label_en": "Child (1–13 years)" },
+    { "id": "PS_ADOLESCENT",  "label_vi": "Thanh thiếu niên",     "label_en": "Adolescent (14–18 years)" },
+    { "id": "PS_ADULT",       "label_vi": "Người lớn",            "label_en": "Adult (19–70 years)" },
+    { "id": "PS_ELDERLY",     "label_vi": "Người cao tuổi",       "label_en": "Elderly (>70 years)" }
+  ],
+  "activity_levels": [
+    { "id": "AL_SEDENTARY",   "label_vi": "Ít vận động",          "label_en": "Sedentary",          "pal": 1.4, "note": "PAL 1.4 — ngồi nhiều, không tập thể dục" },
+    { "id": "AL_LOW",         "label_vi": "Vận động nhẹ",         "label_en": "Low Active",          "pal": 1.6, "note": "PAL 1.6 — đi bộ ~2–3km/ngày" },
+    { "id": "AL_MODERATE",    "label_vi": "Vận động vừa",         "label_en": "Moderately Active",   "pal": 1.8, "note": "PAL 1.8 — tập thể dục 3–5 ngày/tuần" },
+    { "id": "AL_HIGH",        "label_vi": "Vận động nhiều",       "label_en": "Active",              "pal": 2.0, "note": "PAL 2.0 — tập thể dục hàng ngày, cường độ cao" },
+    { "id": "AL_VERY_HIGH",   "label_vi": "Vận động rất nhiều",   "label_en": "Very Active",         "pal": 2.2, "note": "PAL 2.2 — vận động viên, lao động thể lực nặng" }
+  ],
+  "body_metrics": {
+    "bmi_classification": [
+      { "id": "BMI_UNDERWEIGHT",    "label_vi": "Thiếu cân",       "label_en": "Underweight",      "min": null, "max": 18.5 },
+      { "id": "BMI_NORMAL",         "label_vi": "Bình thường",     "label_en": "Normal weight",    "min": 18.5, "max": 24.9 },
+      { "id": "BMI_OVERWEIGHT",     "label_vi": "Thừa cân",        "label_en": "Overweight",       "min": 25.0, "max": 29.9 },
+      { "id": "BMI_OBESE_1",        "label_vi": "Béo phì độ 1",    "label_en": "Obese Class I",    "min": 30.0, "max": 34.9 },
+      { "id": "BMI_OBESE_2",        "label_vi": "Béo phì độ 2",    "label_en": "Obese Class II",   "min": 35.0, "max": 39.9 },
+      { "id": "BMI_OBESE_3",        "label_vi": "Béo phì độ 3",    "label_en": "Obese Class III",  "min": 40.0, "max": null }
+    ],
+    "bmi_asia_pacific": {
+      "note": "Ngưỡng BMI điều chỉnh cho người châu Á theo WHO/IOTF",
+      "classifications": [
+        { "id": "BMI_AP_UNDERWEIGHT", "label_vi": "Thiếu cân",     "label_en": "Underweight",      "min": null, "max": 18.5 },
+        { "id": "BMI_AP_NORMAL",      "label_vi": "Bình thường",   "label_en": "Normal",           "min": 18.5, "max": 22.9 },
+        { "id": "BMI_AP_OVERWEIGHT",  "label_vi": "Thừa cân",      "label_en": "Overweight",       "min": 23.0, "max": 24.9 },
+        { "id": "BMI_AP_OBESE_1",     "label_vi": "Béo phì độ 1",  "label_en": "Obese Class I",    "min": 25.0, "max": 29.9 },
+        { "id": "BMI_AP_OBESE_2",     "label_vi": "Béo phì độ 2",  "label_en": "Obese Class II",   "min": 30.0, "max": null }
+      ]
+    }
+  },
+  "special_conditions": [
+    { "id": "SC_VEGETARIAN",     "label_vi": "Ăn chay (Vegetarian)",  "label_en": "Vegetarian",     "note": "Không ăn thịt, có thể dùng trứng/sữa" },
+    { "id": "SC_VEGAN",          "label_vi": "Thuần chay (Vegan)",     "label_en": "Vegan",          "note": "Không dùng bất kỳ sản phẩm động vật" },
+    { "id": "SC_GLUTEN_FREE",    "label_vi": "Không Gluten",           "label_en": "Gluten-free",    "note": "Celiac hoặc nhạy cảm Gluten" },
+    { "id": "SC_LACTOSE_FREE",   "label_vi": "Không Lactose",          "label_en": "Lactose-free",   "note": "Không dung nạp Lactose" },
+    { "id": "SC_DIABETIC",       "label_vi": "Đái tháo đường",         "label_en": "Diabetic",       "note": "Type 1, Type 2 hoặc Gestational" },
+    { "id": "SC_HYPERTENSION",   "label_vi": "Tăng huyết áp",          "label_en": "Hypertension",   "note": "Cần hạn chế Sodium" },
+    { "id": "SC_CKD",            "label_vi": "Bệnh thận mạn",          "label_en": "Chronic Kidney Disease", "note": "Cần hạn chế Protein, K, P" },
+    { "id": "SC_HALAL",          "label_vi": "Halal",                  "label_en": "Halal",          "note": "Theo quy định Hồi giáo" },
+    { "id": "SC_KOSHER",         "label_vi": "Kosher",                 "label_en": "Kosher",         "note": "Theo quy định Do Thái" },
+    { "id": "SC_ATHLETE",        "label_vi": "Vận động viên",          "label_en": "Athlete",        "note": "Nhu cầu protein & năng lượng cao hơn" }
+  ],
+  "reference_body_weight": {
+    "note": "Cân nặng tham chiếu dùng để tính RDA theo kg — theo IOM",
+    "unit": "kg",
+    "values": {
+      "AG_CHILD_1_3Y":    { "M": 13, "F": 13 },
+      "AG_CHILD_4_8Y":    { "M": 20, "F": 20 },
+      "AG_CHILD_9_13Y":   { "M": 36, "F": 37 },
+      "AG_TEEN_14_18Y_M": { "M": 61, "F": null },
+      "AG_TEEN_14_18Y_F": { "M": null,"F": 54 },
+      "AG_ADULT_19_30Y_M":{ "M": 70, "F": null },
+      "AG_ADULT_19_30Y_F":{ "M": null,"F": 57 },
+      "AG_ADULT_31_50Y_M":{ "M": 70, "F": null },
+      "AG_ADULT_31_50Y_F":{ "M": null,"F": 57 },
+      "AG_ADULT_51_70Y_M":{ "M": 70, "F": null },
+      "AG_ADULT_51_70Y_F":{ "M": null,"F": 57 },
+      "AG_ELDER_70Y_M":   { "M": 70, "F": null },
+      "AG_ELDER_70Y_F":   { "M": null,"F": 57 }
+    }
+  }
+}
