@@ -1,1 +1,142 @@
-
+{
+  "$schema": "https://smartnutri.org/schemas/standards",
+  "version": "1.1.0",
+  "description": "Hệ thống phân loại category cho từng loại entity trong SmartNutri KG",
+  "food_categories": {
+    "plant_based": {
+      "label_vi": "Thực vật",
+      "items": ["grain", "vegetable", "fruit", "legume", "nut_seed", "herb_spice", "mushroom", "seaweed"]
+    },
+    "animal_based": {
+      "label_vi": "Động vật",
+      "items": ["meat_red", "meat_poultry", "seafood_fish", "seafood_shellfish", "dairy", "egg"]
+    },
+    "processed": {
+      "label_vi": "Chế biến",
+      "items": ["fermented", "pickled", "dried", "canned", "frozen", "processed_meat", "fast_food"]
+    },
+    "beverages": {
+      "label_vi": "Đồ uống",
+      "items": ["water", "juice", "tea", "coffee", "alcohol", "soft_drink", "plant_milk"]
+    },
+    "fats_oils": {
+      "label_vi": "Dầu mỡ",
+      "items": ["vegetable_oil", "animal_fat", "butter", "margarine"]
+    },
+    "supplements": {
+      "label_vi": "Thực phẩm bổ sung",
+      "items": ["vitamin_supplement", "mineral_supplement", "protein_powder", "probiotic", "prebiotic"]
+    }
+  },
+  "herb_categories": {
+    "traditional_medicine": {
+      "label_vi": "Y học cổ truyền",
+      "items": ["yhct_viet_nam", "tcm_china", "ayurveda_india", "kampo_japan"]
+    },
+    "functional_group": {
+      "label_vi": "Nhóm tác dụng",
+      "items": ["adaptogen", "anti_inflammatory", "antioxidant", "digestive", "immunomodulator",
+                "hepatoprotective", "cardioprotective", "neuroprotective", "antimicrobial"]
+    }
+  },
+  "nutrient_categories": {
+    "energy_yielding": {
+      "label_vi": "Sinh năng lượng",
+      "items": ["macronutrient_carb", "macronutrient_protein", "macronutrient_fat"]
+    },
+    "vitamins": {
+      "label_vi": "Vitamin",
+      "items": ["vitamin_fat_soluble", "vitamin_water_soluble"]
+    },
+    "minerals": {
+      "label_vi": "Khoáng chất",
+      "items": ["mineral_macro", "mineral_micro", "mineral_trace"]
+    },
+    "other": {
+      "label_vi": "Khác",
+      "items": ["fiber", "water", "amino_acid_eaa", "amino_acid_neaa"]
+    }
+  },
+  "bioactive_categories": {
+    "polyphenols": {
+      "label_vi": "Polyphenol",
+      "items": ["flavonoid", "phenolic_acid", "stilbene", "lignan", "tannin"]
+    },
+    "carotenoids": {
+      "label_vi": "Carotenoid",
+      "items": ["alpha_carotene", "beta_carotene", "lycopene", "lutein", "zeaxanthin", "astaxanthin"]
+    },
+    "glucosinolates": {
+      "label_vi": "Glucosinolate",
+      "items": ["sulforaphane", "indole_3_carbinol"]
+    },
+    "terpenoids": {
+      "label_vi": "Terpenoid",
+      "items": ["monoterpene", "diterpene", "triterpene", "sesquiterpene"]
+    },
+    "alkaloids": {
+      "label_vi": "Alkaloid",
+      "items": ["purine", "caffeine", "theobromine", "capsaicin"]
+    },
+    "organosulfur": {
+      "label_vi": "Hợp chất lưu huỳnh hữu cơ",
+      "items": ["allicin", "alliin", "quercetin_sulfide"]
+    },
+    "prebiotics_probiotics": {
+      "label_vi": "Prebiotic & Probiotic",
+      "items": ["inulin", "fos", "gos", "lactobacillus_group", "bifidobacterium_group"]
+    }
+  },
+  "toxic_categories": {
+    "mycotoxins": {
+      "label_vi": "Độc tố nấm",
+      "items": ["aflatoxin", "ochratoxin", "fumonisin", "deoxynivalenol", "zearalenone"]
+    },
+    "heavy_metals": {
+      "label_vi": "Kim loại nặng",
+      "items": ["lead", "mercury", "cadmium", "arsenic", "chromium_vi"]
+    },
+    "pesticides": {
+      "label_vi": "Thuốc trừ sâu",
+      "items": ["organophosphate", "organochlorine", "pyrethroid", "neonicotinoid"]
+    },
+    "food_additives": {
+      "label_vi": "Phụ gia thực phẩm",
+      "items": ["preservative", "artificial_color", "artificial_sweetener", "emulsifier", "nitrate_nitrite"]
+    },
+    "natural_toxins": {
+      "label_vi": "Độc tố tự nhiên",
+      "items": ["solanine", "oxalate", "phytate", "lectin", "cyanogenic_glycoside", "saponin"]
+    },
+    "processing_byproducts": {
+      "label_vi": "Sản phẩm phụ chế biến",
+      "items": ["acrylamide", "heterocyclic_amine", "polycyclic_aromatic", "advanced_glycation_end"]
+    }
+  },
+  "disease_categories": {
+    "cardiovascular":     { "label_vi": "Tim mạch",          "icd10_prefix": "I" },
+    "metabolic":          { "label_vi": "Chuyển hóa",        "icd10_prefix": "E" },
+    "neurological":       { "label_vi": "Thần kinh",         "icd10_prefix": "G" },
+    "musculoskeletal":    { "label_vi": "Cơ xương khớp",     "icd10_prefix": "M" },
+    "gastrointestinal":   { "label_vi": "Tiêu hóa",          "icd10_prefix": "K" },
+    "immunological":      { "label_vi": "Miễn dịch",         "icd10_prefix": "D" },
+    "oncological":        { "label_vi": "Ung thư",           "icd10_prefix": "C" },
+    "endocrine":          { "label_vi": "Nội tiết",          "icd10_prefix": "E" },
+    "nutritional_deficiency": { "label_vi": "Thiếu dinh dưỡng", "icd10_prefix": "E4" },
+    "renal":              { "label_vi": "Thận tiết niệu",    "icd10_prefix": "N" },
+    "respiratory":        { "label_vi": "Hô hấp",            "icd10_prefix": "J" },
+    "dermatological":     { "label_vi": "Da liễu",           "icd10_prefix": "L" }
+  },
+  "drug_categories": {
+    "anticoagulant":       { "label_vi": "Chống đông máu",        "atc_prefix": "B01" },
+    "antidiabetic":        { "label_vi": "Điều trị đái tháo đường","atc_prefix": "A10" },
+    "antihypertensive":    { "label_vi": "Hạ huyết áp",           "atc_prefix": "C02" },
+    "lipid_lowering":      { "label_vi": "Hạ lipid máu",          "atc_prefix": "C10" },
+    "antibiotic":          { "label_vi": "Kháng sinh",            "atc_prefix": "J01" },
+    "anti_inflammatory":   { "label_vi": "Chống viêm",            "atc_prefix": "M01" },
+    "antacid":             { "label_vi": "Kháng acid dạ dày",     "atc_prefix": "A02" },
+    "vitamin_mineral_supplement": { "label_vi": "Bổ sung vitamin & khoáng", "atc_prefix": "A11-A12" },
+    "immunosuppressant":   { "label_vi": "Ức chế miễn dịch",      "atc_prefix": "L04" },
+    "antineoplastic":      { "label_vi": "Chống ung thư",         "atc_prefix": "L01" }
+  }
+}
