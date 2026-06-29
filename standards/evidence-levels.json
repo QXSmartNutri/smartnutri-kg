@@ -1,1 +1,91 @@
-
+{
+  "$schema": "https://smartnutri.org/schemas/standards",
+  "version": "1.1.0",
+  "description": "Phân loại mức độ bằng chứng khoa học cho các quan hệ (relations) trong SmartNutri KG",
+  "source": "Tổng hợp từ GRADE, Oxford CEBM, IOM, WHO",
+  "usage": "Thêm trường sn:evidenceLevel vào mỗi quan hệ trong JSON-LD. Ví dụ: sn:affects → { sn:evidenceLevel: 'A' }",
+  "levels": {
+    "A": {
+      "label_vi": "Bằng chứng mạnh",
+      "label_en": "Strong Evidence",
+      "color": "#3fb950",
+      "description_vi": "Meta-analysis, systematic review của nhiều RCT chất lượng cao, hoặc hướng dẫn lâm sàng quốc tế (WHO, IOM, ESC, AHA...)",
+      "description_en": "Meta-analysis or systematic review of high-quality RCTs, or international clinical guidelines",
+      "examples": [
+        "Cochrane systematic review",
+        "Multiple high-quality RCTs",
+        "IOM Dietary Reference Intakes reports",
+        "WHO/FAO Expert Consultation reports"
+      ],
+      "trust": "Cao — có thể dùng trực tiếp trong khuyến nghị lâm sàng"
+    },
+    "B": {
+      "label_vi": "Bằng chứng trung bình",
+      "label_en": "Moderate Evidence",
+      "color": "#58a6ff",
+      "description_vi": "RCT đơn lẻ chất lượng tốt, nghiên cứu thuần tập lớn có kiểm soát, hoặc systematic review không meta-analysis",
+      "description_en": "Single well-designed RCT, large controlled cohort study, or systematic review without meta-analysis",
+      "examples": [
+        "Single RCT với cỡ mẫu lớn",
+        "Prospective cohort study (n > 1000)",
+        "Systematic review (không meta-analysis)"
+      ],
+      "trust": "Trung bình — dùng được nhưng cần thận trọng"
+    },
+    "C": {
+      "label_vi": "Bằng chứng hạn chế",
+      "label_en": "Limited Evidence",
+      "color": "#e3b341",
+      "description_vi": "Nghiên cứu quan sát (case-control, cross-sectional), nghiên cứu in vitro, nghiên cứu trên động vật, hoặc RCT nhỏ có bias cao",
+      "description_en": "Observational studies, in vitro/animal studies, or small RCTs with high risk of bias",
+      "examples": [
+        "Case-control study",
+        "Cross-sectional study",
+        "In vitro / cell study",
+        "Animal model study",
+        "RCT nhỏ (n < 50)"
+      ],
+      "trust": "Thấp — chỉ dùng để gợi ý hướng nghiên cứu, không đủ cho khuyến nghị"
+    },
+    "D": {
+      "label_vi": "Bằng chứng sơ bộ",
+      "label_en": "Preliminary / Expert Opinion",
+      "color": "#f85149",
+      "description_vi": "Case report, ý kiến chuyên gia, dữ liệu truyền thống y học cổ truyền chưa được kiểm chứng khoa học",
+      "description_en": "Case reports, expert opinion, or traditional use without scientific validation",
+      "examples": [
+        "Case report / Case series",
+        "Expert consensus (không dựa trên RCT)",
+        "Y học cổ truyền (YHCT)",
+        "Dữ liệu tiền lâm sàng sơ bộ"
+      ],
+      "trust": "Rất thấp — chỉ dùng để đặt giả thuyết, cần nghiên cứu thêm"
+    }
+  },
+  "relation_evidence_rules": {
+    "note": "Mỗi quan hệ trong JSON-LD phải gán evidenceLevel. Nếu chưa có bằng chứng, dùng D.",
+    "required_for": [
+      "sn:affects",
+      "sn:associatedWith",
+      "sn:interactsWith",
+      "sn:participatesIn"
+    ],
+    "optional_for": [
+      "sn:contains",
+      "sn:locatedIn",
+      "sn:hasForm",
+      "sn:hasSource"
+    ]
+  },
+  "example_usage": {
+    "json_ld": {
+      "@id": "https://smartnutri.org/entity/NUT_20260601_000001_000003",
+      "sn:affects": {
+        "@id": "https://smartnutri.org/entity/ORG_YYYYMMDD_000002",
+        "sn:evidenceLevel": "A",
+        "sn:effectType": "protective",
+        "rdfs:comment": "Vitamin K2 MK-7 kích hoạt Osteocalcin, tăng mật độ khoáng xương"
+      }
+    }
+  }
+}
