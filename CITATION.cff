@@ -1,0 +1,77 @@
+cff-version: 1.2.0
+message: "If you use SmartNutri Knowledge Graph in your research or application, please cite it as below."
+
+title: "SmartNutri Open Nutrition Knowledge Graph"
+abstract: >
+  SmartNutri KG is an open nutrition knowledge graph built on JSON-LD / RDF / OWL standards.
+  It provides structured, machine-readable nutritional knowledge including nutrients, foods,
+  herbs, bioactives, diseases, drugs, anatomy, and metabolic pathways — designed to power
+  AI-driven personalized nutrition and optimal meal planning systems.
+
+version: "1.0.0"
+date-released: "2026-06-01"
+license: "MIT"
+
+repository-code: "https://github.com/QXSmartNutri/smartnutri-kg"
+url: "https://QXSmartNutri.github.io/smartnutri-kg"
+
+authors:
+  - name: "SmartNutri Team"
+    alias: "QXSmartNutri"
+    website: "https://github.com/QXSmartNutri"
+
+keywords:
+  - nutrition
+  - knowledge-graph
+  - JSON-LD
+  - RDF
+  - OWL
+  - ontology
+  - dietary-reference-intakes
+  - nutrient-absorption
+  - personalized-nutrition
+  - meal-planning
+  - open-data
+  - Vietnam
+  - multilingual
+
+references:
+  - type: dataset
+    title: "IOM Dietary Reference Intakes"
+    authors:
+      - name: "Institute of Medicine (IOM)"
+    publisher: "National Academies Press"
+    url: "https://www.nationalacademies.org/hmd/Activities/Nutrition/SummaryDRIs/DRI-Tables.aspx"
+    notes: "Primary source for RDA, AI, UL values in nutrient-rda.json and nutrient-ul.json"
+
+  - type: dataset
+    title: "FDA Nutrition Labeling Daily Values"
+    authors:
+      - name: "U.S. Food and Drug Administration"
+    url: "https://www.fda.gov/food/nutrition-facts-label/daily-value-nutrition-facts-label"
+    notes: "Source for Daily Values in nutrient-dv.json"
+
+  - type: dataset
+    title: "International Tables of Glycemic Index and Glycemic Load Values"
+    authors:
+      - name: "Atkinson FS"
+      - name: "Foster-Powell K"
+      - name: "Brand-Miller JC"
+    journal: "Diabetes Care"
+    year: 2008
+    doi: "10.2337/dc08-1239"
+    notes: "Source for GI/GL data in gi_gl_tables.json"
+
+  - type: standard
+    title: "JSON-LD 1.1"
+    authors:
+      - name: "W3C"
+    url: "https://www.w3.org/TR/json-ld11/"
+    notes: "Data format standard used throughout SmartNutri KG"
+
+  - type: standard
+    title: "OWL 2 Web Ontology Language"
+    authors:
+      - name: "W3C"
+    url: "https://www.w3.org/TR/owl2-overview/"
+    notes: "Ontology language used in ontology/ directory"
