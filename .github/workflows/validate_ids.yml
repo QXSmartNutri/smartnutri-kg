@@ -1,1 +1,298 @@
+name: Validate Entity IDs
 
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/jsonld/**/*.jsonld'
+      - 'standards/entity-ids.md'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'data/jsonld/**/*.jsonld'
+      - 'standards/entity-ids.md'
+  workflow_dispatch:
+
+jobs:
+  validate-id-format:
+    name: "🔑 Entity ID Format Check"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run validate-ids.js
+        run: |
+          echo "=== SmartNutri Entity ID Validator ==="
+          echo "Valid prefixes: FOOD_ HERB_ NUT_ BIO_ TOX_ DIS_ SYM_ DRUG_ BRAND_ SYS_ ORG_ TIS_ CELL_ PROC_ PATH_"
+          echo ""
+          if [ -f "tests/data/validate-ids.js" ]; then
+            node tests/data/validate-ids.js
+          else
+            echo "⚠️  tests/data/validate-ids.js not found — running inline check"
+            node - << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+
+          const VALID_PREFIXES = [
+            'FOOD_','HERB_','NUT_','BIO_','TOX_',
+            'DIS_','SYM_',
+            'DRUG_','BRAND_',
+            'SYS_','ORG_','TIS_','CELL_',
+            'PROC_','PATH_'
+          ];
+
+          const BASE_URI = 'https://smartnutri.org/entity/';
+          // Parent: PREFIX_YYYYMMDD_SEQ6
+          // Child:  PREFIX_YYYYMMDD_SEQ6_SEQ6
+          const ID_REGEX = /^(FOOD_|HERB_|NUT_|BIO_|TOX_|DIS_|SYM_|DRUG_|BRAND_|SYS_|ORG_|TIS_|CELL_|PROC_|PATH_)\d{8}_\d{6}(_\d{6})?$/;
+
+          const allIds = new Map();
+          let PASS = 0, FAIL = 0;
+
+          function walkDir(dir) {
+            if (!fs.existsSync(dir)) return;
+            fs.readdirSync(dir).forEach(f => {
+              const full = path.join(dir, f);
+              if (fs.statSync(full).isDirectory()) walkDir(full);
+              else if (f.endsWith('.jsonld')) checkFile(full);
+            });
+          }
+
+          function checkFile(filePath) {
+            const short = filePath.replace(process.cwd() + '/', '');
+            let data;
+            try { data = JSON.parse(fs.readFileSync(filePath, 'utf8')); }
+            catch (e) { console.log('❌ ', short, '— Invalid JSON'); FAIL++; return; }
+
+            const nodes = data['@graph'] ? data['@graph'] : [data];
+            const errors = [];
+
+            nodes.forEach((node, i) => {
+              if (!node['@id']) return;
+              let id = node['@id'];
+              if (id.startsWith(BASE_URI)) id = id.replace(BASE_URI, '');
+              else if (id.includes('://') || id.includes(':')) return;
+
+              if (!ID_REGEX.test(id)) {
+                errors.push('Node[' + i + '] ID "' + id + '" sai format');
+              } else if (allIds.has(id)) {
+                errors.push('Node[' + i + '] ID "' + id + '" TRÙNG với ' + allIds.get(id));
+              } else {
+                allIds.set(id, short);
+              }
+            });
+
+            if (errors.length === 0) {
+              console.log('✅ ', short.padEnd(55), 'OK —', nodes.length, 'nodes');
+              PASS++;
+            } else {
+              console.log('❌ ', short);
+              errors.forEach(e => console.log('     →', e));
+              FAIL++;
+            }
+          }
+
+          walkDir('data/jsonld');
+          console.log('\n' + '─'.repeat(60));
+          console.log('PASS:', PASS, ' | FAIL:', FAIL);
+          console.log('Total unique IDs:', allIds.size);
+          if (FAIL > 0) process.exit(1);
+          EOF
+          fi
+
+  validate-id-uniqueness:
+    name: "🔍 ID Uniqueness Check"
+    runs-on: ubuntu-latest
+    needs: validate-id-format
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check for duplicate IDs across all files
+        run: |
+          echo "=== Cross-file Duplicate ID Check ==="
+          node - << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+
+          const BASE_URI = 'https://smartnutri.org/entity/';
+          const seen = new Map();
+          let DUPS = 0;
+
+          function walkDir(dir) {
+            if (!fs.existsSync(dir)) return;
+            fs.readdirSync(dir).forEach(f => {
+              const full = path.join(dir, f);
+              if (fs.statSync(full).isDirectory()) walkDir(full);
+              else if (f.endsWith('.jsonld')) checkFile(full);
+            });
+          }
+
+          function checkFile(filePath) {
+            const short = filePath.replace(process.cwd() + '/', '');
+            let data;
+            try { data = JSON.parse(fs.readFileSync(filePath, 'utf8')); }
+            catch (e) { return; }
+
+            const nodes = data['@graph'] ? data['@graph'] : [data];
+            nodes.forEach(node => {
+              if (!node['@id']) return;
+              let id = node['@id'];
+              if (id.startsWith(BASE_URI)) id = id.replace(BASE_URI, '');
+              if (id.includes('://') || id.includes(':')) return;
+
+              if (seen.has(id)) {
+                console.log('❌ DUPLICATE:', id);
+                console.log('   First seen:', seen.get(id));
+                console.log('   Also in:   ', short);
+                DUPS++;
+              } else {
+                seen.set(id, short);
+              }
+            });
+          }
+
+          walkDir('data/jsonld');
+          console.log('\n' + '─'.repeat(60));
+          console.log('Total unique IDs:', seen.size);
+          console.log('Duplicates found:', DUPS);
+
+          if (DUPS > 0) {
+            console.log('\n❌ Fix duplicate IDs before merging.');
+            process.exit(1);
+          } else {
+            console.log('✅ No duplicate IDs found.');
+          }
+          EOF
+
+  validate-id-prefix:
+    name: "🏷️ Prefix Phase Check"
+    runs-on: ubuntu-latest
+    needs: validate-id-format
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check prefix matches correct data folder
+        run: |
+          echo "=== Prefix ↔ Folder Consistency Check ==="
+          node - << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+
+          // Folder → allowed prefixes
+          const FOLDER_PREFIX_MAP = {
+            'nutrients':   ['NUT_'],
+            'foods':       ['FOOD_'],
+            'herbs':       ['HERB_'],
+            'bioactives':  ['BIO_'],
+            'toxic':       ['TOX_'],
+            'diseases':    ['DIS_'],
+            'symptoms':    ['SYM_'],
+            'drugs':       ['DRUG_'],
+            'brands':      ['BRAND_'],
+            'systems':     ['SYS_'],
+            'organs':      ['ORG_'],
+            'tissues':     ['TIS_'],
+            'cells':       ['CELL_'],
+            'processes':   ['PROC_'],
+            'pathways':    ['PATH_'],
+          };
+
+          const BASE_URI = 'https://smartnutri.org/entity/';
+          let PASS = 0, FAIL = 0;
+
+          function walkDir(dir) {
+            if (!fs.existsSync(dir)) return;
+            fs.readdirSync(dir).forEach(f => {
+              const full = path.join(dir, f);
+              if (fs.statSync(full).isDirectory()) walkDir(full);
+              else if (f.endsWith('.jsonld')) checkFile(full);
+            });
+          }
+
+          function getFolderName(filePath) {
+            const parts = filePath.split(path.sep);
+            const jsonldIdx = parts.indexOf('jsonld');
+            return jsonldIdx >= 0 ? parts[jsonldIdx + 1] : null;
+          }
+
+          function checkFile(filePath) {
+            const short = filePath.replace(process.cwd() + '/', '');
+            const folder = getFolderName(filePath);
+            if (!folder || !FOLDER_PREFIX_MAP[folder]) return;
+
+            const allowedPrefixes = FOLDER_PREFIX_MAP[folder];
+            let data;
+            try { data = JSON.parse(fs.readFileSync(filePath, 'utf8')); }
+            catch (e) { return; }
+
+            const nodes = data['@graph'] ? data['@graph'] : [data];
+            nodes.forEach((node, i) => {
+              if (!node['@id']) return;
+              let id = node['@id'];
+              if (id.startsWith(BASE_URI)) id = id.replace(BASE_URI, '');
+              if (id.includes('://') || id.includes(':')) return;
+
+              const hasValidPrefix = allowedPrefixes.some(p => id.startsWith(p));
+              if (!hasValidPrefix) {
+                console.log('❌ ', short);
+                console.log('   Node[' + i + '] ID "' + id + '" không thuộc folder "' + folder + '"');
+                console.log('   Folder này chỉ cho phép prefix:', allowedPrefixes.join(', '));
+                FAIL++;
+              } else {
+                PASS++;
+              }
+            });
+          }
+
+          walkDir('data/jsonld');
+          console.log('\n' + '─'.repeat(60));
+          console.log('PASS:', PASS, ' | FAIL:', FAIL);
+          if (FAIL > 0) {
+            console.log('❌ Prefix/folder mismatch found.');
+            process.exit(1);
+          } else {
+            console.log('✅ All prefixes match their folders.');
+          }
+          EOF
+
+  id-summary:
+    name: "📊 ID Validation Summary"
+    runs-on: ubuntu-latest
+    needs: [validate-id-format, validate-id-uniqueness, validate-id-prefix]
+    if: always()
+    steps:
+      - name: Print summary
+        run: |
+          echo "=================================="
+          echo "  SmartNutri KG — ID Validation Summary"
+          echo "=================================="
+          echo "ID Format:    ${{ needs.validate-id-format.result }}"
+          echo "ID Uniqueness: ${{ needs.validate-id-uniqueness.result }}"
+          echo "ID Prefix:    ${{ needs.validate-id-prefix.result }}"
+          echo ""
+          if [ "${{ needs.validate-id-format.result }}" = "success" ] && \
+             [ "${{ needs.validate-id-uniqueness.result }}" = "success" ] && \
+             [ "${{ needs.validate-id-prefix.result }}" = "success" ]; then
+            echo "✅ All ID validations passed!"
+          else
+            echo "❌ Some ID validations failed. Check logs above."
+            exit 1
+          fi
