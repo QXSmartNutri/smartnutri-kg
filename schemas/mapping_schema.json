@@ -1,1 +1,78 @@
-
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smartnutri.org/schemas/mapping_schema.json",
+  "title": "Mapping File",
+  "description": "JSON Schema chung cho mọi file trong mappings/ — ánh xạ ID nội bộ sang hệ thống ngoài (ICD-10, DrugBank, USDA FDC, Wikidata...).",
+  "type": "object",
+  "required": ["$schema", "version", "description"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "description": { "type": "string" },
+    "source": { "type": ["string", "array"] },
+    "note": { "type": "string" },
+    "mapping_type": {
+      "type": "string",
+      "enum": [
+        "icd10", "drugbank", "atc", "usda_fdc", "wikidata",
+        "pubchem", "kegg", "chebi", "uniprot", "mesh",
+        "synonym", "allergen", "category", "external_id"
+      ]
+    },
+    "mappings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["internal_id"],
+        "properties": {
+          "internal_id": {
+            "type": "string",
+            "description": "ID nội bộ SmartNutri (vd: NUT_20260601_000001)"
+          },
+          "internal_uri": {
+            "type": "string",
+            "pattern": "^https://smartnutri\\.org/entity/"
+          },
+          "label_vi": { "type": "string" },
+          "label_en": { "type": "string" },
+          "external_mappings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["system", "value"],
+              "properties": {
+                "system": { "type": "string" },
+                "value": { "type": "string" },
+                "relation": {
+                  "type": "string",
+                  "enum": ["exactMatch", "closeMatch", "sameAs", "broadMatch", "narrowMatch"]
+                },
+                "url": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "synonyms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "internal_id": { "type": "string" },
+          "synonym_list": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "@value": { "type": "string" },
+                "@language": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": true
+}
