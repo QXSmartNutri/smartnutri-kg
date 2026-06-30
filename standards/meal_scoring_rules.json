@@ -1,1 +1,88 @@
+{
+  "$schema": "https://smartnutri.org/schemas/standards",
+  "version": "1.0.0",
+  "description": "Quy tắc tính điểm chất lượng bữa ăn (Meal Score 0-100) — tổng hợp từ nutrition_balance_rules.json, gi_gl_tables.json, allergens.json. Dùng cho logic_engine/scoring_engine.js",
+  "source": "Tổng hợp HEI (Healthy Eating Index), Nutri-Score (EU), DASH Score",
 
+  "scoring_formula": {
+    "description_vi": "Điểm tổng = tổng có trọng số của các thành phần con, thang điểm 0-100",
+    "total_scale": "0-100",
+    "components": [
+      { "component": "macronutrient_balance_score", "weight_pct": 25, "max_points": 25 },
+      { "component": "micronutrient_adequacy_score", "weight_pct": 25, "max_points": 25 },
+      { "component": "fiber_score", "weight_pct": 10, "max_points": 10 },
+      { "component": "sugar_penalty_score", "weight_pct": 10, "max_points": 10 },
+      { "component": "sodium_penalty_score", "weight_pct": 10, "max_points": 10 },
+      { "component": "glycemic_load_score", "weight_pct": 10, "max_points": 10 },
+      { "component": "diversity_score", "weight_pct": 10, "max_points": 10 }
+    ]
+  },
+
+  "macronutrient_balance_score": {
+    "description_vi": "Điểm dựa trên độ lệch so với AMDR — lệch càng ít điểm càng cao",
+    "calculation": "25 - (deviation_pct_from_ideal * penalty_factor)",
+    "penalty_factor": 0.5,
+    "min_score": 0
+  },
+
+  "micronutrient_adequacy_score": {
+    "description_vi": "Điểm dựa trên % RDA đạt được của 13 vitamin + 16 khoáng chất",
+    "calculation": "average(%RDA_achieved cho mỗi nutrient, capped at 100%) * 0.25",
+    "note": "Vượt RDA không cộng thêm điểm nhưng vượt UL sẽ bị trừ điểm nghiêm trọng (xem ul_penalty)"
+  },
+
+  "fiber_score": {
+    "description_vi": "10 điểm nếu đạt RDA chất xơ, giảm tuyến tính nếu thiếu",
+    "full_score_threshold_g_per_1000kcal": 14,
+    "calculation": "min(10, (fiber_g_per_1000kcal / 14) * 10)"
+  },
+
+  "sugar_penalty_score": {
+    "description_vi": "Bắt đầu trừ điểm khi đường vượt 5% năng lượng",
+    "full_score_threshold_pct_energy": 5,
+    "zero_score_threshold_pct_energy": 15,
+    "calculation": "10 - ((sugar_pct_energy - 5) / 10 * 10), clamp 0-10"
+  },
+
+  "sodium_penalty_score": {
+    "description_vi": "Bắt đầu trừ điểm khi Natri vượt 50% DV trong 1 bữa",
+    "full_score_threshold_pct_dv": 25,
+    "zero_score_threshold_pct_dv": 75,
+    "calculation": "10 - ((sodium_pct_dv - 25) / 50 * 10), clamp 0-10"
+  },
+
+  "glycemic_load_score": {
+    "description_vi": "Dựa trên GL tổng của bữa ăn — xem gi_gl_tables.json",
+    "scoring_table": [
+      { "gl_range": "0-10", "points": 10 },
+      { "gl_range": "11-19", "points": 6 },
+      { "gl_range": "20+", "points": 2 }
+    ]
+  },
+
+  "diversity_score": {
+    "description_vi": "Điểm thưởng cho sự đa dạng nhóm thực phẩm trong bữa ăn (theo food_taxonomy F01-F17)",
+    "calculation": "min(10, số_nhóm_food_khác_nhau_trong_bữa * 1.5)",
+    "ideal_min_groups": 4
+  },
+
+  "ul_penalty": {
+    "description_vi": "Phạt nghiêm trọng nếu bất kỳ nutrient nào vượt UL — xem nutrient-ul.json",
+    "penalty_per_nutrient_exceeded": -15,
+    "max_total_penalty": -50,
+    "note": "Áp dụng sau khi tính tổng điểm các component khác"
+  },
+
+  "allergen_penalty": {
+    "description_vi": "Nếu người dùng có dị ứng đã khai báo mà món ăn chứa allergen đó",
+    "penalty": -100,
+    "note": "Loại trừ hoàn toàn khỏi đề xuất, không chỉ trừ điểm — xem allergens.json"
+  },
+
+  "score_interpretation": [
+    { "range": "85-100", "label_vi": "Xuất sắc", "label_en": "Excellent", "color": "#3fb950" },
+    { "range": "70-84", "label_vi": "Tốt", "label_en": "Good", "color": "#58a6ff" },
+    { "range": "50-69", "label_vi": "Trung bình", "label_en": "Fair", "color": "#e3b341" },
+    { "range": "0-49", "label_vi": "Cần cải thiện", "label_en": "Needs Improvement", "color": "#f85149" }
+  ]
+}
