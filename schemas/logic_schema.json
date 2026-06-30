@@ -1,1 +1,80 @@
-
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smartnutri.org/schemas/logic_schema.json",
+  "title": "Logic Engine File",
+  "description": "JSON Schema chung cho mọi file trong logic/ — absorption, biomarkers, evidence, kinetics, modifiers, systems_biology.",
+  "type": "object",
+  "required": ["$schema", "version", "description"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "description": { "type": "string" },
+    "source": { "type": ["string", "array"] },
+    "note": { "type": "string" },
+    "nutrients": {
+      "type": "object",
+      "description": "Map nutrientId → logic data. Mỗi nutrient có thể chứa các mục con tùy theo loại file (enhancers, inhibitors, kinetics...)",
+      "patternProperties": {
+        "^NUT_": {
+          "type": "object",
+          "properties": {
+            "label_vi": { "type": "string" },
+            "label_en": { "type": "string" },
+            "status": { "type": "string", "enum": ["pending", "partial", "complete"] },
+            "forms": {
+              "type": "object",
+              "description": "Các dạng của nutrient (vd: k1_raw, k2_mk7_natto)"
+            }
+          },
+          "required": ["label_vi", "status"]
+        }
+      }
+    },
+    "logic_categories": {
+      "type": "object",
+      "description": "39 mục tiêu chuẩn — xem standards/absorption_factors.json._schema_definition",
+      "properties": {
+        "base_absorption_factor": { "type": "object" },
+        "enhancers": { "type": "array" },
+        "inhibitors": { "type": "array" },
+        "food_matrix_modifiers": { "type": "array" },
+        "food_processing_effects": { "type": "array" },
+        "physiological_modifiers": { "type": "array" },
+        "disease_modifiers": { "type": "array" },
+        "drug_interactions": { "type": "array" },
+        "gut_microbiome_effects": { "type": "array" },
+        "homeostatic_regulation": { "type": "object" },
+        "dietary_modifiers": { "type": "array" },
+        "absorption_site": { "type": "object" },
+        "transporters": { "type": "array" },
+        "digestive_requirements": { "type": "object" },
+        "evidence": { "type": "string", "enum": ["A", "B", "C", "D"] },
+        "scientific_metadata": { "type": "object" },
+        "co_ingested_foods": { "type": "array" },
+        "digestion_phase": { "type": "object" },
+        "release_factor": { "type": "number" },
+        "genetic_modifiers": { "type": "array" },
+        "epigenetic_modifiers": { "type": "array" },
+        "circadian_modifiers": { "type": "object" },
+        "kinetics": { "type": "object" },
+        "storage_compartment": { "type": "object" },
+        "distribution_compartment": { "type": "object" },
+        "excretion_pathways": { "type": "object" },
+        "biomarkers": { "type": "array" },
+        "functional_markers": { "type": "array" },
+        "toxicity_thresholds": { "type": "object" },
+        "ontology_mapping": { "type": "object" },
+        "interaction_network": { "type": "object" },
+        "pathways": { "type": "array" },
+        "microbiome_profile": { "type": "object" },
+        "genome_profile": { "type": "object" },
+        "metabolome_profile": { "type": "object" },
+        "proteome_profile": { "type": "object" },
+        "transcriptome_profile": { "type": "object" },
+        "wearable_data": { "type": "object" },
+        "environmental_exposure": { "type": "object" }
+      }
+    }
+  },
+  "additionalProperties": true
+}
