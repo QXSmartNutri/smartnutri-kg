@@ -1,1 +1,104 @@
-
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smartnutri.org/schemas/anatomy.schema.json",
+  "title": "Anatomy",
+  "description": "JSON Schema cho entity Anatomy (System/Organ/Tissue/Cell). Prefix: SYS_ ORG_ TIS_ CELL_. Phase 4.",
+  "type": "object",
+  "required": ["@context", "@id", "@type", "sn:entityId", "rdfs:label"],
+  "properties": {
+    "@context": { "type": ["string", "object"] },
+    "@id": {
+      "type": "string",
+      "pattern": "^https://smartnutri\\.org/entity/(SYS_|ORG_|TIS_|CELL_)[0-9]{8}_[0-9]{6}(_[0-9]{6})?$"
+    },
+    "@type": {
+      "type": "string",
+      "enum": ["sn:System", "sn:Organ", "sn:Tissue", "sn:Cell"]
+    },
+    "sn:entityId": {
+      "type": "string",
+      "pattern": "^(SYS_|ORG_|TIS_|CELL_)[0-9]{8}_[0-9]{6}(_[0-9]{6})?$"
+    },
+    "rdfs:label": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@value", "@language"],
+        "properties": {
+          "@value": { "type": "string" },
+          "@language": { "type": "string", "pattern": "^[a-z]{2}(-[A-Za-z]+)?$" }
+        }
+      },
+      "minItems": 2
+    },
+    "rdfs:comment": { "type": "string" },
+    "sn:anatomyLevel": {
+      "type": "string",
+      "enum": ["system", "organ", "tissue", "cell"]
+    },
+    "sn:partOf": {
+      "type": "object",
+      "properties": {
+        "@id": { "type": "string", "description": "Cấp cao hơn — vd: Organ partOf System" }
+      }
+    },
+    "sn:hasPart": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "@id": { "type": "string", "description": "Cấp thấp hơn — vd: System hasPart Organ" }
+        }
+      }
+    },
+    "sn:primaryFunction": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "sn:nutrientDependency": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@id"],
+        "properties": {
+          "@id": { "type": "string" },
+          "sn:role": { "type": "string" },
+          "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] }
+        }
+      },
+      "description": "Nutrient nào cơ quan này phụ thuộc"
+    },
+    "sn:affectedByDeficiency": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@id"],
+        "properties": {
+          "@id": { "type": "string" },
+          "sn:effect": { "type": "string" },
+          "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] }
+        }
+      }
+    },
+    "sn:associatedDisease": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@id"],
+        "properties": {
+          "@id": { "type": "string" }
+        }
+      }
+    },
+    "sn:cellTypes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Chỉ dùng khi @type = sn:Tissue hoặc sn:Organ"
+    },
+    "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] },
+    "owl:sameAs": { "type": ["string", "array"] },
+    "skos:exactMatch": { "type": ["string", "array"], "description": "FMA, UBERON ontology ID" },
+    "skos:closeMatch": { "type": ["string", "array"] }
+  },
+  "additionalProperties": true
+}
