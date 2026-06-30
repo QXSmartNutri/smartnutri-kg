@@ -1,1 +1,76 @@
+{
+  "$schema": "https://smartnutri.org/schemas/standards",
+  "version": "1.0.0",
+  "description": "Quy tắc cân bằng dinh dưỡng tổng thể — dùng cho logic_engine để đánh giá một bữa ăn/ngày ăn có cân đối hay không. Tham chiếu nutrient_amdr.json, nutrient-rda.json.",
+  "source": "IOM AMDR, USDA MyPlate, WHO Healthy Diet Guidelines",
 
+  "macronutrient_balance": {
+    "description_vi": "Tỉ lệ năng lượng từ 3 nhóm đa lượng phải nằm trong AMDR — xem nutrient_amdr.json",
+    "ideal_ratio_adult": { "carbohydrate_pct": "50-55", "protein_pct": "15-20", "fat_pct": "25-30" },
+    "imbalance_flags": [
+      { "condition": "carbohydrate_pct > 65", "flag": "high_carb_warning", "severity": "medium" },
+      { "condition": "protein_pct < 10", "flag": "low_protein_warning", "severity": "high" },
+      { "condition": "fat_pct > 35", "flag": "high_fat_warning", "severity": "medium" },
+      { "condition": "saturated_fat_pct > 10", "flag": "high_saturated_fat", "severity": "high" }
+    ]
+  },
+
+  "fiber_balance": {
+    "description_vi": "Đảm bảo đủ chất xơ theo RDA, tỉ lệ Soluble:Insoluble lý tưởng 1:3",
+    "min_fiber_per_1000kcal": 14,
+    "soluble_insoluble_ratio_ideal": "1:3"
+  },
+
+  "sugar_balance": {
+    "description_vi": "WHO khuyến nghị đường tự do <10% năng lượng, lý tưởng <5%",
+    "max_added_sugar_pct_energy": 10,
+    "ideal_added_sugar_pct_energy": 5
+  },
+
+  "sodium_potassium_balance": {
+    "description_vi": "Tỉ lệ Natri:Kali ảnh hưởng huyết áp — WHO khuyến nghị Na:K < 1:1 (lý tưởng K nhiều hơn Na)",
+    "ideal_na_k_ratio": "< 1.0",
+    "flag_if_na_k_ratio_above": 1.5
+  },
+
+  "omega_balance": {
+    "description_vi": "Tỉ lệ Omega-6:Omega-3 lý tưởng theo khuyến nghị quốc tế",
+    "ideal_omega6_omega3_ratio": "4:1 to 1:1",
+    "western_diet_typical_ratio": "15:1 to 20:1",
+    "flag_if_ratio_above": 10
+  },
+
+  "calcium_phosphorus_balance": {
+    "description_vi": "Tỉ lệ Ca:P ảnh hưởng chuyển hóa xương — lý tưởng gần 1:1 đến 2:1",
+    "ideal_ca_p_ratio": "1:1 to 2:1"
+  },
+
+  "vitamin_mineral_synergy": {
+    "description_vi": "Các cặp nutrient nên xuất hiện cùng nhau để tối ưu hấp thu/chuyển hóa",
+    "synergy_pairs": [
+      { "pair": ["NUT_vitamin_d", "NUT_calcium"], "reason": "Vitamin D tăng hấp thu Calcium" },
+      { "pair": ["NUT_vitamin_c", "NUT_iron"], "reason": "Vitamin C tăng hấp thu Sắt non-heme" },
+      { "pair": ["NUT_vitamin_k", "NUT_calcium"], "reason": "Vitamin K2 hỗ trợ Calcium gắn vào xương qua Osteocalcin" },
+      { "pair": ["NUT_vitamin_e", "NUT_selenium"], "reason": "Đồng vận chống oxy hóa" },
+      { "pair": ["NUT_zinc", "NUT_copper"], "reason": "Cần cân bằng tỉ lệ Zn:Cu khoảng 8:1 đến 15:1" }
+    ]
+  },
+
+  "antagonist_pairs": {
+    "description_vi": "Các cặp nutrient nên KHÔNG dùng đồng thời cùng bữa do cạnh tranh hấp thu",
+    "pairs": [
+      { "pair": ["NUT_calcium", "NUT_iron"], "reason": "Calcium ức chế hấp thu Sắt — nên cách bữa", "evidence": "A" },
+      { "pair": ["NUT_zinc", "NUT_iron"], "reason": "Liều cao cạnh tranh transporter hấp thu", "evidence": "B" },
+      { "pair": ["NUT_calcium", "NUT_zinc"], "reason": "Calcium liều cao ức chế hấp thu Kẽm", "evidence": "B" }
+    ]
+  },
+
+  "overall_scoring_inputs": {
+    "description_vi": "Các yếu tố đầu vào dùng cho meal_scoring_rules.json để tính điểm cân bằng tổng thể",
+    "factors": [
+      "macronutrient_balance", "fiber_balance", "sugar_balance",
+      "sodium_potassium_balance", "omega_balance", "calcium_phosphorus_balance",
+      "vitamin_mineral_synergy", "antagonist_pairs"
+    ]
+  }
+}
