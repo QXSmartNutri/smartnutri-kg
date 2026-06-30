@@ -1,1 +1,71 @@
-
+{
+  "$schema": "https://smartnutri.org/schemas/standards",
+  "version": "1.0.0",
+  "description": "Phân loại học (Taxonomy) phân cấp cho Bioactive Compounds — bổ sung cho bioactive-groups.json bằng cấu trúc cây phân cấp chuẩn hóa, dùng cho ontology mapping và truy vấn theo cấp bậc.",
+  "source": "ChEBI Ontology, KNApSAcK Database",
+  "taxonomy_tree": {
+    "root": "Bioactive Compound",
+    "level_1": [
+      {
+        "id": "phenolic_compounds",
+        "label_vi": "Hợp chất Phenolic",
+        "level_2": [
+          { "id": "flavonoids", "label_vi": "Flavonoid",
+            "level_3": ["flavonol", "flavone", "flavanone", "isoflavone", "anthocyanidin", "flavan_3_ol"] },
+          { "id": "non_flavonoid_phenolics", "label_vi": "Phenolic không phải Flavonoid",
+            "level_3": ["phenolic_acid", "stilbene", "lignan", "tannin"] }
+        ]
+      },
+      {
+        "id": "terpenoids",
+        "label_vi": "Terpenoid",
+        "level_2": [
+          { "id": "carotenoids", "label_vi": "Carotenoid",
+            "level_3": ["carotene", "xanthophyll"] },
+          { "id": "other_terpenoids", "label_vi": "Terpenoid khác",
+            "level_3": ["monoterpene", "diterpene", "triterpene", "sesquiterpene"] }
+        ]
+      },
+      {
+        "id": "alkaloids",
+        "label_vi": "Alkaloid",
+        "level_2": [
+          { "id": "purine_alkaloids", "label_vi": "Purine alkaloid",
+            "level_3": ["caffeine", "theobromine", "theophylline"] },
+          { "id": "capsaicinoids", "label_vi": "Capsaicinoid",
+            "level_3": ["capsaicin", "dihydrocapsaicin"] }
+        ]
+      },
+      {
+        "id": "organosulfur",
+        "label_vi": "Hợp chất lưu huỳnh hữu cơ",
+        "level_2": [
+          { "id": "allium_compounds", "label_vi": "Hợp chất từ họ Allium",
+            "level_3": ["allicin", "alliin", "diallyl_disulfide"] },
+          { "id": "glucosinolates", "label_vi": "Glucosinolate (họ Brassica)",
+            "level_3": ["sulforaphane", "indole_3_carbinol", "glucoraphanin"] }
+        ]
+      },
+      {
+        "id": "oligosaccharides_microbial",
+        "label_vi": "Oligosaccharide & Vi sinh",
+        "level_2": [
+          { "id": "prebiotic_fibers", "label_vi": "Chất xơ Prebiotic",
+            "level_3": ["inulin", "fos", "gos", "resistant_starch"] },
+          { "id": "probiotic_strains", "label_vi": "Chủng Probiotic",
+            "level_3": ["lactobacillus", "bifidobacterium", "saccharomyces_boulardii"] }
+        ]
+      }
+    ]
+  },
+  "depth_levels": {
+    "level_0": "root (Bioactive Compound)",
+    "level_1": "major_class (5 nhóm chính)",
+    "level_2": "subclass (10 nhóm phụ)",
+    "level_3": "compound_type (29 loại cụ thể) — map tới @type của entity BIO_"
+  },
+  "ontology_mapping": {
+    "external_systems": ["ChEBI", "KNApSAcK", "PubChem Classification Browser"],
+    "note": "Mỗi compound_type ở level_3 nên có owl:sameAs trỏ đến ChEBI ID tương ứng"
+  }
+}
