@@ -1,1 +1,88 @@
-
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smartnutri.org/schemas/ai_config_schema.json",
+  "title": "AI Config File",
+  "description": "JSON Schema chung cho mọi file trong ai_config/ — generation_rules, safety_rules, prompt_templates, reasoning_rules, response_schemas, medical_disclaimers, clinical_tone_guidelines, output_constraints.",
+  "type": "object",
+  "required": ["$schema", "version", "description"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "description": { "type": "string" },
+    "config_type": {
+      "type": "string",
+      "enum": [
+        "generation_rules", "safety_rules", "prompt_templates",
+        "reasoning_rules", "response_schemas", "medical_disclaimers",
+        "clinical_tone_guidelines", "output_constraints"
+      ]
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "description"],
+        "properties": {
+          "id": { "type": "string" },
+          "description": { "type": "string" },
+          "priority": { "type": "string", "enum": ["critical", "high", "medium", "low"] },
+          "condition": { "type": "string" },
+          "action": { "type": "string" },
+          "examples": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "safety_constraints": {
+      "type": "object",
+      "properties": {
+        "require_evidence_level": { "type": "string", "enum": ["A", "B", "C", "D"] },
+        "require_disclaimer": { "type": "boolean" },
+        "block_diagnosis_claims": { "type": "boolean" },
+        "block_dosage_without_professional": { "type": "boolean" },
+        "max_confidence_without_citation": { "type": "number" }
+      }
+    },
+    "prompt_templates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "purpose": { "type": "string" },
+          "template": { "type": "string" },
+          "variables": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "response_schema": {
+      "type": "object",
+      "description": "Cấu trúc bắt buộc cho output của AI Agent (vd: meal plan, nutrient analysis)"
+    },
+    "tone_guidelines": {
+      "type": "object",
+      "properties": {
+        "register": { "type": "string", "enum": ["clinical", "friendly", "educational", "concise"] },
+        "avoid_terms": { "type": "array", "items": { "type": "string" } },
+        "preferred_terms": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "disclaimers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "trigger_context": { "type": "string" },
+          "text_vi": { "type": "string" },
+          "text_en": { "type": "string" }
+        }
+      }
+    }
+  },
+  "additionalProperties": true
+}
