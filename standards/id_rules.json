@@ -1,1 +1,63 @@
-
+{
+  "$schema": "https://smartnutri.org/schemas/standards",
+  "version": "1.0.0",
+  "description": "Quy tắc kỹ thuật đặt ID — bản tóm tắt máy đọc được của standards/entity-ids.md, dùng cho validate-ids.js và các script tự động.",
+  "note": "File .md là tài liệu cho người đọc; file này là cấu hình cho máy/script.",
+  "id_format": {
+    "pattern_parent": "^(PREFIX)_(YYYYMMDD)_(SEQ6)$",
+    "pattern_child": "^(PREFIX)_(YYYYMMDD)_(SEQ6)_(SEQ6)$",
+    "regex_parent": "^[A-Z]+_[0-9]{8}_[0-9]{6}$",
+    "regex_child": "^[A-Z]+_[0-9]{8}_[0-9]{6}_[0-9]{6}$",
+    "regex_combined": "^[A-Z]+_[0-9]{8}_[0-9]{6}(_[0-9]{6})?$",
+    "max_nesting_level": 1,
+    "seq_digits": 6,
+    "seq_start": 1,
+    "seq_max": 999999
+  },
+  "valid_prefixes": [
+    "FOOD_", "HERB_", "NUT_", "BIO_", "TOX_",
+    "DIS_", "SYM_",
+    "DRUG_", "BRAND_",
+    "SYS_", "ORG_", "TIS_", "CELL_",
+    "PROC_", "PATH_"
+  ],
+  "prefix_to_folder": {
+    "FOOD_": "data/jsonld/foods",
+    "HERB_": "data/jsonld/herbs",
+    "NUT_": "data/jsonld/nutrients",
+    "BIO_": "data/jsonld/bioactives",
+    "TOX_": "data/jsonld/toxic",
+    "DIS_": "data/jsonld/diseases",
+    "SYM_": "data/jsonld/symptoms",
+    "DRUG_": "data/jsonld/drugs",
+    "BRAND_": "data/jsonld/brands",
+    "SYS_": "data/jsonld/anatomy/systems",
+    "ORG_": "data/jsonld/anatomy/organs",
+    "TIS_": "data/jsonld/anatomy/tissues",
+    "CELL_": "data/jsonld/anatomy/cells",
+    "PROC_": "data/jsonld/metabolism/processes",
+    "PATH_": "data/jsonld/metabolism/pathways"
+  },
+  "prefix_to_phase": {
+    "FOOD_": 1, "HERB_": 1, "NUT_": 1, "BIO_": 1, "TOX_": 1,
+    "DIS_": 2, "SYM_": 2,
+    "DRUG_": 3, "BRAND_": 3,
+    "SYS_": 4, "ORG_": 4, "TIS_": 4, "CELL_": 4,
+    "PROC_": 5, "PATH_": 5
+  },
+  "base_uri": "https://smartnutri.org/entity/",
+  "date_format": "YYYYMMDD",
+  "date_timezone": "UTC",
+  "rules": [
+    { "id": "RULE_001", "description": "PREFIX phải nằm trong danh sách 15 prefix chính thức", "severity": "error" },
+    { "id": "RULE_002", "description": "YYYYMMDD phải là ngày hợp lệ theo lịch UTC", "severity": "error" },
+    { "id": "RULE_003", "description": "SEQ6 phải đủ 6 chữ số, bắt đầu từ 000001, không được 000000", "severity": "error" },
+    { "id": "RULE_004", "description": "SEQ6 không reset theo ngày — chỉ tăng dần trong mỗi prefix", "severity": "error" },
+    { "id": "RULE_005", "description": "Entity con chỉ được lồng tối đa 1 cấp (không có cháu)", "severity": "error" },
+    { "id": "RULE_006", "description": "Entity cha phải tồn tại trước khi tạo entity con", "severity": "error" },
+    { "id": "RULE_007", "description": "ID đã tạo là vĩnh viễn — không xóa, không tái sử dụng, không đổi", "severity": "critical" },
+    { "id": "RULE_008", "description": "Mỗi prefix chỉ được dùng trong đúng folder tương ứng (prefix_to_folder)", "severity": "error" },
+    { "id": "RULE_009", "description": "ID phải duy nhất toàn cục trên toàn bộ data/jsonld/", "severity": "critical" },
+    { "id": "RULE_010", "description": "Entity bị deprecated phải đánh dấu owl:deprecated=true, không xóa khỏi file", "severity": "warning" }
+  ]
+}
