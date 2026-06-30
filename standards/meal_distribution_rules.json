@@ -1,1 +1,79 @@
+{
+  "$schema": "https://smartnutri.org/schemas/standards",
+  "version": "1.0.0",
+  "description": "Quy tắc phân bổ năng lượng & nutrient theo các bữa ăn trong ngày — dùng cho logic_engine khi tạo thực đơn cả ngày từ nhu cầu tổng (nutrient-rda.json, nutrient_amdr.json).",
+  "source": "USDA MyPlate, Vietnamese National Institute of Nutrition (NIN), IOM",
 
+  "standard_meal_patterns": {
+    "3_meals": {
+      "label_vi": "3 bữa chính",
+      "distribution": [
+        { "meal": "breakfast", "label_vi": "Sáng", "pct_energy": 25 },
+        { "meal": "lunch", "label_vi": "Trưa", "pct_energy": 40 },
+        { "meal": "dinner", "label_vi": "Tối", "pct_energy": 35 }
+      ]
+    },
+    "3_meals_2_snacks": {
+      "label_vi": "3 bữa chính + 2 bữa phụ",
+      "distribution": [
+        { "meal": "breakfast", "label_vi": "Sáng", "pct_energy": 20 },
+        { "meal": "morning_snack", "label_vi": "Phụ sáng", "pct_energy": 10 },
+        { "meal": "lunch", "label_vi": "Trưa", "pct_energy": 30 },
+        { "meal": "afternoon_snack", "label_vi": "Phụ chiều", "pct_energy": 10 },
+        { "meal": "dinner", "label_vi": "Tối", "pct_energy": 30 }
+      ]
+    },
+    "5_6_small_meals": {
+      "label_vi": "5-6 bữa nhỏ (cho người tiểu đường/dạ dày)",
+      "distribution": [
+        { "meal": "breakfast", "label_vi": "Sáng", "pct_energy": 18 },
+        { "meal": "morning_snack", "label_vi": "Phụ sáng", "pct_energy": 12 },
+        { "meal": "lunch", "label_vi": "Trưa", "pct_energy": 25 },
+        { "meal": "afternoon_snack", "label_vi": "Phụ chiều", "pct_energy": 12 },
+        { "meal": "dinner", "label_vi": "Tối", "pct_energy": 23 },
+        { "meal": "evening_snack", "label_vi": "Phụ tối", "pct_energy": 10 }
+      ]
+    }
+  },
+
+  "special_population_patterns": {
+    "AG_PREGNANT": {
+      "note": "Tăng nhẹ pct_energy bữa phụ sáng để giảm buồn nôn (nausea), ưu tiên 3_meals_2_snacks",
+      "recommended_pattern": "3_meals_2_snacks"
+    },
+    "AG_ELDER_70Y": {
+      "note": "Khuyến nghị bữa nhỏ tần suất nhiều hơn do giảm dung tích dạ dày và cảm giác no nhanh",
+      "recommended_pattern": "5_6_small_meals"
+    },
+    "diabetic": {
+      "note": "Phân bổ đều carbohydrate giữa các bữa để tránh đỉnh đường huyết",
+      "recommended_pattern": "5_6_small_meals",
+      "carb_distribution_priority": true
+    },
+    "AG_CHILD_1_3Y": {
+      "note": "Dạ dày nhỏ, cần 5-6 bữa nhỏ trong ngày",
+      "recommended_pattern": "5_6_small_meals"
+    }
+  },
+
+  "nutrient_timing_rules": {
+    "description_vi": "Một số nutrient nên ưu tiên phân bổ vào bữa cụ thể vì lý do sinh lý/hấp thu",
+    "rules": [
+      { "nutrient": "NUT_calcium", "preferred_meal": "any", "note": "Tách khỏi bữa giàu Sắt — xem antagonist_pairs trong nutrition_balance_rules.json" },
+      { "nutrient": "NUT_iron", "preferred_meal": "breakfast_or_lunch", "note": "Kết hợp Vitamin C, tránh dùng cùng trà/cà phê" },
+      { "nutrient": "NUT_vitamin_b1", "preferred_meal": "breakfast", "note": "Hỗ trợ chuyển hóa năng lượng đầu ngày" },
+      { "nutrient": "NUT_protein", "preferred_meal": "distributed_evenly", "note": "Phân bổ đều protein các bữa tối ưu tổng hợp protein cơ (muscle protein synthesis) hơn là dồn vào 1 bữa" },
+      { "nutrient": "NUT_fat_total", "preferred_meal": "lunch_or_dinner", "note": "Hỗ trợ hấp thu Vitamin tan dầu (A, D, E, K)" },
+      { "nutrient": "NUT_vitamin_k", "preferred_meal": "with_fat_containing_meal", "note": "Cần chất béo để hấp thu — xem absorption_factors.json" }
+    ]
+  },
+
+  "fasting_patterns": {
+    "description_vi": "Hỗ trợ tính toán cho các kiểu nhịn ăn gián đoạn (Intermittent Fasting) — không bắt buộc, chỉ tham chiếu khi người dùng chọn",
+    "patterns": [
+      { "id": "16_8", "label_vi": "16:8 (Ăn trong 8 giờ)", "eating_window_hours": 8 },
+      { "id": "14_10", "label_vi": "14:10 (Ăn trong 10 giờ)", "eating_window_hours": 10 }
+    ],
+    "note": "Khi áp dụng fasting, phân bổ lại 100% năng lượng trong eating_window theo tỉ lệ standard_meal_patterns tương ứng số bữa"
+  }
+}
