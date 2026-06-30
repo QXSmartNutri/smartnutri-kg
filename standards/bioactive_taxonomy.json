@@ -1,71 +1,269 @@
 {
   "$schema": "https://smartnutri.org/schemas/standards",
-  "version": "1.0.0",
-  "description": "Phân loại học (Taxonomy) phân cấp cho Bioactive Compounds — bổ sung cho bioactive-groups.json bằng cấu trúc cây phân cấp chuẩn hóa, dùng cho ontology mapping và truy vấn theo cấp bậc.",
-  "source": "ChEBI Ontology, KNApSAcK Database",
-  "taxonomy_tree": {
-    "root": "Bioactive Compound",
-    "level_1": [
-      {
-        "id": "phenolic_compounds",
-        "label_vi": "Hợp chất Phenolic",
-        "level_2": [
-          { "id": "flavonoids", "label_vi": "Flavonoid",
-            "level_3": ["flavonol", "flavone", "flavanone", "isoflavone", "anthocyanidin", "flavan_3_ol"] },
-          { "id": "non_flavonoid_phenolics", "label_vi": "Phenolic không phải Flavonoid",
-            "level_3": ["phenolic_acid", "stilbene", "lignan", "tannin"] }
-        ]
-      },
-      {
-        "id": "terpenoids",
-        "label_vi": "Terpenoid",
-        "level_2": [
-          { "id": "carotenoids", "label_vi": "Carotenoid",
-            "level_3": ["carotene", "xanthophyll"] },
-          { "id": "other_terpenoids", "label_vi": "Terpenoid khác",
-            "level_3": ["monoterpene", "diterpene", "triterpene", "sesquiterpene"] }
-        ]
-      },
-      {
-        "id": "alkaloids",
-        "label_vi": "Alkaloid",
-        "level_2": [
-          { "id": "purine_alkaloids", "label_vi": "Purine alkaloid",
-            "level_3": ["caffeine", "theobromine", "theophylline"] },
-          { "id": "capsaicinoids", "label_vi": "Capsaicinoid",
-            "level_3": ["capsaicin", "dihydrocapsaicin"] }
-        ]
-      },
-      {
-        "id": "organosulfur",
-        "label_vi": "Hợp chất lưu huỳnh hữu cơ",
-        "level_2": [
-          { "id": "allium_compounds", "label_vi": "Hợp chất từ họ Allium",
-            "level_3": ["allicin", "alliin", "diallyl_disulfide"] },
-          { "id": "glucosinolates", "label_vi": "Glucosinolate (họ Brassica)",
-            "level_3": ["sulforaphane", "indole_3_carbinol", "glucoraphanin"] }
-        ]
-      },
-      {
-        "id": "oligosaccharides_microbial",
-        "label_vi": "Oligosaccharide & Vi sinh",
-        "level_2": [
-          { "id": "prebiotic_fibers", "label_vi": "Chất xơ Prebiotic",
-            "level_3": ["inulin", "fos", "gos", "resistant_starch"] },
-          { "id": "probiotic_strains", "label_vi": "Chủng Probiotic",
-            "level_3": ["lactobacillus", "bifidobacterium", "saccharomyces_boulardii"] }
-        ]
-      }
-    ]
+  "version": "2.0.0",
+  "description": "Bioactive Compounds Ingredient Taxonomy — phân loại đầy đủ 15 nhóm chính (B01–B15) + T02 Toxins/Defensive Compounds. Đồng bộ với Food/Herb/Toxic Taxonomy và Nutrients Taxonomy.",
+  "source": "Tổng hợp ChEBI Ontology, KNApSAcK, LIPID MAPS, PubChem Classification, FooDB",
+  "note": "sn:taxonomyCode (vd: B05) là trường phân loại bổ sung, KHÔNG thay thế Entity ID (BIO_YYYYMMDD_SEQ6). Mỗi entity BIO_ nên gắn đúng 1 taxonomyCode ở cấp con sâu nhất phù hợp.",
+  "taxonomy": {
+
+    "B01": {
+      "label_vi": "Lipid & dẫn xuất Lipid",
+      "label_en": "Lipids & Lipid-derived",
+      "subcategories": [
+        { "code": "B01.01", "label_vi": "Acid béo bão hòa (SFAs)", "label_en": "Saturated Fatty Acids", "examples": ["Palmitic acid", "Stearic acid", "Lauric acid"] },
+        { "code": "B01.02", "label_vi": "Acid béo không bão hòa đơn (MUFAs)", "label_en": "Monounsaturated Fatty Acids", "examples": ["Oleic acid"] },
+        { "code": "B01.03", "label_vi": "Acid béo không bão hòa đa (PUFAs)", "label_en": "Polyunsaturated Fatty Acids", "examples": ["Omega-3 ALA/EPA/DHA", "Omega-6 Linoleic acid"] },
+        { "code": "B01.04", "label_vi": "Acid béo dạng Trans", "label_en": "Trans Fatty Acids", "examples": ["Elaidic acid"] },
+        { "code": "B01.05", "label_vi": "Triglyceride", "label_en": "Triglycerides", "examples": ["MCT oil"] },
+        { "code": "B01.06", "label_vi": "Phospholipid", "label_en": "Phospholipids", "examples": ["Phosphatidylcholine", "Lecithin"] },
+        { "code": "B01.07", "label_vi": "Sphingolipid", "label_en": "Sphingolipids", "examples": ["Sphingomyelin", "Ceramide"] },
+        { "code": "B01.08", "label_vi": "Glycolipid", "label_en": "Glycolipids", "examples": ["Cerebroside"] },
+        { "code": "B01.09", "label_vi": "Ether Lipid", "label_en": "Ether Lipids", "examples": ["Plasmalogen"] },
+        { "code": "B01.10", "label_vi": "Wax Ester", "label_en": "Wax Esters", "examples": [] },
+        { "code": "B01.11", "label_vi": "Eicosanoid", "label_en": "Eicosanoids", "examples": ["Prostaglandin", "Thromboxane", "Leukotriene"] },
+        { "code": "B01.12", "label_vi": "Chất trung gian tiền giải quyết viêm chuyên biệt (SPMs)", "label_en": "Specialized Pro-resolving Mediators", "examples": ["Resolvin", "Protectin"] },
+        { "code": "B01.13", "label_vi": "Endocannabinoid", "label_en": "Endocannabinoids", "examples": ["Anandamide"] },
+        { "code": "B01.14", "label_vi": "Vitamin tan trong dầu", "label_en": "Fat-soluble Vitamins", "examples": ["Vitamin A, D, E, K — xem NUT_ riêng"] }
+      ]
+    },
+
+    "B02": {
+      "label_vi": "Carbohydrate & Glycoconjugate",
+      "label_en": "Carbohydrates & Glycoconjugates",
+      "subcategories": [
+        { "code": "B02.01", "label_vi": "Monosaccharide", "label_en": "Monosaccharides", "examples": ["Glucose", "Fructose"] },
+        { "code": "B02.02", "label_vi": "Oligosaccharide", "label_en": "Oligosaccharides", "examples": ["FOS", "GOS", "Raffinose"] },
+        { "code": "B02.03", "label_vi": "Polysaccharide cấu trúc", "label_en": "Structural Polysaccharides", "examples": ["Cellulose", "Chitin"] },
+        { "code": "B02.04", "label_vi": "Polysaccharide chức năng/sinh học", "label_en": "Functional/Bioactive Polysaccharides", "examples": ["Beta-glucan", "Pectin", "Inulin", "Fucoidan"] },
+        { "code": "B02.05", "label_vi": "Glycosaminoglycan (GAGs)", "label_en": "Glycosaminoglycans", "examples": ["Hyaluronic acid", "Chondroitin sulfate"] },
+        { "code": "B02.06", "label_vi": "Cyclitol", "label_en": "Cyclitols", "examples": ["Inositol", "Pinitol"] }
+      ]
+    },
+
+    "B03": {
+      "label_vi": "Amino acid & Chất chuyển hóa sơ cấp chứa Nitơ",
+      "label_en": "Amino Acids & N-Primary Metabolites",
+      "subcategories": [
+        { "code": "B03.01", "label_vi": "Amino acid tự do", "label_en": "Free Amino Acids", "examples": ["Glutamine", "Taurine", "Glycine"] },
+        { "code": "B03.02", "label_vi": "Amino acid không tạo Protein", "label_en": "Non-Protein Amino Acids", "examples": ["GABA", "Ornithine", "Citrulline"] },
+        { "code": "B03.03", "label_vi": "Dipeptide Imidazole", "label_en": "Imidazole Dipeptides", "examples": ["Carnosine", "Anserine"] },
+        { "code": "B03.04", "label_vi": "Peptide sinh học", "label_en": "Bioactive Peptides", "examples": ["Glutathione", "Casein-derived peptides"] },
+        { "code": "B03.05", "label_vi": "Peptide vòng", "label_en": "Cyclic Peptides", "examples": [] },
+        { "code": "B03.06", "label_vi": "Hợp chất Guanidino", "label_en": "Guanidino Compounds", "examples": ["Creatine"] },
+        { "code": "B03.07", "label_vi": "Chất thẩm thấu chứa Nitơ", "label_en": "Nitrogenous Osmolytes", "examples": ["Betaine"] },
+        { "code": "B03.08", "label_vi": "Polyamine", "label_en": "Polyamines", "examples": ["Spermidine", "Putrescine"] }
+      ]
+    },
+
+    "B04": {
+      "label_vi": "Nucleotide, Nucleoside & Nucleobase",
+      "label_en": "Nucleotides, Nucleosides & Nucleobases",
+      "subcategories": [
+        { "code": "B04.01", "label_vi": "Nucleotide Purine", "label_en": "Purine Nucleotides", "examples": ["ATP", "GTP"] },
+        { "code": "B04.02", "label_vi": "Nucleotide Pyrimidine", "label_en": "Pyrimidine Nucleotides", "examples": ["UTP", "CTP"] },
+        { "code": "B04.03", "label_vi": "Nucleotide vòng", "label_en": "Cyclic Nucleotides", "examples": ["cAMP", "cGMP"] },
+        { "code": "B04.04", "label_vi": "Base Purine", "label_en": "Purine Bases", "examples": ["Adenine", "Guanine"] },
+        { "code": "B04.05", "label_vi": "Base Pyrimidine", "label_en": "Pyrimidine Bases", "examples": ["Cytosine", "Thymine", "Uracil"] }
+      ]
+    },
+
+    "B05": {
+      "label_vi": "Terpenoid / Isoprenoid",
+      "label_en": "Terpenoids / Isoprenoids",
+      "subcategories": [
+        { "code": "B05.01", "label_vi": "Hemiterpene", "label_en": "Hemiterpenes", "examples": ["Isoprene"] },
+        { "code": "B05.02", "label_vi": "Monoterpene", "label_en": "Monoterpenes", "examples": ["Limonene", "Menthol", "Linalool"] },
+        { "code": "B05.03", "label_vi": "Sesquiterpene", "label_en": "Sesquiterpenes", "examples": ["Zingiberene", "Farnesene"] },
+        { "code": "B05.04", "label_vi": "Diterpene", "label_en": "Diterpenes", "examples": ["Carnosol", "Stevioside-related"] },
+        { "code": "B05.05", "label_vi": "Sesterterpene", "label_en": "Sesterterpenes", "examples": [] },
+        { "code": "B05.06", "label_vi": "Triterpene", "label_en": "Triterpenes", "examples": ["Ursolic acid", "Oleanolic acid"] },
+        { "code": "B05.07", "label_vi": "Carotenoid", "label_en": "Carotenoids", "examples": ["Beta-carotene", "Lycopene", "Lutein", "Astaxanthin"] },
+        { "code": "B05.08", "label_vi": "Polyterpene", "label_en": "Polyterpenes", "examples": ["Rubber-related compounds"] },
+        { "code": "B05.09", "label_vi": "Sterol", "label_en": "Sterols", "examples": ["Phytosterol", "Beta-sitosterol", "Cholesterol"] },
+        { "code": "B05.10", "label_vi": "Hormone Steroid", "label_en": "Steroid Hormones", "examples": ["Phytoestrogen-related"] },
+        { "code": "B05.11", "label_vi": "Stanol", "label_en": "Stanols", "examples": ["Sitostanol"] },
+        { "code": "B05.12", "label_vi": "Iridoid", "label_en": "Iridoids", "examples": ["Aucubin", "Geniposide"] },
+        { "code": "B05.13", "label_vi": "Saponin Triterpenoid", "label_en": "Triterpenoid Saponins", "examples": ["Ginsenoside"] },
+        { "code": "B05.14", "label_vi": "Saponin Steroid", "label_en": "Steroidal Saponins", "examples": ["Diosgenin-related"] }
+      ]
+    },
+
+    "B06": {
+      "label_vi": "Hợp chất Phenolic (Polyphenol)",
+      "label_en": "Phenolic Compounds (Polyphenols)",
+      "subcategories": [
+        { "code": "B06.01", "label_vi": "Phenol đơn giản", "label_en": "Simple Phenols", "examples": ["Hydroquinone"] },
+        { "code": "B06.02", "label_vi": "Acid phenolic", "label_en": "Phenolic Acids", "examples": ["Chlorogenic acid", "Caffeic acid", "Gallic acid", "Ferulic acid"] },
+        { "code": "B06.03", "label_vi": "Chalcone & Hydroxychalcone", "label_en": "Chalcones & Hydroxychalcones", "examples": ["Phloretin"] },
+        { "code": "B06.04", "label_vi": "Auron & Auronol", "label_en": "Aurones & Auronols", "examples": [] },
+        { "code": "B06.05", "label_vi": "Flavanon", "label_en": "Flavanones", "examples": ["Hesperetin", "Naringenin"] },
+        { "code": "B06.06", "label_vi": "Flavon", "label_en": "Flavones", "examples": ["Apigenin", "Luteolin"] },
+        { "code": "B06.07", "label_vi": "Flavonol", "label_en": "Flavonols", "examples": ["Quercetin", "Kaempferol", "Myricetin"] },
+        { "code": "B06.08", "label_vi": "Flavanol (Catechin)", "label_en": "Flavanols (Catechins)", "examples": ["EGCG", "Catechin", "Epicatechin"] },
+        { "code": "B06.09", "label_vi": "Anthocyanin", "label_en": "Anthocyanins", "examples": ["Cyanidin", "Delphinidin"] },
+        { "code": "B06.10", "label_vi": "Isoflavon", "label_en": "Isoflavones", "examples": ["Genistein", "Daidzein"] },
+        { "code": "B06.11", "label_vi": "Neoflavonoid", "label_en": "Neoflavonoids", "examples": [] },
+        { "code": "B06.12", "label_vi": "Proanthocyanidin", "label_en": "Proanthocyanidins", "examples": ["Condensed tannins"] },
+        { "code": "B06.13", "label_vi": "Stilbene", "label_en": "Stilbenes", "examples": ["Resveratrol", "Pterostilbene"] },
+        { "code": "B06.14", "label_vi": "Tannin thủy phân được", "label_en": "Hydrolyzable Tannins", "examples": ["Tannic acid"] },
+        { "code": "B06.15", "label_vi": "Acid Ellagic & Urolithin", "label_en": "Ellagic Acid & Urolithins", "examples": ["Ellagic acid", "Urolithin A"] },
+        { "code": "B06.16", "label_vi": "Lignan", "label_en": "Lignans", "examples": ["Secoisolariciresinol"] },
+        { "code": "B06.17", "label_vi": "Lignin", "label_en": "Lignins", "examples": [] },
+        { "code": "B06.18", "label_vi": "Coumarin", "label_en": "Coumarins", "examples": ["Esculetin"] },
+        { "code": "B06.19", "label_vi": "Chromone", "label_en": "Chromones", "examples": [] },
+        { "code": "B06.20", "label_vi": "Xanthone", "label_en": "Xanthones", "examples": ["Mangostin"] }
+      ]
+    },
+
+    "B07": {
+      "label_vi": "Alkaloid & Chất chuyển hóa thứ cấp chứa Nitơ",
+      "label_en": "Alkaloids & N-Secondary Metabolites",
+      "subcategories": [
+        { "code": "B07.01", "label_vi": "Alkaloid Pyrrolidine", "label_en": "Pyrrolidine Alkaloids", "examples": [] },
+        { "code": "B07.02", "label_vi": "Alkaloid Pyridine & Piperidine", "label_en": "Pyridine & Piperidine Alkaloids", "examples": ["Piperine"] },
+        { "code": "B07.03", "label_vi": "Alkaloid Tropane", "label_en": "Tropane Alkaloids", "examples": [] },
+        { "code": "B07.04", "label_vi": "Alkaloid Pyrrolizidine", "label_en": "Pyrrolizidine Alkaloids", "examples": [] },
+        { "code": "B07.05", "label_vi": "Alkaloid Indole", "label_en": "Indole Alkaloids", "examples": [] },
+        { "code": "B07.06", "label_vi": "Alkaloid Quinoline", "label_en": "Quinoline Alkaloids", "examples": [] },
+        { "code": "B07.07", "label_vi": "Alkaloid Isoquinoline", "label_en": "Isoquinoline Alkaloids", "examples": ["Berberine"] },
+        { "code": "B07.08", "label_vi": "Alkaloid Quinolizidine", "label_en": "Quinolizidine Alkaloids", "examples": [] },
+        { "code": "B07.09", "label_vi": "Alkaloid Imidazole", "label_en": "Imidazole Alkaloids", "examples": ["Histamine-related"] },
+        { "code": "B07.10", "label_vi": "Alkaloid Xanthine", "label_en": "Xanthine Alkaloids", "examples": ["Caffeine", "Theobromine", "Theophylline"] },
+        { "code": "B07.11", "label_vi": "Alkaloid Steroid", "label_en": "Steroidal Alkaloids", "examples": ["Solanine"] },
+        { "code": "B07.12", "label_vi": "Alkaloid Terpenoid", "label_en": "Terpenoid Alkaloids", "examples": ["Capsaicin-related"] },
+        { "code": "B07.13", "label_vi": "Alkaloid Polyamine", "label_en": "Polyamine Alkaloids", "examples": [] }
+      ]
+    },
+
+    "B08": {
+      "label_vi": "Polyketide",
+      "label_en": "Polyketides",
+      "subcategories": [
+        { "code": "B08.01", "label_vi": "Macrolide", "label_en": "Macrolides", "examples": [] },
+        { "code": "B08.02", "label_vi": "Tetracycline", "label_en": "Tetracyclines", "examples": [] },
+        { "code": "B08.03", "label_vi": "Hợp chất Polyene", "label_en": "Polyene Compounds", "examples": [] },
+        { "code": "B08.04", "label_vi": "Polyketide dạng Statin", "label_en": "Statin-type Polyketides", "examples": ["Monacolin K"] },
+        { "code": "B08.05", "label_vi": "Polyketide biển", "label_en": "Marine Polyketides", "examples": [] },
+        { "code": "B08.06", "label_vi": "Polyketide nấm", "label_en": "Fungal Polyketides", "examples": [] }
+      ]
+    },
+
+    "B09": {
+      "label_vi": "Hợp chất lưu huỳnh hữu cơ",
+      "label_en": "Organosulfur Compounds",
+      "subcategories": [
+        { "code": "B09.01", "label_vi": "Thiosulfinate", "label_en": "Thiosulfinates", "examples": ["Allicin"] },
+        { "code": "B09.02", "label_vi": "Organosulfide", "label_en": "Organosulfides", "examples": ["Diallyl disulfide"] },
+        { "code": "B09.03", "label_vi": "S-Alk(en)yl Cysteine", "label_en": "S-Alk(en)yl Cysteines", "examples": ["Alliin"] },
+        { "code": "B09.04", "label_vi": "Glucosinolate", "label_en": "Glucosinolates", "examples": ["Glucoraphanin", "Sinigrin"] },
+        { "code": "B09.05", "label_vi": "Isothiocyanate", "label_en": "Isothiocyanates", "examples": ["Sulforaphane"] },
+        { "code": "B09.06", "label_vi": "Indole-3-carbinol (I3C) & DIM", "label_en": "Indole-3-carbinol (I3C) & DIM", "examples": ["Indole-3-carbinol", "DIM"] },
+        { "code": "B09.07", "label_vi": "Ergothioneine", "label_en": "Ergothioneine", "examples": ["Ergothioneine"] },
+        { "code": "B09.08", "label_vi": "Glutathione & Peptide Thiol", "label_en": "Glutathione & Thiol Peptides", "examples": ["Glutathione"] }
+      ]
+    },
+
+    "B10": {
+      "label_vi": "Quinone & Đồng yếu tố Oxy hóa-khử",
+      "label_en": "Quinones & Redox Cofactors",
+      "subcategories": [
+        { "code": "B10.01", "label_vi": "Benzoquinone", "label_en": "Benzoquinones", "examples": [] },
+        { "code": "B10.02", "label_vi": "Naphthoquinone", "label_en": "Naphthoquinones", "examples": ["Vitamin K-related"] },
+        { "code": "B10.03", "label_vi": "Anthraquinone", "label_en": "Anthraquinones", "examples": ["Emodin"] },
+        { "code": "B10.04", "label_vi": "Coenzyme", "label_en": "Coenzymes", "examples": ["Coenzyme Q10"] },
+        { "code": "B10.05", "label_vi": "Quinone hô hấp", "label_en": "Respiratory Quinones", "examples": ["Ubiquinone"] },
+        { "code": "B10.06", "label_vi": "PQQ", "label_en": "PQQ (Pyrroloquinoline quinone)", "examples": ["PQQ"] }
+      ]
+    },
+
+    "B11": {
+      "label_vi": "Hoạt chất sinh học đặc thù từ biển",
+      "label_en": "Marine-specific Bioactives",
+      "subcategories": [
+        { "code": "B11.01", "label_vi": "Polysaccharide biển", "label_en": "Marine Polysaccharides", "examples": ["Fucoidan", "Alginate"] },
+        { "code": "B11.02", "label_vi": "Polyphenol biển", "label_en": "Marine Polyphenols", "examples": ["Phlorotannin"] },
+        { "code": "B11.03", "label_vi": "Carotenoid biển", "label_en": "Marine Carotenoids", "examples": ["Astaxanthin", "Fucoxanthin"] },
+        { "code": "B11.04", "label_vi": "Lipid biển", "label_en": "Marine Lipids", "examples": ["EPA", "DHA"] },
+        { "code": "B11.05", "label_vi": "Sterol biển", "label_en": "Marine Sterols", "examples": ["Fucosterol"] },
+        { "code": "B11.06", "label_vi": "Peptide sinh học biển", "label_en": "Marine Bioactive Peptides", "examples": [] },
+        { "code": "B11.07", "label_vi": "Dẫn xuất Amino acid biển", "label_en": "Marine Amino Acid Derivatives", "examples": ["Taurine"] },
+        { "code": "B11.08", "label_vi": "Chất chuyển hóa biển Halogen hóa", "label_en": "Halogenated Marine Metabolites", "examples": [] },
+        { "code": "B11.09", "label_vi": "Chất chuyển hóa vi sinh vật biển", "label_en": "Marine Microbial Metabolites", "examples": [] }
+      ]
+    },
+
+    "B12": {
+      "label_vi": "Sắc tố",
+      "label_en": "Pigments",
+      "subcategories": [
+        { "code": "B12.01", "label_vi": "Sắc tố Tetrapyrrole", "label_en": "Tetrapyrrole Pigments", "examples": ["Chlorophyll", "Bilirubin"] },
+        { "code": "B12.02", "label_vi": "Sắc tố Carotenoid", "label_en": "Carotenoid Pigments", "examples": ["Beta-carotene"] },
+        { "code": "B12.03", "label_vi": "Sắc tố Flavonoid", "label_en": "Flavonoid Pigments", "examples": ["Anthocyanin"] },
+        { "code": "B12.04", "label_vi": "Sắc tố chứa Nitơ", "label_en": "Nitrogen-containing Pigments", "examples": ["Betalain"] },
+        { "code": "B12.05", "label_vi": "Sắc tố Quinone", "label_en": "Quinone Pigments", "examples": [] },
+        { "code": "B12.06", "label_vi": "Sắc tố Melanin", "label_en": "Melanin Pigments", "examples": [] },
+        { "code": "B12.07", "label_vi": "Sắc tố biển", "label_en": "Marine Pigments", "examples": ["Phycocyanin"] }
+      ]
+    },
+
+    "B13": {
+      "label_vi": "Chất chuyển hóa Probiotic & Postbiotic",
+      "label_en": "Probiotic & Postbiotic Metabolites",
+      "subcategories": [
+        { "code": "B13.01", "label_vi": "Acid béo chuỗi ngắn (SCFA)", "label_en": "Short-chain Fatty Acids", "examples": ["Butyrate", "Propionate", "Acetate"] },
+        { "code": "B13.02", "label_vi": "Acid béo chuỗi trung bình", "label_en": "Medium-chain Fatty Acids", "examples": [] },
+        { "code": "B13.03", "label_vi": "Acid hữu cơ từ lên men", "label_en": "Fermentation-derived Organic Acids", "examples": ["Lactic acid"] },
+        { "code": "B13.04", "label_vi": "Chất chuyển hóa Amino acid vi sinh", "label_en": "Microbial Amino Acid Metabolites", "examples": [] },
+        { "code": "B13.05", "label_vi": "Chất chuyển hóa Indole & Tryptophan", "label_en": "Indole & Tryptophan Metabolites", "examples": ["Indole-3-propionic acid"] },
+        { "code": "B13.06", "label_vi": "Amine sinh học", "label_en": "Biogenic Amines", "examples": ["Histamine", "Tyramine"] },
+        { "code": "B13.07", "label_vi": "Chất chuyển hóa Acid mật thứ cấp", "label_en": "Secondary Bile Acid Metabolites", "examples": [] },
+        { "code": "B13.08", "label_vi": "Chất chuyển hóa Polyphenol vi sinh", "label_en": "Microbial Polyphenol Metabolites", "examples": ["Urolithin A"] },
+        { "code": "B13.09", "label_vi": "Chất chuyển hóa Lipid vi sinh", "label_en": "Microbial Lipid Metabolites", "examples": [] },
+        { "code": "B13.10", "label_vi": "Exopolysaccharide (EPS)", "label_en": "Exopolysaccharides", "examples": [] },
+        { "code": "B13.11", "label_vi": "Peptide & Bacteriocin vi sinh", "label_en": "Microbial Peptides & Bacteriocins", "examples": ["Nisin"] },
+        { "code": "B13.12", "label_vi": "Hoạt chất từ thành tế bào", "label_en": "Cell Wall-derived Bioactives", "examples": [] },
+        { "code": "B13.13", "label_vi": "Thành phần Paraprobiotic", "label_en": "Paraprobiotic Components", "examples": [] },
+        { "code": "B13.14", "label_vi": "Vitamin & Đồng yếu tố vi sinh", "label_en": "Microbial Vitamins & Cofactors", "examples": ["Vitamin K2 từ vi khuẩn"] },
+        { "code": "B13.15", "label_vi": "Chất chuyển hóa thần kinh vi sinh", "label_en": "Neuroactive Microbial Metabolites", "examples": ["GABA từ vi khuẩn"] },
+        { "code": "B13.16", "label_vi": "Phân tử Quorum-sensing & Tín hiệu", "label_en": "Quorum-sensing & Signaling Molecules", "examples": [] }
+      ]
+    },
+
+    "T02": {
+      "label_vi": "Độc tố & Hợp chất phòng vệ",
+      "label_en": "Toxins & Defensive Compounds",
+      "note": "Liên kết với data/jsonld/toxic/ (TOX_) và food_herb_toxic_taxonomy.json mục T01",
+      "subcategories": [
+        { "code": "T02.01", "label_vi": "Cyanotoxin", "label_en": "Cyanotoxins", "examples": ["Microcystin"] },
+        { "code": "T02.02", "label_vi": "Mycotoxin", "label_en": "Mycotoxins", "examples": ["Aflatoxin", "Ochratoxin"] },
+        { "code": "T02.03", "label_vi": "Độc tố sinh học biển", "label_en": "Marine Biotoxins", "examples": ["Tetrodotoxin", "Ciguatoxin"] },
+        { "code": "T02.04", "label_vi": "Zootoxin (độc tố động vật)", "label_en": "Zootoxins", "examples": ["Bufotoxin (Cóc)"] },
+        { "code": "T02.05", "label_vi": "Phytotoxin (độc tố thực vật)", "label_en": "Phytotoxins", "examples": ["Solanine (Khoai tây mọc mầm)"] },
+        { "code": "T02.06", "label_vi": "Lectin", "label_en": "Lectins", "examples": ["Phytohaemagglutinin"] },
+        { "code": "T02.07", "label_vi": "Glycoside sinh Cyanide", "label_en": "Cyanogenic Glycosides", "examples": ["Amygdalin (Hạt mơ đắng)", "Linamarin (Sắn)"] },
+        { "code": "T02.08", "label_vi": "Chất kháng dinh dưỡng", "label_en": "Antinutrients", "examples": ["Phytate", "Oxalate", "Trypsin inhibitor"] },
+        { "code": "T02.09", "label_vi": "Polyketide từ Mycotoxin", "label_en": "Mycotoxin-derived Polyketides", "examples": [] },
+        { "code": "T02.10", "label_vi": "Độc tố & Chất phòng vệ biển", "label_en": "Marine Toxins & Defense Metabolites", "examples": [] },
+        { "code": "T02.11", "label_vi": "Chất ô nhiễm môi trường", "label_en": "Environmental Contaminants", "examples": ["Dioxin", "PCB"] }
+      ]
+    },
+
+    "B15": {
+      "label_vi": "Hoạt chất sinh học khác",
+      "label_en": "Other Bioactives",
+      "note": "Dùng cho hoạt chất chưa phân loại được vào B01–B13",
+      "subcategories": []
+    }
   },
-  "depth_levels": {
-    "level_0": "root (Bioactive Compound)",
-    "level_1": "major_class (5 nhóm chính)",
-    "level_2": "subclass (10 nhóm phụ)",
-    "level_3": "compound_type (29 loại cụ thể) — map tới @type của entity BIO_"
+
+  "summary": {
+    "total_major_groups": 15,
+    "groups_list": ["B01","B02","B03","B04","B05","B06","B07","B08","B09","B10","B11","B12","B13","T02","B15"],
+    "total_subcategories": 121
   },
+
   "ontology_mapping": {
-    "external_systems": ["ChEBI", "KNApSAcK", "PubChem Classification Browser"],
-    "note": "Mỗi compound_type ở level_3 nên có owl:sameAs trỏ đến ChEBI ID tương ứng"
+    "note": "Mỗi subcategory nên có owl:sameAs trỏ đến ChEBI/LIPID MAPS/KNApSAcK tương ứng khi tạo entity BIO_",
+    "external_systems": ["ChEBI", "LIPID MAPS", "KNApSAcK", "PubChem Classification Browser"]
   }
 }
