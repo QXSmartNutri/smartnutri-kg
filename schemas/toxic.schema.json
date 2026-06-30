@@ -1,1 +1,117 @@
-
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smartnutri.org/schemas/toxic.schema.json",
+  "title": "Toxic",
+  "description": "JSON Schema cho entity Toxic Substance (Độc chất). ID prefix: TOX_. Phase 1.",
+  "type": "object",
+  "required": ["@context", "@id", "@type", "sn:entityId", "rdfs:label"],
+  "properties": {
+    "@context": { "type": ["string", "object"] },
+    "@id": {
+      "type": "string",
+      "pattern": "^https://smartnutri\\.org/entity/TOX_[0-9]{8}_[0-9]{6}(_[0-9]{6})?$"
+    },
+    "@type": { "type": "string", "const": "sn:Toxic" },
+    "sn:entityId": {
+      "type": "string",
+      "pattern": "^TOX_[0-9]{8}_[0-9]{6}(_[0-9]{6})?$"
+    },
+    "rdfs:label": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@value", "@language"],
+        "properties": {
+          "@value": { "type": "string" },
+          "@language": { "type": "string", "pattern": "^[a-z]{2}(-[A-Za-z]+)?$" }
+        }
+      },
+      "minItems": 2
+    },
+    "rdfs:comment": { "type": "string" },
+    "sn:hasMolecularFormula": { "type": "string" },
+    "sn:toxicCategory": {
+      "type": "string",
+      "enum": [
+        "aflatoxin", "ochratoxin", "fumonisin", "deoxynivalenol", "zearalenone",
+        "lead", "mercury", "cadmium", "arsenic", "chromium_vi",
+        "organophosphate", "organochlorine", "pyrethroid", "neonicotinoid",
+        "preservative", "artificial_color", "artificial_sweetener", "emulsifier", "nitrate_nitrite",
+        "solanine", "oxalate", "phytate", "lectin", "cyanogenic_glycoside", "saponin",
+        "acrylamide", "heterocyclic_amine", "polycyclic_aromatic", "advanced_glycation_end"
+      ]
+    },
+    "sn:hasSource": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "@id": { "type": "string" },
+          "rdfs:label": { "type": "string" },
+          "sn:contaminationRoute": { "type": "string" }
+        }
+      }
+    },
+    "sn:toxicityThreshold": {
+      "type": "object",
+      "properties": {
+        "value": { "type": "number" },
+        "unit": { "type": "string" },
+        "reference": { "type": "string", "description": "VD: FDA, WHO, EU EFSA" }
+      }
+    },
+    "sn:targetOrgan": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@id"],
+        "properties": {
+          "@id": { "type": "string" },
+          "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] }
+        }
+      }
+    },
+    "sn:clinicalEffect": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "severity": { "type": "string", "enum": ["mild", "moderate", "severe", "lethal"] },
+          "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] }
+        }
+      }
+    },
+    "sn:riskGroup": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "@id": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      }
+    },
+    "sn:detoxificationMethod": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Phương pháp giảm thiểu/loại bỏ (vd: nấu chín, ngâm rửa)"
+    },
+    "sn:regulatoryLimit": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "region": { "type": "string" },
+          "value": { "type": "number" },
+          "unit": { "type": "string" }
+        }
+      }
+    },
+    "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] },
+    "owl:sameAs": { "type": ["string", "array"] },
+    "skos:exactMatch": { "type": ["string", "array"] },
+    "skos:closeMatch": { "type": ["string", "array"] }
+  },
+  "additionalProperties": true
+}
