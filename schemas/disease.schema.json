@@ -1,1 +1,108 @@
-
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smartnutri.org/schemas/disease.schema.json",
+  "title": "Disease",
+  "description": "JSON Schema cho entity Disease (Bệnh lý). ID prefix: DIS_. Phase 2.",
+  "type": "object",
+  "required": ["@context", "@id", "@type", "sn:entityId", "rdfs:label"],
+  "properties": {
+    "@context": { "type": ["string", "object"] },
+    "@id": {
+      "type": "string",
+      "pattern": "^https://smartnutri\\.org/entity/DIS_[0-9]{8}_[0-9]{6}(_[0-9]{6})?$"
+    },
+    "@type": { "type": "string", "const": "sn:Disease" },
+    "sn:entityId": {
+      "type": "string",
+      "pattern": "^DIS_[0-9]{8}_[0-9]{6}(_[0-9]{6})?$"
+    },
+    "rdfs:label": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@value", "@language"],
+        "properties": {
+          "@value": { "type": "string" },
+          "@language": { "type": "string", "pattern": "^[a-z]{2}(-[A-Za-z]+)?$" }
+        }
+      },
+      "minItems": 2
+    },
+    "rdfs:comment": { "type": "string" },
+    "sn:diseaseCategory": {
+      "type": "string",
+      "enum": [
+        "cardiovascular", "metabolic", "neurological", "musculoskeletal",
+        "gastrointestinal", "immunological", "oncological", "endocrine",
+        "nutritional_deficiency", "renal", "respiratory", "dermatological"
+      ]
+    },
+    "sn:icd10Code": {
+      "type": "string",
+      "description": "Mã ICD-10. Xem mappings/disease_icd10_mapping.json"
+    },
+    "sn:associatedSymptom": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@id"],
+        "properties": {
+          "@id": { "type": "string" },
+          "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] }
+        }
+      }
+    },
+    "sn:associatedWith": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@id"],
+        "properties": {
+          "@id": { "type": "string" },
+          "sn:relationType": { "type": "string", "enum": ["nutrient_deficiency", "nutrient_excess", "protective_factor", "risk_factor"] },
+          "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] }
+        }
+      }
+    },
+    "sn:affectedOrgan": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@id"],
+        "properties": {
+          "@id": { "type": "string" }
+        }
+      }
+    },
+    "sn:riskGroup": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "@id": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      }
+    },
+    "sn:dietaryRecommendation": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "nutrient": { "type": "string" },
+          "action": { "type": "string", "enum": ["increase", "decrease", "avoid", "monitor"] },
+          "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] }
+        }
+      }
+    },
+    "sn:contraindicatedDrug": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] },
+    "owl:sameAs": { "type": ["string", "array"] },
+    "skos:exactMatch": { "type": ["string", "array"] },
+    "skos:closeMatch": { "type": ["string", "array"] }
+  },
+  "additionalProperties": true
+}
