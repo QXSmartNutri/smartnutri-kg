@@ -1,1 +1,64 @@
-
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smartnutri.org/schemas/food.schema.json",
+  "title": "Food",
+  "description": "JSON Schema cho entity Food. ID prefix: FOOD_. Phase 1.",
+  "type": "object",
+  "required": ["@context", "@id", "@type", "sn:entityId", "rdfs:label"],
+  "properties": {
+    "@context": { "type": ["string", "object"] },
+    "@id": {
+      "type": "string",
+      "pattern": "^https://smartnutri\\.org/entity/FOOD_[0-9]{8}_[0-9]{6}(_[0-9]{6})?$"
+    },
+    "@type": { "type": "string", "const": "sn:Food" },
+    "sn:entityId": {
+      "type": "string",
+      "pattern": "^FOOD_[0-9]{8}_[0-9]{6}(_[0-9]{6})?$"
+    },
+    "rdfs:label": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@value", "@language"],
+        "properties": {
+          "@value": { "type": "string" },
+          "@language": { "type": "string", "pattern": "^[a-z]{2}(-[A-Za-z]+)?$" }
+        }
+      },
+      "minItems": 2
+    },
+    "rdfs:comment": { "type": "string" },
+    "sn:scientificName": { "type": "string" },
+    "sn:foodCategory": { "type": "string" },
+    "sn:foodSubCategory": { "type": "string" },
+    "sn:containsAllergen": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^ALG_" }
+    },
+    "sn:mayContainAllergen": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^ALG_" }
+    },
+    "sn:glycemicIndex": { "type": "number", "minimum": 0, "maximum": 110 },
+    "sn:glycemicLoad": { "type": "number", "minimum": 0 },
+    "sn:contains": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@id"],
+        "properties": {
+          "@id": { "type": "string" },
+          "sn:amountPer100g": { "type": "number" },
+          "sn:unit": { "type": "string" },
+          "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] }
+        }
+      }
+    },
+    "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] },
+    "owl:sameAs": { "type": ["string", "array"] },
+    "skos:exactMatch": { "type": ["string", "array"] },
+    "skos:closeMatch": { "type": ["string", "array"] }
+  },
+  "additionalProperties": true
+}
