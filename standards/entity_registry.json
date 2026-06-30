@@ -1,1 +1,24 @@
-
+{
+  "$schema": "https://smartnutri.org/schemas/standards",
+  "version": "1.0.0",
+  "description": "Registry trung tâm theo dõi toàn bộ Entity ID đã cấp phát. Tự động cập nhật bởi tests/data/validate-ids.js khi chạy CI/CD.",
+  "note": "Nguồn sự thật (source of truth) cho toàn bộ ID đã tồn tại — tránh trùng lặp khi tạo entity mới. Cập nhật mục 'entities' mỗi khi tạo entity.",
+  "last_updated": "2026-06-01",
+  "total_entities": 0,
+  "by_prefix": {
+    "FOOD_": 0, "HERB_": 0, "NUT_": 0, "BIO_": 0, "TOX_": 0,
+    "DIS_": 0, "SYM_": 0,
+    "DRUG_": 0, "BRAND_": 0,
+    "SYS_": 0, "ORG_": 0, "TIS_": 0, "CELL_": 0,
+    "PROC_": 0, "PATH_": 0
+  },
+  "by_phase": {
+    "phase1": { "prefixes": ["FOOD_", "HERB_", "NUT_", "BIO_", "TOX_"], "count": 0 },
+    "phase2": { "prefixes": ["DIS_", "SYM_"], "count": 0 },
+    "phase3": { "prefixes": ["DRUG_", "BRAND_"], "count": 0 },
+    "phase4": { "prefixes": ["SYS_", "ORG_", "TIS_", "CELL_"], "count": 0 },
+    "phase5": { "prefixes": ["PROC_", "PATH_"], "count": 0 }
+  },
+  "entities": [],
+  "deprecated_entities": []
+}
