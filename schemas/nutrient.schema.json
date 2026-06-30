@@ -1,1 +1,148 @@
-
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smartnutri.org/schemas/nutrient.schema.json",
+  "title": "Nutrient",
+  "description": "JSON Schema cho entity Nutrient. ID prefix: NUT_. Phase 1.",
+  "type": "object",
+  "required": ["@context", "@id", "@type", "sn:entityId", "rdfs:label"],
+  "properties": {
+    "@context": { "type": ["string", "object"] },
+    "@id": {
+      "type": "string",
+      "pattern": "^https://smartnutri\\.org/entity/NUT_[0-9]{8}_[0-9]{6}(_[0-9]{6})?$"
+    },
+    "@type": { "type": "string", "const": "sn:Nutrient" },
+    "sn:entityId": {
+      "type": "string",
+      "pattern": "^NUT_[0-9]{8}_[0-9]{6}(_[0-9]{6})?$"
+    },
+    "rdfs:label": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@value", "@language"],
+        "properties": {
+          "@value": { "type": "string" },
+          "@language": { "type": "string", "pattern": "^[a-z]{2}(-[A-Za-z]+)?$" }
+        }
+      },
+      "minItems": 2
+    },
+    "rdfs:comment": { "type": "string" },
+    "sn:hasMolecularFormula": { "type": "string" },
+    "sn:nutrientCategory": {
+      "type": "string",
+      "enum": [
+        "energy", "macronutrient_carb", "macronutrient_protein", "macronutrient_fat",
+        "fiber", "vitamin_fat_soluble", "vitamin_water_soluble",
+        "mineral_macro", "mineral_micro", "mineral_trace",
+        "amino_acid_eaa", "amino_acid_neaa"
+      ]
+    },
+    "sn:hasForm": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@id"],
+        "properties": {
+          "@id": { "type": "string" },
+          "rdfs:label": { "type": "array" }
+        }
+      },
+      "description": "Các dạng tồn tại (vd: Vitamin K1, K2 MK-4, K2 MK-7)"
+    },
+    "sn:hasSource": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "@id": { "type": "string" },
+          "rdfs:label": { "type": "string" }
+        }
+      }
+    },
+    "sn:absorptionRate": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "context": { "type": "string" },
+          "rate": { "type": "string" }
+        }
+      }
+    },
+    "sn:halfLife": { "type": "string" },
+    "sn:solubility": { "type": "string", "enum": ["fat_soluble", "water_soluble"] },
+    "sn:bodyStorage": { "type": "string" },
+    "sn:primaryTransporter": { "type": "string" },
+    "sn:targetOrgan": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@id"],
+        "properties": {
+          "@id": { "type": "string" },
+          "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] }
+        }
+      }
+    },
+    "sn:activatesProtein": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@id"],
+        "properties": {
+          "@id": { "type": "string" },
+          "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] }
+        }
+      }
+    },
+    "sn:deficiencyEffect": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@id"],
+        "properties": {
+          "@id": { "type": "string" },
+          "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] }
+        }
+      }
+    },
+    "sn:riskGroup": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "@id": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      }
+    },
+    "sn:interactsWith": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@id"],
+        "properties": {
+          "@id": { "type": "string" },
+          "sn:mechanism": { "type": "string" },
+          "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] }
+        }
+      }
+    },
+    "sn:convertedTo": {
+      "type": "object",
+      "properties": {
+        "@id": { "type": "string" },
+        "sn:conversionEnzyme": { "type": "string" }
+      }
+    },
+    "sn:rdaReference": { "type": "string", "description": "Tham chiếu đến standards/nutrient-rda.json" },
+    "sn:ulReference": { "type": "string", "description": "Tham chiếu đến standards/nutrient-ul.json" },
+    "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] },
+    "owl:sameAs": { "type": ["string", "array"] },
+    "skos:exactMatch": { "type": ["string", "array"] },
+    "skos:closeMatch": { "type": ["string", "array"] }
+  },
+  "additionalProperties": true
+}
