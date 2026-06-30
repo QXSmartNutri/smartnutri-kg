@@ -1,1 +1,111 @@
-
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smartnutri.org/schemas/drug.schema.json",
+  "title": "Drug",
+  "description": "JSON Schema cho entity Drug (Hoạt chất thuốc). ID prefix: DRUG_. Phase 3.",
+  "type": "object",
+  "required": ["@context", "@id", "@type", "sn:entityId", "rdfs:label"],
+  "properties": {
+    "@context": { "type": ["string", "object"] },
+    "@id": {
+      "type": "string",
+      "pattern": "^https://smartnutri\\.org/entity/DRUG_[0-9]{8}_[0-9]{6}(_[0-9]{6})?$"
+    },
+    "@type": { "type": "string", "const": "sn:Drug" },
+    "sn:entityId": {
+      "type": "string",
+      "pattern": "^DRUG_[0-9]{8}_[0-9]{6}(_[0-9]{6})?$"
+    },
+    "rdfs:label": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@value", "@language"],
+        "properties": {
+          "@value": { "type": "string" },
+          "@language": { "type": "string", "pattern": "^[a-z]{2}(-[A-Za-z]+)?$" }
+        }
+      },
+      "minItems": 2
+    },
+    "rdfs:comment": { "type": "string" },
+    "sn:inn": { "type": "string", "description": "International Nonproprietary Name" },
+    "sn:atcCode": { "type": "string", "description": "Anatomical Therapeutic Chemical code" },
+    "sn:drugCategory": {
+      "type": "string",
+      "enum": [
+        "anticoagulant", "antidiabetic", "antihypertensive", "lipid_lowering",
+        "antibiotic", "anti_inflammatory", "antacid",
+        "vitamin_mineral_supplement", "immunosuppressant", "antineoplastic"
+      ]
+    },
+    "sn:mechanismOfAction": { "type": "string" },
+    "sn:hasBrand": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@id"],
+        "properties": {
+          "@id": { "type": "string" },
+          "rdfs:label": { "type": "string" }
+        }
+      }
+    },
+    "sn:interactsWith": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@id"],
+        "properties": {
+          "@id": { "type": "string" },
+          "sn:mechanism": { "type": "string" },
+          "sn:interactionType": { "type": "string", "enum": ["increases_effect", "decreases_effect", "increases_absorption", "decreases_absorption", "toxicity_risk"] },
+          "sn:severity": { "type": "string", "enum": ["minor", "moderate", "major", "contraindicated"] },
+          "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] }
+        }
+      }
+    },
+    "sn:treatsDisease": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@id"],
+        "properties": {
+          "@id": { "type": "string" }
+        }
+      }
+    },
+    "sn:nutrientDepletion": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "@id": { "type": "string" },
+          "mechanism": { "type": "string" },
+          "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] }
+        }
+      },
+      "description": "Nutrient bị thuốc làm cạn kiệt (drug-induced nutrient depletion)"
+    },
+    "sn:foodInteraction": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "food": { "type": "string" },
+          "effect": { "type": "string" },
+          "recommendation": { "type": "string" }
+        }
+      }
+    },
+    "sn:contraindications": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] },
+    "owl:sameAs": { "type": ["string", "array"] },
+    "skos:exactMatch": { "type": ["string", "array"], "description": "DrugBank ID" },
+    "skos:closeMatch": { "type": ["string", "array"] }
+  },
+  "additionalProperties": true
+}
