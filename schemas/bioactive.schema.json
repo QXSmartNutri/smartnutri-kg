@@ -1,1 +1,116 @@
-
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smartnutri.org/schemas/bioactive.schema.json",
+  "title": "Bioactive",
+  "description": "JSON Schema cho entity Bioactive Compound. ID prefix: BIO_. Phase 1.",
+  "type": "object",
+  "required": ["@context", "@id", "@type", "sn:entityId", "rdfs:label"],
+  "properties": {
+    "@context": { "type": ["string", "object"] },
+    "@id": {
+      "type": "string",
+      "pattern": "^https://smartnutri\\.org/entity/BIO_[0-9]{8}_[0-9]{6}(_[0-9]{6})?$"
+    },
+    "@type": { "type": "string", "const": "sn:Bioactive" },
+    "sn:entityId": {
+      "type": "string",
+      "pattern": "^BIO_[0-9]{8}_[0-9]{6}(_[0-9]{6})?$"
+    },
+    "rdfs:label": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@value", "@language"],
+        "properties": {
+          "@value": { "type": "string" },
+          "@language": { "type": "string", "pattern": "^[a-z]{2}(-[A-Za-z]+)?$" }
+        }
+      },
+      "minItems": 2
+    },
+    "rdfs:comment": { "type": "string" },
+    "sn:hasMolecularFormula": { "type": "string" },
+    "sn:bioactiveCategory": {
+      "type": "string",
+      "enum": [
+        "flavonoid", "phenolic_acid", "stilbene", "lignan", "tannin",
+        "alpha_carotene", "beta_carotene", "lycopene", "lutein", "zeaxanthin", "astaxanthin",
+        "sulforaphane", "indole_3_carbinol",
+        "monoterpene", "diterpene", "triterpene", "sesquiterpene",
+        "purine", "caffeine", "theobromine", "capsaicin",
+        "allicin", "alliin",
+        "inulin", "fos", "gos", "probiotic_strain"
+      ]
+    },
+    "sn:hasSource": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "@id": { "type": "string" },
+          "rdfs:label": { "type": "string" }
+        }
+      }
+    },
+    "sn:targetOrgan": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@id"],
+        "properties": {
+          "@id": { "type": "string" },
+          "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] }
+        }
+      }
+    },
+    "sn:biologicalFunction": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] }
+        }
+      }
+    },
+    "sn:affects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@id"],
+        "properties": {
+          "@id": { "type": "string" },
+          "sn:effectType": { "type": "string", "enum": ["protective", "therapeutic", "adverse"] },
+          "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] }
+        }
+      }
+    },
+    "sn:interactsWith": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@id"],
+        "properties": {
+          "@id": { "type": "string" },
+          "sn:mechanism": { "type": "string" },
+          "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] }
+        }
+      }
+    },
+    "sn:absorptionRate": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "context": { "type": "string" },
+          "rate": { "type": "string" }
+        }
+      }
+    },
+    "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] },
+    "owl:sameAs": { "type": ["string", "array"] },
+    "skos:exactMatch": { "type": ["string", "array"] },
+    "skos:closeMatch": { "type": ["string", "array"] }
+  },
+  "additionalProperties": true
+}
