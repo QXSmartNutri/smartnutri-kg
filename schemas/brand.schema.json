@@ -1,1 +1,74 @@
-
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smartnutri.org/schemas/brand.schema.json",
+  "title": "Brand",
+  "description": "JSON Schema cho entity Brand (Biệt dược thương mại). ID prefix: BRAND_. Phase 3.",
+  "type": "object",
+  "required": ["@context", "@id", "@type", "sn:entityId", "rdfs:label"],
+  "properties": {
+    "@context": { "type": ["string", "object"] },
+    "@id": {
+      "type": "string",
+      "pattern": "^https://smartnutri\\.org/entity/BRAND_[0-9]{8}_[0-9]{6}(_[0-9]{6})?$"
+    },
+    "@type": { "type": "string", "const": "sn:Brand" },
+    "sn:entityId": {
+      "type": "string",
+      "pattern": "^BRAND_[0-9]{8}_[0-9]{6}(_[0-9]{6})?$"
+    },
+    "rdfs:label": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@value", "@language"],
+        "properties": {
+          "@value": { "type": "string" },
+          "@language": { "type": "string", "pattern": "^[a-z]{2}(-[A-Za-z]+)?$" }
+        }
+      },
+      "minItems": 2
+    },
+    "rdfs:comment": { "type": "string" },
+    "sn:manufacturer": { "type": "string" },
+    "sn:hasActiveIngredient": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@id"],
+        "properties": {
+          "@id": { "type": "string" },
+          "sn:strength": { "type": "string" },
+          "sn:unit": { "type": "string" }
+        }
+      }
+    },
+    "sn:dosageForm": {
+      "type": "string",
+      "enum": ["tablet", "capsule", "syrup", "injection", "cream", "patch", "drops", "suppository", "inhaler"]
+    },
+    "sn:availableRegion": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "sn:prescriptionStatus": {
+      "type": "string",
+      "enum": ["otc", "prescription_only", "controlled_substance"]
+    },
+    "sn:registrationNumber": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "region": { "type": "string" },
+          "number": { "type": "string" }
+        }
+      },
+      "description": "Số đăng ký thuốc (vd: Việt Nam - Bộ Y tế, FDA NDC)"
+    },
+    "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] },
+    "owl:sameAs": { "type": ["string", "array"] },
+    "skos:exactMatch": { "type": ["string", "array"] },
+    "skos:closeMatch": { "type": ["string", "array"] }
+  },
+  "additionalProperties": true
+}
