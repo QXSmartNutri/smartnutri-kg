@@ -1,1 +1,96 @@
+{
+  "$schema": "https://smartnutri.org/schemas/standards",
+  "version": "1.0.0",
+  "description": "Trọng số tối ưu hóa thực đơn — điều chỉnh mức độ ưu tiên của từng mục tiêu khi AI tạo thực đơn. Dùng cho logic_engine/meal_optimizer.js và optimization_constraints.json.",
+  "source": "Tổng hợp từ IOM, WHO, nghiên cứu tối ưu hóa dinh dưỡng lâm sàng",
 
+  "default_weights": {
+    "description_vi": "Trọng số mặc định cho người khỏe mạnh bình thường — tổng = 1.0",
+    "nutrient_adequacy": 0.30,
+    "caloric_balance": 0.20,
+    "macronutrient_balance": 0.15,
+    "glycemic_control": 0.10,
+    "sodium_control": 0.10,
+    "food_diversity": 0.10,
+    "meal_palatability": 0.05
+  },
+
+  "condition_weights": {
+    "diabetic": {
+      "description_vi": "Ưu tiên kiểm soát đường huyết",
+      "nutrient_adequacy": 0.25,
+      "caloric_balance": 0.15,
+      "macronutrient_balance": 0.15,
+      "glycemic_control": 0.25,
+      "sodium_control": 0.08,
+      "food_diversity": 0.07,
+      "meal_palatability": 0.05
+    },
+    "hypertension": {
+      "description_vi": "Ưu tiên kiểm soát Natri và tăng Kali",
+      "nutrient_adequacy": 0.25,
+      "caloric_balance": 0.15,
+      "macronutrient_balance": 0.15,
+      "glycemic_control": 0.05,
+      "sodium_control": 0.28,
+      "food_diversity": 0.07,
+      "meal_palatability": 0.05
+    },
+    "weight_loss": {
+      "description_vi": "Ưu tiên cân bằng calo âm (deficit) và đủ protein",
+      "nutrient_adequacy": 0.25,
+      "caloric_balance": 0.30,
+      "macronutrient_balance": 0.20,
+      "glycemic_control": 0.10,
+      "sodium_control": 0.05,
+      "food_diversity": 0.05,
+      "meal_palatability": 0.05
+    },
+    "pregnant": {
+      "description_vi": "Ưu tiên đủ vi chất thiết yếu (Folate, Sắt, Canxi, DHA)",
+      "nutrient_adequacy": 0.45,
+      "caloric_balance": 0.20,
+      "macronutrient_balance": 0.15,
+      "glycemic_control": 0.08,
+      "sodium_control": 0.05,
+      "food_diversity": 0.05,
+      "meal_palatability": 0.02
+    },
+    "athlete": {
+      "description_vi": "Ưu tiên calo đủ và protein cao",
+      "nutrient_adequacy": 0.25,
+      "caloric_balance": 0.25,
+      "macronutrient_balance": 0.25,
+      "glycemic_control": 0.10,
+      "sodium_control": 0.05,
+      "food_diversity": 0.05,
+      "meal_palatability": 0.05
+    },
+    "ckd": {
+      "description_vi": "Ưu tiên kiểm soát Protein, Kali, Phốt pho",
+      "nutrient_adequacy": 0.20,
+      "caloric_balance": 0.15,
+      "macronutrient_balance": 0.25,
+      "glycemic_control": 0.10,
+      "sodium_control": 0.20,
+      "food_diversity": 0.05,
+      "meal_palatability": 0.05
+    }
+  },
+
+  "nutrient_priority_tiers": {
+    "description_vi": "Phân cấp độ ưu tiên nutrients khi tối ưu hóa — Tier 1 phải đạt trước, Tier 3 là tùy chọn",
+    "tier_1_critical": ["NUT_vitamin_b12", "NUT_vitamin_d", "NUT_iron", "NUT_calcium", "NUT_iodine", "NUT_folate"],
+    "tier_2_important": ["NUT_vitamin_a", "NUT_vitamin_c", "NUT_zinc", "NUT_magnesium", "NUT_protein", "NUT_fiber"],
+    "tier_3_optimize": ["NUT_vitamin_e", "NUT_vitamin_k", "NUT_selenium", "NUT_copper", "NUT_manganese"]
+  },
+
+  "cultural_preferences": {
+    "description_vi": "Điều chỉnh trọng số theo văn hóa ẩm thực",
+    "vietnamese": {
+      "preferred_foods": ["F02", "F05", "F06", "F07", "F10"],
+      "preferred_cooking": ["steamed", "boiled", "stir_fried"],
+      "palatability_boost": 1.2
+    }
+  }
+}
