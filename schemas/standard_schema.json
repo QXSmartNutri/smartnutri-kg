@@ -1,1 +1,53 @@
-
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smartnutri.org/schemas/standard_schema.json",
+  "title": "Standards File",
+  "description": "JSON Schema chung cho mọi file trong standards/ — age-groups, nutrient-rda, nutrient-ul, nutrient-dv, nutrient_amdr, evidence-levels, categories, languages, demographics, dri_tables, gi_gl_tables, allergens, absorption_factors, và các file standards khác.",
+  "type": "object",
+  "required": ["$schema", "version", "description"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "https://smartnutri.org/schemas/standards"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "description": { "type": "string" },
+    "source": { "type": ["string", "array"] },
+    "note": { "type": "string" },
+    "legend": {
+      "type": "object",
+      "description": "Giải thích các viết tắt/mã dùng trong file (vd: RDA, AI, UL)"
+    },
+    "age_groups": {
+      "type": "array",
+      "description": "Danh sách 15 nhóm tuổi tham chiếu — dùng trong nutrient-rda.json, nutrient-ul.json...",
+      "items": { "type": "string", "pattern": "^AG_" }
+    },
+    "nutrients": {
+      "type": "object",
+      "description": "Map nutrientId → giá trị chuẩn (RDA/UL/DV/đơn vị/absorption...)",
+      "patternProperties": {
+        "^NUT_": { "type": "object" }
+      }
+    },
+    "values": {
+      "type": "object",
+      "description": "Map ageGroupId → giá trị số, dùng trong các bảng RDA/UL/DV"
+    },
+    "unit": { "type": "string" },
+    "type": {
+      "type": "string",
+      "enum": ["RDA", "AI", "UL", "DV", "EER", "AMDR"]
+    },
+    "totals": {
+      "type": "object",
+      "description": "Thống kê tổng hợp (vd: tổng số nutrients, age_groups...)"
+    },
+    "summary": { "type": "object" },
+    "summary_table": { "type": "object" }
+  },
+  "additionalProperties": true
+}
