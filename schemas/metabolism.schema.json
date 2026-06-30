@@ -1,1 +1,106 @@
-
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smartnutri.org/schemas/metabolism.schema.json",
+  "title": "Metabolism",
+  "description": "JSON Schema cho entity Metabolism (Process/Pathway). Prefix: PROC_ PATH_. Phase 5.",
+  "type": "object",
+  "required": ["@context", "@id", "@type", "sn:entityId", "rdfs:label"],
+  "properties": {
+    "@context": { "type": ["string", "object"] },
+    "@id": {
+      "type": "string",
+      "pattern": "^https://smartnutri\\.org/entity/(PROC_|PATH_)[0-9]{8}_[0-9]{6}(_[0-9]{6})?$"
+    },
+    "@type": {
+      "type": "string",
+      "enum": ["sn:Process", "sn:Pathway"]
+    },
+    "sn:entityId": {
+      "type": "string",
+      "pattern": "^(PROC_|PATH_)[0-9]{8}_[0-9]{6}(_[0-9]{6})?$"
+    },
+    "rdfs:label": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@value", "@language"],
+        "properties": {
+          "@value": { "type": "string" },
+          "@language": { "type": "string", "pattern": "^[a-z]{2}(-[A-Za-z]+)?$" }
+        }
+      },
+      "minItems": 2
+    },
+    "rdfs:comment": { "type": "string" },
+    "sn:metabolismType": {
+      "type": "string",
+      "enum": ["process", "pathway"]
+    },
+    "sn:location": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Vị trí xảy ra trong cơ thể (vd: Gan, Ruột non, Tế bào gan)"
+    },
+    "sn:stepOrder": {
+      "type": "integer",
+      "description": "Thứ tự bước trong pathway (nếu thuộc 1 pathway lớn hơn)"
+    },
+    "sn:nextStep": {
+      "type": "object",
+      "properties": {
+        "@id": { "type": "string" }
+      }
+    },
+    "sn:previousStep": {
+      "type": "object",
+      "properties": {
+        "@id": { "type": "string" }
+      }
+    },
+    "sn:involvesNutrient": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@id"],
+        "properties": {
+          "@id": { "type": "string" },
+          "sn:role": { "type": "string" }
+        }
+      }
+    },
+    "sn:involvesEnzyme": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "sn:geneSymbol": { "type": "string" }
+        }
+      }
+    },
+    "sn:involvesProtein": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "function": { "type": "string" }
+        }
+      }
+    },
+    "sn:mechanism": { "type": "string", "description": "Mô tả cơ chế chi tiết" },
+    "sn:kegg_pathway_id": { "type": "string" },
+    "sn:reactome_id": { "type": "string" },
+    "sn:participatesIn": {
+      "type": "object",
+      "properties": {
+        "@id": { "type": "string", "description": "Pathway lớn hơn mà Process này thuộc về" }
+      }
+    },
+    "sn:evidenceLevel": { "type": "string", "enum": ["A", "B", "C", "D"] },
+    "owl:sameAs": { "type": ["string", "array"] },
+    "skos:exactMatch": { "type": ["string", "array"] },
+    "skos:closeMatch": { "type": ["string", "array"] }
+  },
+  "additionalProperties": true
+}
