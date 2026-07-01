@@ -1,99 +1,78 @@
 {
-  "$schema": "https://smartnutri.org/schemas/advanced-meal-distribution-v2",
-  "version": "2.0.0",
-  "description": "Dynamic Nutrient Allocation & Timing Architecture (Chrononutrition Engine)",
+  "$schema": "https://smartnutri.org/schemas/advanced-meal-distribution-v2.2",
+  "version": "2.2.0",
+  "description": "Adaptive, Context-Aware, and Explainable Meal Optimization Framework",
   "last_updated": "2026-07-01",
 
-  "----------------------------------------------------------------": "1. MEAL PATTERNS WITH MACRO SPLITS (Phân bổ năng lượng & vĩ chất chi tiết)",
-  "meal_patterns": {
-    "PATTERN_3_MEALS": {
-      "label_vi": "3 bữa chính tiêu chuẩn",
-      "slots": {
-        "breakfast": { "pct_energy": 25, "macro_bias": { "carbs": 0.25, "protein": 0.25, "fat": 0.20 }, "optimal_time_window": "06:30-08:30" },
-        "lunch":     { "pct_energy": 40, "macro_bias": { "carbs": 0.40, "protein": 0.40, "fat": 0.40 }, "optimal_time_window": "11:30-13:00" },
-        "dinner":    { "pct_energy": 35, "macro_bias": { "carbs": 0.35, "protein": 0.35, "fat": 0.40 }, "optimal_time_window": "18:00-20:00" }
+  "----------------------------------------------------------------": "1. REAL-WORLD EXECUTION CONTEXT (Bối cảnh thực tế & Biến số môi trường)",
+  "meal_context_modifiers": {
+    "social_context": {
+      "dining_out_restaurant": { "palatability_weight_boost": 1.5, "sodium_tolerance_multiplier": 1.3, "note": "Tự động nới lỏng trần Natri và tăng trọng số ngon miệng khi người dùng ăn ngoài với gia đình/đối tác." },
+      "business_travel": { "diversity_weight_suppression": 0.5, "focus": "convenience_and_preservation" }
+    },
+    "psychological_state": {
+      "high_stress_cortisol_spike": {
+        "glycemic_control_weight_boost": 1.4,
+        "enforced_micronutrients": ["NUT_magnesium", "NUT_vitamin_c"],
+        "note": "Khi stress nặng, Cortisol tăng làm tăng kháng insulin -> thắt chặt kiểm soát đường huyết và bổ sung vi chất chống oxy hóa."
       }
     },
-    "PATTERN_5_6_SMALL": {
-      "label_vi": "5-6 bữa nhỏ phân mảnh (Tiểu đường / Gym / Dạ dày)",
-      "slots": {
-        "breakfast":       { "pct_energy": 18, "macro_bias": { "carbs": 0.15, "protein": 0.20, "fat": 0.15 }, "optimal_time_window": "06:30-07:30" },
-        "morning_snack":   { "pct_energy": 12, "macro_bias": { "carbs": 0.12, "protein": 0.10, "fat": 0.10 }, "optimal_time_window": "09:30-10:15" },
-        "lunch":           { "pct_energy": 25, "macro_bias": { "carbs": 0.25, "protein": 0.25, "fat": 0.25 }, "optimal_time_window": "12:00-13:00" },
-        "afternoon_snack": { "pct_energy": 12, "macro_bias": { "carbs": 0.13, "protein": 0.15, "fat": 0.10 }, "optimal_time_window": "15:30-16:30" },
-        "dinner":          { "pct_energy": 23, "macro_bias": { "carbs": 0.25, "protein": 0.20, "fat": 0.30 }, "optimal_time_window": "18:30-19:30" },
-        "evening_snack":   { "pct_energy": 10, "macro_bias": { "carbs": 0.10, "protein": 0.10, "fat": 0.10 }, "optimal_time_window": "21:00-21:30" }
+    "financial_constraints": {
+      "budget_tier": {
+        "low_cost": { "food_cost_penalty_multiplier": 3.0, "source_preference": ["local_seasonal_foods", "generic_brands"] },
+        "premium": { "food_cost_penalty_multiplier": 0.1, "source_preference": ["organic", "imported_superfoods"] }
       }
     }
   },
 
-  "----------------------------------------------------------------": "2. CHRONONUTRITION & MICRONUTRIENT TIMING RULES (Hàm phân bổ vi chất động)",
-  "micronutrient_timing_rules": {
-    "NUT_iron": {
-      "preferred_slots": ["breakfast", "lunch"],
-      "synergistic_co_ingestion": ["NUT_vitamin_c"],
-      "antagonist_co_ingestion": ["NUT_calcium", "CMP_polyphenol_tea_coffee"],
-      "allocation_constraint": { "min_pct_of_rda_in_preferred_slot": 60 }
+  "----------------------------------------------------------------": "2. METRIC SCORING ENGINE (Hệ thống chấm điểm chất lượng thực đơn)",
+  "meal_quality_scoring": {
+    "scoring_metrics": {
+      "nutritional_density_score": { "algorithm": "NDON_index (Nutrient Density On Energy)", "weight_in_total_score": 0.35 },
+      "glycemic_variability_index": { "algorithm": "Predicted_MAGE (Mean Amplitude of Glycemic Excursions)", "weight_in_total_score": 0.25 },
+      "biocompatibility_score": { "algorithm": "Sum_of_pairing_synergies_minus_antagonists", "weight_in_total_score": 0.20 },
+      "sustainability_and_cost_score": { "algorithm": "Carbon_footprint_and_budget_adherence", "weight_in_total_score": 0.10 },
+      "palatability_adherence_score": { "algorithm": "User_historical_preference_match", "weight_in_total_score": 0.10 }
     },
-    "NUT_calcium": {
-      "preferred_slots": ["dinner", "evening_snack"],
-      "note": "Hấp thu tốt hơn vào ban đêm do nhịp sinh học xương và giảm nồng độ canxi máu thụ động",
-      "antagonist_co_ingestion": ["NUT_iron", "NUT_zinc"],
-      "allocation_constraint": { "min_pct_of_rda_in_preferred_slot": 50 }
+    "grading_thresholds": { "Grade_A_Excellent": ">= 90", "Grade_B_Good": "75-89", "Grade_C_Acceptable": "60-74", "Grade_F_Reject": "< 60" }
+  },
+
+  "----------------------------------------------------------------": "3. ADAPTIVE LEARNING & UNCERTAINTY (Hệ thống tự học và quản trị rủi ro)",
+  "adaptive_learning_engine": {
+    "reinforcement_learning_hyperparameters": {
+      "state_space": ["daily_macro_deviation", "user_satisfaction_rating", "biomarker_trends"],
+      "action_space": ["shift_macro_ratio", "replace_food_nodes", "adjust_meal_timing"],
+      "reward_function": "Positive_biomarker_improvement + User_retention - Constraints_violations"
     },
-    "NUT_protein": {
-      "strategy": "EVEN_DISTRIBUTION",
-      "note": "Kích hoạt tối đa Muscle Protein Synthesis (Ngưỡng Leucine Trigger ~3g/bữa)",
-      "allocation_constraint": { "max_delta_between_main_meals": 0.10 }
+    "habituation_tracking": {
+      "max_repetition_same_food_per_week": 4,
+      "boredom_threshold_trigger": "Nếu người dùng bấm đổi món > 3 lần với cùng một nguyên liệu, hạ điểm palatability_baseline của nguyên liệu đó xuống 50% trong 14 ngày."
+    }
+  },
+  "uncertainty_management": {
+    "data_lacunae_handling": {
+      "missing_food_composition_data": { "strategy": "Impute_via_nearest_taxonomic_neighbor", "confidence_score_penalty": 0.2 },
+      "missing_user_biomarker": { "strategy": "Fallback_to_demographic_age_sex_dri_averages", "safety_buffer_margin": 0.15 }
     },
-    "NUT_vitamin_b_complex": {
-      "preferred_slots": ["breakfast"],
-      "allocation_constraint": { "min_pct_of_rda_in_preferred_slot": 40 }
+    "probabilistic_absorption_models": {
+      "model_type": "Bayesian_Inference",
+      "absorption_uncertainty_bounds": "Áp dụng phân phối xác suất (Gaussian) cho base_absorption_factor thay vì một con số tĩnh, đảm bảo thực đơn an toàn ngay cả ở kịch bản hấp thu kém nhất (Worst-case scenario)."
     }
   },
 
-  "----------------------------------------------------------------": "3. POPULATION & PATHOLOGICAL OVERRIDES (Cấu hình ghi đè theo đối tượng)",
-  "population_pattern_overrides": {
-    "COND_diabetic": {
-      "enforced_pattern": "PATTERN_5_6_SMALL",
-      "rules": {
-        "strict_carb_cap_per_snack_g": 15,
-        "even_carb_distribution": true,
-        "suppress_evening_snack_carbs": true
-      }
+  "----------------------------------------------------------------": "4. EXPLAINABLE AI - XAI (Trí tuệ nhân tạo có thể giải thích)",
+  "explainable_ai": {
+    "clinical_justification_generation": {
+      "target_audience": "Medical_Professionals",
+      "output_format": "Graph_Path_Tracing",
+      "logic_mapping": "Bữa ăn được chọn vì: [User_Biomarker: Serum_Ferritin_Low] -> Kích hoạt [Priority: Tier_1_Critical: NUT_iron] -> Chọn [Food: Thit_bo] kết hợp [Food: Bông_cải_xanh] chứa [Enhancer: NUT_vitamin_c] -> Tối ưu hóa hệ số hấp thu thực tế lên gấp 2.5 lần."
     },
-    "COND_geriatric_70y": {
-      "enforced_pattern": "PATTERN_5_6_SMALL",
-      "rules": {
-        "max_volume_per_meal_ml": 400,
-        "protein_density_boost_factor": 1.25
-      }
-    },
-    "COND_gerd": {
-      "enforced_pattern": "PATTERN_3_MEALS",
-      "rules": {
-        "no_eating_before_sleep_hours": 3,
-        "dinner_max_fat_pct": 20
-      }
-    }
-  },
-
-  "----------------------------------------------------------------": "4. INTERMITTENT FASTING INTEGRATION (Tích hợp Nhịn ăn gián đoạn thực tế)",
-  "intermittent_fasting_engine": {
-    "IF_16_8": {
-      "eating_window_duration_hours": 8,
-      "allowed_slots_mapping": {
-        "default_schedule": { "start_time": "12:00", "end_time": "20:00" },
-        "active_meals": ["lunch", "afternoon_snack", "dinner"],
-        "redistribution_logic": {
-          "strategy": "COMPRESS_AND_SCALE",
-          "target_pattern": "PATTERN_3_MEALS",
-          "scale_multipliers": {
-            "lunch": 0.45,
-            "afternoon_snack": 0.15,
-            "dinner": 0.40
-          }
-        }
+    "patient_friendly_education": {
+      "target_audience": "End_User",
+      "output_format": "Natural_Language_Generation_vi",
+      "templates": {
+        "iron_boost": "SmartNutri chọn món này cho bạn vì thịt bò kết hợp với bông cải xanh sẽ giúp cơ thể bạn hấp thu Sắt tốt hơn gấp 2 lần, giúp giảm mệt mỏi.",
+        "medication_safety": "Món ăn này đã được tự động loại bỏ các chế phẩm từ sữa vì bạn đang uống thuốc Levothyroxine vào buổi sáng."
       }
     }
   }
