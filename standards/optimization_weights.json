@@ -1,96 +1,100 @@
 {
-  "$schema": "https://smartnutri.org/schemas/standards",
-  "version": "1.0.0",
-  "description": "Trọng số tối ưu hóa thực đơn — điều chỉnh mức độ ưu tiên của từng mục tiêu khi AI tạo thực đơn. Dùng cho logic_engine/meal_optimizer.js và optimization_constraints.json.",
-  "source": "Tổng hợp từ IOM, WHO, nghiên cứu tối ưu hóa dinh dưỡng lâm sàng",
+  "$schema": "https://smartnutri.org/schemas/advanced-optimizer-v2",
+  "version": "2.0.0",
+  "description": "Dynamic Menu Optimization Weights & Penalty Functions for SmartNutri Core Engine",
+  "last_updated": "2026-07-01",
 
-  "default_weights": {
-    "description_vi": "Trọng số mặc định cho người khỏe mạnh bình thường — tổng = 1.0",
-    "nutrient_adequacy": 0.30,
-    "caloric_balance": 0.20,
-    "macronutrient_balance": 0.15,
-    "glycemic_control": 0.10,
-    "sodium_control": 0.10,
-    "food_diversity": 0.10,
-    "meal_palatability": 0.05
+  "----------------------------------------------------------------": "1. BASE OBJECTIVE FUNCTIONS (Hàm mục tiêu cơ sở)",
+  "base_objectives": {
+    "nutrient_adequacy": { "default_weight": 0.30, "type": "maximize", "description": "Độ bao phủ vi chất theo DRI" },
+    "caloric_balance": { "default_weight": 0.20, "type": "minimize_delta", "description": "Độ lệch so với TDEE mục tiêu" },
+    "macronutrient_balance": { "default_weight": 0.15, "type": "minimize_delta", "description": "Tỉ lệ vàng Carbs:Protein:Fat" },
+    "glycemic_control": { "default_weight": 0.10, "type": "minimize_auc", "description": "Diện tích dưới đường cong tải lượng đường huyết (GL)" },
+    "sodium_potassium_ratio": { "default_weight": 0.10, "type": "minimize_delta", "description": "Tối ưu cân bằng Na:K" },
+    "food_diversity": { "default_weight": 0.10, "type": "maximize", "description": "Chỉ số đa dạng hóa thực phẩm (Sử dụng Simpson/Shannon Index)" },
+    "meal_palatability": { "default_weight": 0.05, "type": "maximize", "description": "Điểm ưu thích cá nhân & văn hóa" }
   },
 
-  "condition_weights": {
-    "diabetic": {
-      "description_vi": "Ưu tiên kiểm soát đường huyết",
-      "nutrient_adequacy": 0.25,
-      "caloric_balance": 0.15,
-      "macronutrient_balance": 0.15,
-      "glycemic_control": 0.25,
-      "sodium_control": 0.08,
-      "food_diversity": 0.07,
-      "meal_palatability": 0.05
+  "----------------------------------------------------------------": "2. CLINICAL & PHYSIOLOGICAL MODIFIERS (Hệ số hiệu chỉnh bệnh lý/sinh lý)",
+  "optimization_modifiers": {
+    "COND_diabetic": {
+      "target_objectives": {
+        "glycemic_control": { "action": "multiply", "value": 2.5 },
+        "macronutrient_balance": { "action": "multiply", "value": 1.2 }
+      },
+      "nutrient_tier_overrides": {
+        "tier_1_critical": ["NUT_fiber", "NUT_magnesium", "NUT_chromium"],
+        "soft_constraints_tightening": { "max_glycemic_load_per_meal": 10 }
+      }
     },
-    "hypertension": {
-      "description_vi": "Ưu tiên kiểm soát Natri và tăng Kali",
-      "nutrient_adequacy": 0.25,
-      "caloric_balance": 0.15,
-      "macronutrient_balance": 0.15,
-      "glycemic_control": 0.05,
-      "sodium_control": 0.28,
-      "food_diversity": 0.07,
-      "meal_palatability": 0.05
+    "COND_hypertension": {
+      "target_objectives": {
+        "sodium_potassium_ratio": { "action": "multiply", "value": 2.8 },
+        "food_diversity": { "action": "multiply", "value": 1.2 }
+      },
+      "nutrient_tier_overrides": {
+        "tier_1_critical": ["NUT_potassium", "NUT_magnesium", "NUT_calcium"]
+      }
     },
-    "weight_loss": {
-      "description_vi": "Ưu tiên cân bằng calo âm (deficit) và đủ protein",
-      "nutrient_adequacy": 0.25,
-      "caloric_balance": 0.30,
-      "macronutrient_balance": 0.20,
-      "glycemic_control": 0.10,
-      "sodium_control": 0.05,
-      "food_diversity": 0.05,
-      "meal_palatability": 0.05
+    "COND_ckd_stage3": {
+      "target_objectives": {
+        "macronutrient_balance": { "action": "multiply", "value": 2.0, "note": "Kiểm soát ngặt nghèo đạm" },
+        "sodium_potassium_ratio": { "action": "multiply", "value": 2.0 }
+      },
+      "nutrient_tier_overrides": {
+        "hard_caps": {
+          "NUT_protein": { "max_g_kg_day": 0.6 },
+          "NUT_phosphorus": { "max_mg_day": 800 },
+          "NUT_potassium": { "max_mg_day": 2000 }
+        },
+        "tier_down-grades": ["NUT_protein", "NUT_phosphorus"]
+      }
     },
-    "pregnant": {
-      "description_vi": "Ưu tiên đủ vi chất thiết yếu (Folate, Sắt, Canxi, DHA)",
-      "nutrient_adequacy": 0.45,
-      "caloric_balance": 0.20,
-      "macronutrient_balance": 0.15,
-      "glycemic_control": 0.08,
-      "sodium_control": 0.05,
-      "food_diversity": 0.05,
-      "meal_palatability": 0.02
-    },
-    "athlete": {
-      "description_vi": "Ưu tiên calo đủ và protein cao",
-      "nutrient_adequacy": 0.25,
-      "caloric_balance": 0.25,
-      "macronutrient_balance": 0.25,
-      "glycemic_control": 0.10,
-      "sodium_control": 0.05,
-      "food_diversity": 0.05,
-      "meal_palatability": 0.05
-    },
-    "ckd": {
-      "description_vi": "Ưu tiên kiểm soát Protein, Kali, Phốt pho",
-      "nutrient_adequacy": 0.20,
-      "caloric_balance": 0.15,
-      "macronutrient_balance": 0.25,
-      "glycemic_control": 0.10,
-      "sodium_control": 0.20,
-      "food_diversity": 0.05,
-      "meal_palatability": 0.05
+    "PHYS_pregnant_trimester2": {
+      "target_objectives": {
+        "nutrient_adequacy": { "action": "multiply", "value": 1.8 }
+      },
+      "nutrient_tier_overrides": {
+        "tier_1_critical": ["NUT_folate", "NUT_iron", "NUT_calcium", "NUT_dha", "NUT_iodine"]
+      }
     }
   },
 
-  "nutrient_priority_tiers": {
-    "description_vi": "Phân cấp độ ưu tiên nutrients khi tối ưu hóa — Tier 1 phải đạt trước, Tier 3 là tùy chọn",
-    "tier_1_critical": ["NUT_vitamin_b12", "NUT_vitamin_d", "NUT_iron", "NUT_calcium", "NUT_iodine", "NUT_folate"],
-    "tier_2_important": ["NUT_vitamin_a", "NUT_vitamin_c", "NUT_zinc", "NUT_magnesium", "NUT_protein", "NUT_fiber"],
-    "tier_3_optimize": ["NUT_vitamin_e", "NUT_vitamin_k", "NUT_selenium", "NUT_copper", "NUT_manganese"]
+  "----------------------------------------------------------------": "3. PENALTY FUNCTIONS (Hàm phạt toán học cho Thuật toán)",
+  "penalty_matrix": {
+    "hard_constraints_violation": {
+      "penalty_score": 10000,
+      "action": "immediate_reject",
+      "targets": ["allergic_foods", "religious_restrictions", "toxic_thresholds_ul"]
+    },
+    "soft_constraints_violation": {
+      "caloric_deviation": { "penalty_per_10kcal": 5 },
+      "macro_ratio_deviation": { "penalty_per_1_percent_deviation": 12 },
+      "micro_deficit": { "tier_1_penalty_per_1_percent_shortage": 50, "tier_2_penalty_per_1_percent_shortage": 20 }
+    }
   },
 
-  "cultural_preferences": {
-    "description_vi": "Điều chỉnh trọng số theo văn hóa ẩm thực",
-    "vietnamese": {
-      "preferred_foods": ["F02", "F05", "F06", "F07", "F10"],
-      "preferred_cooking": ["steamed", "boiled", "stir_fried"],
-      "palatability_boost": 1.2
+  "----------------------------------------------------------------": "4. PHENOTYPE & PERSONALIZATION ENGINE (Cá nhân hóa và Văn hóa)",
+  "contextual_palatability": {
+    "cultural_anchors": {
+      "CULT_vietnamese": {
+        "preferred_cooking_methods": ["steamed", "boiled", "stir_fried_light"],
+        "forbidden_pairings": [["F02_milk", "F10_seafood"]],
+        "staple_carb_nodes": ["FOOD_rice", "FOOD_rice_noodle"],
+        "seasoning_profile": { "preferred": ["sauce_fish", "ginger", "garlic"], "sodium_allowance_buffer": 0.1 }
+      }
+    },
+    "circadian_and_wearable_triggers": {
+      "time_of_day_modifier": {
+        "morning": { "carb_tolerance_weight_boost": 1.1 },
+        "evening": { "glycemic_control_weight_boost": 1.3, "note": "Tăng cường kiểm soát đường huyết vào ban đêm" }
+      },
+      "wearable_strain_trigger": {
+        "high_activity_day": {
+          "caloric_balance_weight": { "action": "multiply", "value": 1.5 },
+          "macronutrient_balance": { "override_target_ratio": { "carbs": 0.60, "protein": 0.20, "fat": 0.20 } }
+        }
+      }
     }
   }
 }
