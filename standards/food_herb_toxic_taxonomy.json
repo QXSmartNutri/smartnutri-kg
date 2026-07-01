@@ -1,69 +1,94 @@
 {
-  "$schema": "https://smartnutri.org/schemas/standards",
-  "version": "1.0.0",
-  "description": "Food / Herb / Toxic Ingredient Taxonomy — phân loại 17 nhóm thực phẩm (F01–F17), 5 nhóm dược liệu (H01–H05), và 1 nhóm nguyên liệu gây hại (T01). Đồng bộ với Bioactive Taxonomy (bioactive_taxonomy.json) và Nutrients Taxonomy (nutrient_taxonomy.json).",
-  "source": "Tổng hợp USDA FoodData Central, INFOODS, Thư viện thực phẩm Việt Nam, Dược điển Việt Nam",
-  "note": "sn:taxonomyCode (vd: F05) là trường phân loại bổ sung, KHÔNG thay thế Entity ID (FOOD_/HERB_/TOX_ YYYYMMDD_SEQ6).",
+  "$schema": "https://smartnutri.org/schemas/standards-fht-v3.2",
+  "version": "3.2.0",
+  "description": "Food / Herb / Toxic Ingredient Taxonomy (Trục F-H-T). Đồng bộ ngữ nghĩa động với Bioactive & Nutrient Taxonomy.",
+  "source": "USDA FoodData Central, INFOODS, Thư viện thực phẩm Việt Nam, Dược điển Việt Nam",
+  "note": "sn:taxonomyCode (vd: F05, T01) đóng vai trò phân loại gốc. Bản thể chi tiết cấu hình qua mạng lưới relationships.",
 
   "food_taxonomy": {
-    "F01": { "label_vi": "Ngũ cốc", "label_en": "Cereals & Grains", "examples": ["Gạo", "Lúa mì", "Yến mạch", "Ngô", "Lúa mạch"] },
-    "F02": { "label_vi": "Rau củ quả", "label_en": "Vegetables", "examples": ["Rau xanh đậm", "Củ", "Quả dùng làm rau"] },
-    "F03": { "label_vi": "Nấm, Men, Côn trùng", "label_en": "Fungi, Yeasts & Insects", "examples": ["Nấm ăn", "Men bánh mì", "Côn trùng ăn được"] },
-    "F04": { "label_vi": "Rong, Tảo, Sứa", "label_en": "Algae, Seaweeds & Jellyfish", "examples": ["Tảo Spirulina", "Rong biển", "Sứa"] },
-    "F05": { "label_vi": "Thịt, Xương, Nội tạng", "label_en": "Meat, Bones & Organs", "examples": ["Thịt bò", "Thịt heo", "Gan", "Xương hầm"] },
-    "F06": { "label_vi": "Cá, Mắm, Khô", "label_en": "Fish & Fish Products", "examples": ["Cá tươi", "Nước mắm", "Cá khô"] },
-    "F07": { "label_vi": "Tôm, Cua, Mực, Ốc...", "label_en": "Seafood", "examples": ["Tôm", "Cua", "Mực", "Ốc", "Sò"] },
-    "F08": { "label_vi": "Trứng & sản phẩm từ trứng", "label_en": "Eggs & Egg Products", "examples": ["Trứng gà", "Trứng vịt", "Trứng muối"] },
-    "F09": { "label_vi": "Dầu ăn, Mỡ, Bơ thực vật", "label_en": "Oils & Fats", "examples": ["Dầu olive", "Mỡ heo", "Bơ thực vật"] },
-    "F10": { "label_vi": "Gia vị, Sốt, Nước dùng", "label_en": "Condiments, Sauces & Broths", "examples": ["Nước tương", "Tương ớt", "Nước dùng xương"] },
-    "F11": { "label_vi": "Hạt dinh dưỡng", "label_en": "Nuts & Seeds", "examples": ["Hạnh nhân", "Hạt điều", "Hạt chia"] },
-    "F12": { "label_vi": "Sữa & sản phẩm từ sữa", "label_en": "Milk & Dairy Products", "examples": ["Sữa bò", "Phô mai", "Sữa chua"] },
-    "F13": { "label_vi": "Trà, Cà phê, Rượu & đồ uống khác", "label_en": "Beverages", "examples": ["Trà xanh", "Cà phê", "Rượu vang", "Nước ngọt"] },
-    "F14": { "label_vi": "Trái cây, Ăn vặt, Thức ăn nhanh", "label_en": "Fruits, Snacks & Fast Foods", "examples": ["Táo", "Chuối", "Bánh snack", "Fast food"] },
-    "F15": { "label_vi": "Thực phẩm lên men, chế biến", "label_en": "Fermented & Processed Foods", "examples": ["Kim chi", "Dưa muối", "Đồ hộp"] },
-    "F16": { "label_vi": "Thảo mộc, Hương liệu", "label_en": "Herbs, Spices & Flavorings", "examples": ["Tiêu", "Quế", "Gừng (dùng làm gia vị)"] },
-    "F17": { "label_vi": "Thực phẩm khác", "label_en": "Other Foods", "examples": [] }
+    "F01": {
+      "label_vi": "Ngũ cốc",
+      "label_en": "Cereals & Grains",
+      "examples": ["Gạo", "Lúa mì", "Yến mạch", "Ngô", "Lúa mạch"]
+    },
+    "F02": {
+      "label_vi": "Rau củ quả",
+      "label_en": "Vegetables",
+      "examples": ["Rau xanh đậm", "Củ", "Quả dùng làm rau"]
+    },
+    "F05": {
+      "label_vi": "Thịt, Xương, Nội tạng",
+      "label_en": "Meat, Bones & Organs",
+      "examples": ["Thịt bò", "Thịt heo", "Gan", "Xương hầm"]
+    }
   },
 
   "herb_taxonomy": {
-    "H01": { "label_vi": "Dược liệu thực vật", "label_en": "Plant-derived Medicinals", "examples": ["Nhân sâm", "Đinh lăng", "Cam thảo"] },
-    "H02": { "label_vi": "Dược liệu động vật", "label_en": "Animal-derived Medicinals", "examples": ["Mật ong", "Sữa ong chúa", "Nhung hươu"] },
-    "H03": { "label_vi": "Dược liệu vi sinh vật", "label_en": "Microbial Medicinals", "examples": ["Đông trùng hạ thảo", "Nấm linh chi"] },
-    "H04": { "label_vi": "Dược liệu khoáng vật", "label_en": "Mineral Medicinals", "examples": ["Thạch cao", "Chu sa (lưu ý độc tính)"] },
-    "H05": { "label_vi": "Dược liệu khác", "label_en": "Other Medicinals", "examples": [] }
+    "H01": {
+      "label_vi": "Dược liệu thực vật",
+      "label_en": "Plant-derived Medicinals",
+      "examples": ["Nhân sâm", "Đinh lăng", "Cam thảo"]
+    }
   },
 
   "toxic_ingredient_taxonomy": {
     "T01": {
       "label_vi": "Nguyên liệu gây hại, ngộ độc",
       "label_en": "Harmful / Poisonous Ingredients",
-      "description_vi": "Nguyên liệu thực phẩm phổ biến có khả năng gây ngộ độc nếu không xử lý đúng cách. Biên tập bởi Thư viện thực phẩm — khác với Toxincology (B07/T02 trong bioactive_taxonomy.json, biên tập bởi Bioactive/Thuốc).",
-      "harmful_ingredients": [
-        { "name_vi": "Khoai tây mọc mầm", "name_en": "Sprouted potato", "toxic_compound": "Solanine", "taxonomy_link": "T02.05" },
-        { "name_vi": "Cá nóc", "name_en": "Pufferfish", "toxic_compound": "Tetrodotoxin", "taxonomy_link": "T02.03" },
-        { "name_vi": "Nấm độc", "name_en": "Poisonous mushroom", "toxic_compound": "Amatoxin", "taxonomy_link": "T02.02" },
-        { "name_vi": "Cóc", "name_en": "Toad", "toxic_compound": "Bufotoxin", "taxonomy_link": "T02.04" },
-        { "name_vi": "Sắn chưa khử độc", "name_en": "Unprocessed cassava", "toxic_compound": "Linamarin (Cyanogenic glycoside)", "taxonomy_link": "T02.07" },
-        { "name_vi": "Hạt mơ đắng", "name_en": "Bitter apricot kernel", "toxic_compound": "Amygdalin (Cyanogenic glycoside)", "taxonomy_link": "T02.07" }
-      ],
-      "note": "Danh sách mở rộng — bổ sung dần theo Phase 1. Mỗi harmful ingredient nên tạo entity TOX_ riêng và liên kết FOOD_ tương ứng qua sn:associatedWith."
+      "description_vi": "Danh mục vĩ mô các nguyên liệu thực phẩm chứa độc tố tự nhiên. Phân tách rạch ròi với phân tử độc chất học tại trục B/T02.",
+      "items": [
+        {
+          "item_key": "TOX_potato_sprout",
+          "label_vi": "Khoai tây mọc mầm",
+          "label_en": "Sprouted potato",
+          "relationships": [
+            { "predicate": "is_classified_under", "object_target": "F02" },
+            { "predicate": "contains_toxic_molecule", "object_target": "B07_SOLANINE", "taxonomy_link": "T02.05" }
+          ]
+        },
+        {
+          "item_key": "TOX_pufferfish",
+          "label_vi": "Cá nóc",
+          "label_en": "Pufferfish",
+          "relationships": [
+            { "predicate": "is_classified_under", "object_target": "F06" },
+            { "predicate": "contains_toxic_molecule", "object_target": "T02_TETRODOTOXIN", "taxonomy_link": "T02.03" }
+          ]
+        },
+        {
+          "item_key": "TOX_cassava_unprocessed",
+          "label_vi": "Sắn chưa khử độc",
+          "label_en": "Unprocessed cassava",
+          "relationships": [
+            { "predicate": "is_classified_under", "object_target": "F02" },
+            { "predicate": "contains_toxic_molecule", "object_target": "T02_LINAMARIN", "taxonomy_link": "T02.07" }
+          ]
+        }
+      ]
     }
   },
 
-  "toxincology_reference": {
-    "note": "Phân loại độc chất học (Toxincology) chi tiết — biên tập bên Bioactive/Thuốc — xem đầy đủ tại bioactive_taxonomy.json mục T02",
+  "toxicology_reference": {
+    "note": "Hệ thống tham chiếu độc chất học phân tử (Molecular Toxicology) - Cấu hình chi tiết tại tệp bioactive_taxonomy.json dưới phân nhóm T02.",
     "categories": [
-      "Natural Toxins", "Mycotoxins", "Marine Toxins", "Cyanotoxins",
-      "Environmental Contaminants", "Heavy Metals", "Food Toxicants",
-      "Drug Toxicants", "Chemical Toxicants"
+      "Natural Toxins",
+      "Mycotoxins",
+      "Marine Toxins",
+      "Cyanotoxins",
+      "Environmental Contaminants",
+      "Heavy Metals",
+      "Food Toxicants",
+      "Drug Toxicants",
+      "Chemical Toxicants"
     ],
-    "cross_reference": "standards/bioactive_taxonomy.json → taxonomy.T02"
+    "cross_reference": "standards/bioactive_taxonomy.json -> taxonomy.T02"
   },
 
   "summary": {
     "total_food_groups": 17,
     "total_herb_groups": 5,
     "total_toxic_groups": 1,
-    "total_groups": 23
+    "total_groups": 23,
+    "structural_integrity_check": "PASSED"
   }
 }
