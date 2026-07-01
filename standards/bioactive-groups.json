@@ -1,53 +1,93 @@
 {
-  "$schema": "https://smartnutri.org/schemas/bioactive-cheminformatics-v3.6",
-  "version": "3.6.0",
-  "description": "Production-grade Cheminformatics & Ontological Specification for Bioactives.",
+  "$schema": "https://smartnutri.org/schemas/bioactive-chemical-taxonomy-v3.5",
+  "version": "3.5.0",
+  "description": "Clinical-grade Chemical Structure Hierarchy for Bioactive Compounds.",
+  
+  "metadata": {
+    "maintainer": "SmartNutri Cheminformatics & Ontologies Board",
+    "last_compiled_by": "CI-Pipeline-Bot",
+    "ontology_framework_version": "OWL-2-DL",
+    "core_vocabularies": ["ChEBI_Class", "PubChem_Classification"]
+  },
 
   "taxonomy": {
-    "B06.13": {
-      "label_vi": "Stilbene",
-      "label_en": "Stilbenes",
-      "items": [
-        {
-          "item_key": "BIO_resveratrol",
-          "label_vi": "Resveratrol",
-          "label_en": "Resveratrol",
-          
-          "chemical_identifiers": {
-            "smiles": "C1=CC(=CC=C1/C=C/C2=CC(=CC(=C2)O)O)O",
-            "inchikey": "YMKUCOIGSHSVIZ-XQRUZZGBSA-N",
-            "cas_number": "501-36-0",
-            "pubchem_cid": 445154
-          },
-
-          "molecular_properties": {
-            "molecular_weight": 228.24,
-            "log_p": 3.1,
-            "hydrogen_bond_donors": 3,
-            "hydrogen_bond_acceptors": 3,
-            "topological_polar_surface_area": 60.7
-          },
-
-          "chemical_role": [
-            "ANTIOXIDANT",
-            "PHYTOALEXIN"
-          ],
-
-          "ontology_links": {
-            "chebi": "CHEBI:27881",
-            "mesh": "D000077264",
-            "classyfire": "CHEMONTID:0000392"
-          },
-
-          "relationships": [
-            { 
-              "predicate": "originated_from_biosynthetic_pathway", 
-              "object_target": "PATHWAY_phenylpropanoid",
-              "enzyme_trigger": "ENZYME_stilbene_synthase"
+    "B06": {
+      "node_metadata": {
+        "status": "APPROVED",
+        "chemical_class": "Phenolic_Compounds"
+      },
+      "label_vi": "Hợp chất Phenolic (Polyphenol)",
+      "label_en": "Phenolic Compounds",
+      "subcategories": {
+        "B06.07": {
+          "label_vi": "Flavonol",
+          "label_en": "Flavonols",
+          "items": [
+            {
+              "item_key": "BIO_quercetin",
+              "label_vi": "Quercetin",
+              "label_en": "Quercetin",
+              "relationships": [
+                { "predicate": "is_instance_of_structure", "object_target": "B06.07" },
+                { "predicate": "has_chemical_framework", "object_target": "CHEM_flavone_core" }
+              ]
             }
           ]
         }
-      ]
+      }
+    },
+
+    "B05.07": {
+      "node_metadata": {
+        "status": "APPROVED",
+        "chemical_class": "Tetraterpenoids"
+      },
+      "label_vi": "Carotenoid",
+      "label_en": "Carotenoids",
+      "subcategories": {
+        "B05.07.01": {
+          "label_vi": "Carotene",
+          "label_en": "Carotenes",
+          "items": [
+            {
+              "item_key": "BIO_beta_carotene",
+              "label_vi": "Beta-carotene",
+              "label_en": "Beta-Carotene",
+              "relationships": [
+                { "predicate": "is_instance_of_structure", "object_target": "B05.07.01" },
+                { "predicate": "acts_as_provitamin_for", "object_target": "NUT_vitamin_a" }
+              ]
+            }
+          ]
+        }
+      }
+    },
+
+    "B09.04": {
+      "node_metadata": {
+        "status": "APPROVED",
+        "chemical_class": "Organosulfur_Compounds"
+      },
+      "label_vi": "Glucosinolate",
+      "label_en": "Glucosinolates",
+      "subcategories": {
+        "B09.04.01": {
+          "label_vi": "Isothiocyanate_Precursors",
+          "label_en": "Isothiocyanate Precursors",
+          "items": [
+            {
+              "item_key": "BIO_glucoraphanin",
+              "label_vi": "Glucoraphanin",
+              "label_en": "Glucoraphanin",
+              "relationships": [
+                { "predicate": "is_instance_of_structure", "object_target": "B09.04.01" },
+                { "predicate": "is_precursor_of", "object_target": "BIO_sulforaphane" }
+              ]
+            }
+          ]
+        }
+      }
     }
   }
 }
+
