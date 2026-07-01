@@ -1,79 +1,100 @@
 {
-  "$schema": "https://smartnutri.org/schemas/standards",
-  "version": "1.0.0",
-  "description": "Quy tắc phân bổ năng lượng & nutrient theo các bữa ăn trong ngày — dùng cho logic_engine khi tạo thực đơn cả ngày từ nhu cầu tổng (nutrient-rda.json, nutrient_amdr.json).",
-  "source": "USDA MyPlate, Vietnamese National Institute of Nutrition (NIN), IOM",
+  "$schema": "https://smartnutri.org/schemas/advanced-meal-distribution-v2",
+  "version": "2.0.0",
+  "description": "Dynamic Nutrient Allocation & Timing Architecture (Chrononutrition Engine)",
+  "last_updated": "2026-07-01",
 
-  "standard_meal_patterns": {
-    "3_meals": {
-      "label_vi": "3 bữa chính",
-      "distribution": [
-        { "meal": "breakfast", "label_vi": "Sáng", "pct_energy": 25 },
-        { "meal": "lunch", "label_vi": "Trưa", "pct_energy": 40 },
-        { "meal": "dinner", "label_vi": "Tối", "pct_energy": 35 }
-      ]
+  "----------------------------------------------------------------": "1. MEAL PATTERNS WITH MACRO SPLITS (Phân bổ năng lượng & vĩ chất chi tiết)",
+  "meal_patterns": {
+    "PATTERN_3_MEALS": {
+      "label_vi": "3 bữa chính tiêu chuẩn",
+      "slots": {
+        "breakfast": { "pct_energy": 25, "macro_bias": { "carbs": 0.25, "protein": 0.25, "fat": 0.20 }, "optimal_time_window": "06:30-08:30" },
+        "lunch":     { "pct_energy": 40, "macro_bias": { "carbs": 0.40, "protein": 0.40, "fat": 0.40 }, "optimal_time_window": "11:30-13:00" },
+        "dinner":    { "pct_energy": 35, "macro_bias": { "carbs": 0.35, "protein": 0.35, "fat": 0.40 }, "optimal_time_window": "18:00-20:00" }
+      }
     },
-    "3_meals_2_snacks": {
-      "label_vi": "3 bữa chính + 2 bữa phụ",
-      "distribution": [
-        { "meal": "breakfast", "label_vi": "Sáng", "pct_energy": 20 },
-        { "meal": "morning_snack", "label_vi": "Phụ sáng", "pct_energy": 10 },
-        { "meal": "lunch", "label_vi": "Trưa", "pct_energy": 30 },
-        { "meal": "afternoon_snack", "label_vi": "Phụ chiều", "pct_energy": 10 },
-        { "meal": "dinner", "label_vi": "Tối", "pct_energy": 30 }
-      ]
-    },
-    "5_6_small_meals": {
-      "label_vi": "5-6 bữa nhỏ (cho người tiểu đường/dạ dày)",
-      "distribution": [
-        { "meal": "breakfast", "label_vi": "Sáng", "pct_energy": 18 },
-        { "meal": "morning_snack", "label_vi": "Phụ sáng", "pct_energy": 12 },
-        { "meal": "lunch", "label_vi": "Trưa", "pct_energy": 25 },
-        { "meal": "afternoon_snack", "label_vi": "Phụ chiều", "pct_energy": 12 },
-        { "meal": "dinner", "label_vi": "Tối", "pct_energy": 23 },
-        { "meal": "evening_snack", "label_vi": "Phụ tối", "pct_energy": 10 }
-      ]
+    "PATTERN_5_6_SMALL": {
+      "label_vi": "5-6 bữa nhỏ phân mảnh (Tiểu đường / Gym / Dạ dày)",
+      "slots": {
+        "breakfast":       { "pct_energy": 18, "macro_bias": { "carbs": 0.15, "protein": 0.20, "fat": 0.15 }, "optimal_time_window": "06:30-07:30" },
+        "morning_snack":   { "pct_energy": 12, "macro_bias": { "carbs": 0.12, "protein": 0.10, "fat": 0.10 }, "optimal_time_window": "09:30-10:15" },
+        "lunch":           { "pct_energy": 25, "macro_bias": { "carbs": 0.25, "protein": 0.25, "fat": 0.25 }, "optimal_time_window": "12:00-13:00" },
+        "afternoon_snack": { "pct_energy": 12, "macro_bias": { "carbs": 0.13, "protein": 0.15, "fat": 0.10 }, "optimal_time_window": "15:30-16:30" },
+        "dinner":          { "pct_energy": 23, "macro_bias": { "carbs": 0.25, "protein": 0.20, "fat": 0.30 }, "optimal_time_window": "18:30-19:30" },
+        "evening_snack":   { "pct_energy": 10, "macro_bias": { "carbs": 0.10, "protein": 0.10, "fat": 0.10 }, "optimal_time_window": "21:00-21:30" }
+      }
     }
   },
 
-  "special_population_patterns": {
-    "AG_PREGNANT": {
-      "note": "Tăng nhẹ pct_energy bữa phụ sáng để giảm buồn nôn (nausea), ưu tiên 3_meals_2_snacks",
-      "recommended_pattern": "3_meals_2_snacks"
+  "----------------------------------------------------------------": "2. CHRONONUTRITION & MICRONUTRIENT TIMING RULES (Hàm phân bổ vi chất động)",
+  "micronutrient_timing_rules": {
+    "NUT_iron": {
+      "preferred_slots": ["breakfast", "lunch"],
+      "synergistic_co_ingestion": ["NUT_vitamin_c"],
+      "antagonist_co_ingestion": ["NUT_calcium", "CMP_polyphenol_tea_coffee"],
+      "allocation_constraint": { "min_pct_of_rda_in_preferred_slot": 60 }
     },
-    "AG_ELDER_70Y": {
-      "note": "Khuyến nghị bữa nhỏ tần suất nhiều hơn do giảm dung tích dạ dày và cảm giác no nhanh",
-      "recommended_pattern": "5_6_small_meals"
+    "NUT_calcium": {
+      "preferred_slots": ["dinner", "evening_snack"],
+      "note": "Hấp thu tốt hơn vào ban đêm do nhịp sinh học xương và giảm nồng độ canxi máu thụ động",
+      "antagonist_co_ingestion": ["NUT_iron", "NUT_zinc"],
+      "allocation_constraint": { "min_pct_of_rda_in_preferred_slot": 50 }
     },
-    "diabetic": {
-      "note": "Phân bổ đều carbohydrate giữa các bữa để tránh đỉnh đường huyết",
-      "recommended_pattern": "5_6_small_meals",
-      "carb_distribution_priority": true
+    "NUT_protein": {
+      "strategy": "EVEN_DISTRIBUTION",
+      "note": "Kích hoạt tối đa Muscle Protein Synthesis (Ngưỡng Leucine Trigger ~3g/bữa)",
+      "allocation_constraint": { "max_delta_between_main_meals": 0.10 }
     },
-    "AG_CHILD_1_3Y": {
-      "note": "Dạ dày nhỏ, cần 5-6 bữa nhỏ trong ngày",
-      "recommended_pattern": "5_6_small_meals"
+    "NUT_vitamin_b_complex": {
+      "preferred_slots": ["breakfast"],
+      "allocation_constraint": { "min_pct_of_rda_in_preferred_slot": 40 }
     }
   },
 
-  "nutrient_timing_rules": {
-    "description_vi": "Một số nutrient nên ưu tiên phân bổ vào bữa cụ thể vì lý do sinh lý/hấp thu",
-    "rules": [
-      { "nutrient": "NUT_calcium", "preferred_meal": "any", "note": "Tách khỏi bữa giàu Sắt — xem antagonist_pairs trong nutrition_balance_rules.json" },
-      { "nutrient": "NUT_iron", "preferred_meal": "breakfast_or_lunch", "note": "Kết hợp Vitamin C, tránh dùng cùng trà/cà phê" },
-      { "nutrient": "NUT_vitamin_b1", "preferred_meal": "breakfast", "note": "Hỗ trợ chuyển hóa năng lượng đầu ngày" },
-      { "nutrient": "NUT_protein", "preferred_meal": "distributed_evenly", "note": "Phân bổ đều protein các bữa tối ưu tổng hợp protein cơ (muscle protein synthesis) hơn là dồn vào 1 bữa" },
-      { "nutrient": "NUT_fat_total", "preferred_meal": "lunch_or_dinner", "note": "Hỗ trợ hấp thu Vitamin tan dầu (A, D, E, K)" },
-      { "nutrient": "NUT_vitamin_k", "preferred_meal": "with_fat_containing_meal", "note": "Cần chất béo để hấp thu — xem absorption_factors.json" }
-    ]
+  "----------------------------------------------------------------": "3. POPULATION & PATHOLOGICAL OVERRIDES (Cấu hình ghi đè theo đối tượng)",
+  "population_pattern_overrides": {
+    "COND_diabetic": {
+      "enforced_pattern": "PATTERN_5_6_SMALL",
+      "rules": {
+        "strict_carb_cap_per_snack_g": 15,
+        "even_carb_distribution": true,
+        "suppress_evening_snack_carbs": true
+      }
+    },
+    "COND_geriatric_70y": {
+      "enforced_pattern": "PATTERN_5_6_SMALL",
+      "rules": {
+        "max_volume_per_meal_ml": 400,
+        "protein_density_boost_factor": 1.25
+      }
+    },
+    "COND_gerd": {
+      "enforced_pattern": "PATTERN_3_MEALS",
+      "rules": {
+        "no_eating_before_sleep_hours": 3,
+        "dinner_max_fat_pct": 20
+      }
+    }
   },
 
-  "fasting_patterns": {
-    "description_vi": "Hỗ trợ tính toán cho các kiểu nhịn ăn gián đoạn (Intermittent Fasting) — không bắt buộc, chỉ tham chiếu khi người dùng chọn",
-    "patterns": [
-      { "id": "16_8", "label_vi": "16:8 (Ăn trong 8 giờ)", "eating_window_hours": 8 },
-      { "id": "14_10", "label_vi": "14:10 (Ăn trong 10 giờ)", "eating_window_hours": 10 }
-    ],
-    "note": "Khi áp dụng fasting, phân bổ lại 100% năng lượng trong eating_window theo tỉ lệ standard_meal_patterns tương ứng số bữa"
+  "----------------------------------------------------------------": "4. INTERMITTENT FASTING INTEGRATION (Tích hợp Nhịn ăn gián đoạn thực tế)",
+  "intermittent_fasting_engine": {
+    "IF_16_8": {
+      "eating_window_duration_hours": 8,
+      "allowed_slots_mapping": {
+        "default_schedule": { "start_time": "12:00", "end_time": "20:00" },
+        "active_meals": ["lunch", "afternoon_snack", "dinner"],
+        "redistribution_logic": {
+          "strategy": "COMPRESS_AND_SCALE",
+          "target_pattern": "PATTERN_3_MEALS",
+          "scale_multipliers": {
+            "lunch": 0.45,
+            "afternoon_snack": 0.15,
+            "dinner": 0.40
+          }
+        }
+      }
+    }
   }
 }
