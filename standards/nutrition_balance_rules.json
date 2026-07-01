@@ -1,76 +1,84 @@
 {
-  "$schema": "https://smartnutri.org/schemas/standards",
-  "version": "1.0.0",
-  "description": "Quy tắc cân bằng dinh dưỡng tổng thể — dùng cho logic_engine để đánh giá một bữa ăn/ngày ăn có cân đối hay không. Tham chiếu nutrient_amdr.json, nutrient-rda.json.",
-  "source": "IOM AMDR, USDA MyPlate, WHO Healthy Diet Guidelines",
-
-  "macronutrient_balance": {
-    "description_vi": "Tỉ lệ năng lượng từ 3 nhóm đa lượng phải nằm trong AMDR — xem nutrient_amdr.json",
-    "ideal_ratio_adult": { "carbohydrate_pct": "50-55", "protein_pct": "15-20", "fat_pct": "25-30" },
-    "imbalance_flags": [
-      { "condition": "carbohydrate_pct > 65", "flag": "high_carb_warning", "severity": "medium" },
-      { "condition": "protein_pct < 10", "flag": "low_protein_warning", "severity": "high" },
-      { "condition": "fat_pct > 35", "flag": "high_fat_warning", "severity": "medium" },
-      { "condition": "saturated_fat_pct > 10", "flag": "high_saturated_fat", "severity": "high" }
-    ]
+  "metadata": {
+    "schema_id": "https://smartnutri.org/schemas/advanced-vector-kinetics-v2.9",
+    "version": "2.9.0",
+    "module_name": "Vector_Kinetics_and_Actionable_Solver_Recommendations",
+    "domain": "Precision_Clinical_Nutrition",
+    "organization": "SmartNutri R&D Center",
+    "environment_target": "production",
+    "compiled_at": "2026-07-01T00:00:00Z"
   },
 
-  "fiber_balance": {
-    "description_vi": "Đảm bảo đủ chất xơ theo RDA, tỉ lệ Soluble:Insoluble lý tưởng 1:3",
-    "min_fiber_per_1000kcal": 14,
-    "soluble_insoluble_ratio_ideal": "1:3"
-  },
-
-  "sugar_balance": {
-    "description_vi": "WHO khuyến nghị đường tự do <10% năng lượng, lý tưởng <5%",
-    "max_added_sugar_pct_energy": 10,
-    "ideal_added_sugar_pct_energy": 5
-  },
-
-  "sodium_potassium_balance": {
-    "description_vi": "Tỉ lệ Natri:Kali ảnh hưởng huyết áp — WHO khuyến nghị Na:K < 1:1 (lý tưởng K nhiều hơn Na)",
-    "ideal_na_k_ratio": "< 1.0",
-    "flag_if_na_k_ratio_above": 1.5
-  },
-
-  "omega_balance": {
-    "description_vi": "Tỉ lệ Omega-6:Omega-3 lý tưởng theo khuyến nghị quốc tế",
-    "ideal_omega6_omega3_ratio": "4:1 to 1:1",
-    "western_diet_typical_ratio": "15:1 to 20:1",
-    "flag_if_ratio_above": 10
-  },
-
-  "calcium_phosphorus_balance": {
-    "description_vi": "Tỉ lệ Ca:P ảnh hưởng chuyển hóa xương — lý tưởng gần 1:1 đến 2:1",
-    "ideal_ca_p_ratio": "1:1 to 2:1"
-  },
-
-  "vitamin_mineral_synergy": {
-    "description_vi": "Các cặp nutrient nên xuất hiện cùng nhau để tối ưu hấp thu/chuyển hóa",
-    "synergy_pairs": [
-      { "pair": ["NUT_vitamin_d", "NUT_calcium"], "reason": "Vitamin D tăng hấp thu Calcium" },
-      { "pair": ["NUT_vitamin_c", "NUT_iron"], "reason": "Vitamin C tăng hấp thu Sắt non-heme" },
-      { "pair": ["NUT_vitamin_k", "NUT_calcium"], "reason": "Vitamin K2 hỗ trợ Calcium gắn vào xương qua Osteocalcin" },
-      { "pair": ["NUT_vitamin_e", "NUT_selenium"], "reason": "Đồng vận chống oxy hóa" },
-      { "pair": ["NUT_zinc", "NUT_copper"], "reason": "Cần cân bằng tỉ lệ Zn:Cu khoảng 8:1 đến 15:1" }
-    ]
-  },
-
-  "antagonist_pairs": {
-    "description_vi": "Các cặp nutrient nên KHÔNG dùng đồng thời cùng bữa do cạnh tranh hấp thu",
-    "pairs": [
-      { "pair": ["NUT_calcium", "NUT_iron"], "reason": "Calcium ức chế hấp thu Sắt — nên cách bữa", "evidence": "A" },
-      { "pair": ["NUT_zinc", "NUT_iron"], "reason": "Liều cao cạnh tranh transporter hấp thu", "evidence": "B" },
-      { "pair": ["NUT_calcium", "NUT_zinc"], "reason": "Calcium liều cao ức chế hấp thu Kẽm", "evidence": "B" }
-    ]
-  },
-
-  "overall_scoring_inputs": {
-    "description_vi": "Các yếu tố đầu vào dùng cho meal_scoring_rules.json để tính điểm cân bằng tổng thể",
-    "factors": [
-      "macronutrient_balance", "fiber_balance", "sugar_balance",
-      "sodium_potassium_balance", "omega_balance", "calcium_phosphorus_balance",
-      "vitamin_mineral_synergy", "antagonist_pairs"
+  "----------------------------------------------------------------": "1. MULTI-DIMENSIONAL KINETIC EDGES WITH ACTIONABLE SOLVER RULES",
+  "vector_interaction_network": {
+    "edges": [
+      {
+        "interaction_id": "INT_089_phytate_zinc",
+        "elements": ["CMP_phytate", "NUT_zinc"],
+        "interaction_scope": "MEAL_LEVEL",
+        "directionality": "UNI_DIRECTIONAL",
+        "effect_type": "CHEMICAL_CHELATION_INSOLUBLE_COMPLEX",
+        "reversibility": {
+          "is_reversible": true,
+          "mechanism": "THERMAL_HYDROLYSIS_OR_FERMENTATION",
+          "required_food_tags": ["SOAKED", "FERMENTED", "COOKED_HIGH_TEMP"],
+          "reversal_efficiency_multiplier": 0.70,
+          "note": "Nếu nguyên liệu chứa Phytate (như các loại đậu) được gắn tag đã ngâm hoặc lên men, mức độ ức chế Kẽm giảm đi 70%."
+        },
+        "conditional_interactions": {
+          "trigger_expression": "meal.compounds.CMP_phytate.mg / meal.nutrients.NUT_zinc.mg > 15",
+          "note": "Tương tác chỉ kích hoạt khi tỷ lệ phân tử Phytate:Kẽm vượt ngưỡng 15 (ngưỡng gây suy giảm hấp thu lâm sàng)."
+        },
+        "population_applicability": {
+          "target_profiles": ["POP_vegetarian", "POP_vegan", "POP_vietnamese_rural_diet"],
+          "severity_multiplier": 1.4
+        },
+        "solver_recommendation": {
+          "primary_strategy": "APPLY_PROCESS_MODIFIER_TAG",
+          "fallback_strategy": "SCALE_NUTRIENT_TARGET",
+          "execution_directives": {
+            "step_1": "Quét đồ thị món ăn, ưu tiên thay thế bằng các món có nguyên liệu đã qua chế biến khử phytate (tag: SOAKED).",
+            "step_2": "Nếu không thể thay thế, tự động nhân mục tiêu (RDA target) của Kẽm trong ngày của user lên hệ số 1.5 lần để bù trừ."
+          }
+        },
+        "reference_sources": [
+          { "author": "WHO/FAO", "year": 2004, "doc_title": "Vitamin and Mineral Requirements in Human Nutrition", "evidence_grade": "GRADE_A" },
+          { "author": "Gibson et al.", "year": 2010, "journal": "Food and Nutrition Bulletin", "doi": "10.1177/15648265100312S206" }
+        ]
+      },
+      {
+        "interaction_id": "INT_042_ca_iron_advanced",
+        "elements": ["NUT_calcium", "NUT_iron"],
+        "interaction_scope": "MEAL_LEVEL",
+        "directionality": "BI_DIRECTIONAL",
+        "effect_type": "COMPETITIVE_TRANSPORT_INHIBITION_DMT1",
+        "reversibility": {
+          "is_reversible": true,
+          "mechanism": "ACID_REDUCTION_CO_INGESTION",
+          "synergistic_mitigator": "NUT_vitamin_c",
+          "mitigation_formula": "suppression_reduced = original_suppression * (1.0 - (vitamin_c_mg / 100))",
+          "max_mitigation_pct": 80.0
+        },
+        "population_applicability": {
+          "target_profiles": ["PHYS_pregnant", "COND_iron_deficiency_anemia"],
+          "clinical_priority": "CRITICAL_LATEST_STAGE"
+        },
+        "solver_recommendation": {
+          "primary_strategy": "FORCE_TEMPORAL_SEPARATION",
+          "fallback_strategy": "INJECT_SYNERGISTIC_MITIGATOR",
+          "execution_directives": {
+            "separation_window_hours": 2.0,
+            "mitigator_injection": {
+              "nutrient": "NUT_vitamin_c",
+              "minimum_dosage_mg": 100,
+              "target_meal": "current_meal"
+            }
+          }
+        },
+        "reference_sources": [
+          { "author": "Lönnerdal B.", "year": 2010, "journal": "International Journal for Vitamin and Nutrition Research", "doi": "10.1024/0300-9831/a000036" }
+        ]
+      }
     ]
   }
 }
