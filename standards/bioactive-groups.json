@@ -1,81 +1,53 @@
 {
-  "$schema": "https://smartnutri.org/schemas/standards",
-  "version": "1.0.0",
-  "description": "Phân nhóm hoạt chất sinh học (Bioactive Compounds) theo cấu trúc hóa học và nguồn gốc — dùng để phân loại entity BIO_",
-  "source": "USDA Database for Flavonoid Content, Phenol-Explorer, FooDB",
-  "groups": {
-    "polyphenols": {
-      "label_vi": "Polyphenol",
-      "label_en": "Polyphenols",
-      "description_vi": "Hợp chất chống oxy hóa có nhiều vòng phenol",
-      "subgroups": [
-        { "id": "flavonoid", "label_vi": "Flavonoid", "examples": ["Quercetin", "Kaempferol", "Catechin", "Anthocyanin"] },
-        { "id": "phenolic_acid", "label_vi": "Acid phenolic", "examples": ["Chlorogenic acid", "Caffeic acid", "Ferulic acid"] },
-        { "id": "stilbene", "label_vi": "Stilbene", "examples": ["Resveratrol"] },
-        { "id": "lignan", "label_vi": "Lignan", "examples": ["Secoisolariciresinol"] },
-        { "id": "tannin", "label_vi": "Tannin", "examples": ["Tannic acid", "Ellagitannin"] }
-      ]
-    },
-    "carotenoids": {
-      "label_vi": "Carotenoid",
-      "label_en": "Carotenoids",
-      "description_vi": "Sắc tố vàng-cam-đỏ, tiền chất Vitamin A",
-      "subgroups": [
-        { "id": "alpha_carotene", "label_vi": "Alpha-carotene", "provitamin_a": true },
-        { "id": "beta_carotene", "label_vi": "Beta-carotene", "provitamin_a": true },
-        { "id": "lycopene", "label_vi": "Lycopene", "provitamin_a": false },
-        { "id": "lutein", "label_vi": "Lutein", "provitamin_a": false },
-        { "id": "zeaxanthin", "label_vi": "Zeaxanthin", "provitamin_a": false },
-        { "id": "astaxanthin", "label_vi": "Astaxanthin", "provitamin_a": false }
-      ]
-    },
-    "glucosinolates": {
-      "label_vi": "Glucosinolate",
-      "label_en": "Glucosinolates",
-      "description_vi": "Hợp chất lưu huỳnh có trong họ cải (Brassica)",
-      "subgroups": [
-        { "id": "sulforaphane", "label_vi": "Sulforaphane", "source": "Bông cải xanh" },
-        { "id": "indole_3_carbinol", "label_vi": "Indole-3-carbinol", "source": "Bắp cải, súp lơ" }
-      ]
-    },
-    "terpenoids": {
-      "label_vi": "Terpenoid",
-      "label_en": "Terpenoids",
-      "subgroups": [
-        { "id": "monoterpene", "label_vi": "Monoterpene", "examples": ["Limonene", "Menthol"] },
-        { "id": "diterpene", "label_vi": "Diterpene", "examples": ["Carnosol"] },
-        { "id": "triterpene", "label_vi": "Triterpene", "examples": ["Ursolic acid"] },
-        { "id": "sesquiterpene", "label_vi": "Sesquiterpene", "examples": ["Zingiberene"] }
-      ]
-    },
-    "alkaloids": {
-      "label_vi": "Alkaloid",
-      "label_en": "Alkaloids",
-      "subgroups": [
-        { "id": "purine", "label_vi": "Purine alkaloid", "examples": ["Caffeine", "Theobromine", "Theophylline"] },
-        { "id": "capsaicinoid", "label_vi": "Capsaicinoid", "examples": ["Capsaicin"] }
-      ]
-    },
-    "organosulfur": {
-      "label_vi": "Hợp chất lưu huỳnh hữu cơ",
-      "label_en": "Organosulfur compounds",
-      "subgroups": [
-        { "id": "allicin", "label_vi": "Allicin", "source": "Tỏi" },
-        { "id": "alliin", "label_vi": "Alliin", "source": "Tỏi" }
-      ]
-    },
-    "prebiotics_probiotics": {
-      "label_vi": "Prebiotic & Probiotic",
-      "label_en": "Prebiotics & Probiotics",
-      "subgroups": [
-        { "id": "inulin", "label_vi": "Inulin", "type": "prebiotic" },
-        { "id": "fos", "label_vi": "FOS (Fructooligosaccharide)", "type": "prebiotic" },
-        { "id": "gos", "label_vi": "GOS (Galactooligosaccharide)", "type": "prebiotic" },
-        { "id": "lactobacillus_group", "label_vi": "Nhóm Lactobacillus", "type": "probiotic" },
-        { "id": "bifidobacterium_group", "label_vi": "Nhóm Bifidobacterium", "type": "probiotic" }
+  "$schema": "https://smartnutri.org/schemas/bioactive-cheminformatics-v3.6",
+  "version": "3.6.0",
+  "description": "Production-grade Cheminformatics & Ontological Specification for Bioactives.",
+
+  "taxonomy": {
+    "B06.13": {
+      "label_vi": "Stilbene",
+      "label_en": "Stilbenes",
+      "items": [
+        {
+          "item_key": "BIO_resveratrol",
+          "label_vi": "Resveratrol",
+          "label_en": "Resveratrol",
+          
+          "chemical_identifiers": {
+            "smiles": "C1=CC(=CC=C1/C=C/C2=CC(=CC(=C2)O)O)O",
+            "inchikey": "YMKUCOIGSHSVIZ-XQRUZZGBSA-N",
+            "cas_number": "501-36-0",
+            "pubchem_cid": 445154
+          },
+
+          "molecular_properties": {
+            "molecular_weight": 228.24,
+            "log_p": 3.1,
+            "hydrogen_bond_donors": 3,
+            "hydrogen_bond_acceptors": 3,
+            "topological_polar_surface_area": 60.7
+          },
+
+          "chemical_role": [
+            "ANTIOXIDANT",
+            "PHYTOALEXIN"
+          ],
+
+          "ontology_links": {
+            "chebi": "CHEBI:27881",
+            "mesh": "D000077264",
+            "classyfire": "CHEMONTID:0000392"
+          },
+
+          "relationships": [
+            { 
+              "predicate": "originated_from_biosynthetic_pathway", 
+              "object_target": "PATHWAY_phenylpropanoid",
+              "enzyme_trigger": "ENZYME_stilbene_synthase"
+            }
+          ]
+        }
       ]
     }
-  },
-  "total_groups": 7,
-  "total_subgroups": 26
+  }
 }
