@@ -1,107 +1,70 @@
 {
-  "$schema": "https://smartnutri.org/schemas/standards",
-  "version": "1.0.0",
-  "description": "Nutrients Ingredient Taxonomy — phân loại 5 nhóm chính (N00–N04) theo IOM/USDA. Đồng bộ với standards/nutrient-units.json, nutrient-rda.json, nutrient-ul.json, nutrient-dv.json.",
-  "source": "Institute of Medicine (IOM), USDA Nutrient Database",
-  "note": "sn:taxonomyCode (vd: N02) là trường phân loại bổ sung, KHÔNG thay thế Entity ID (NUT_YYYYMMDD_SEQ6). Mỗi entity NUT_ nên gắn đúng 1 taxonomyCode.",
-
+  "$schema": "https://smartnutri.org/schemas/advanced-ontology-relationships-v3.2",
+  "version": "3.2.0",
+  "description": "Multi-dimensional Nutrients Taxonomy with Semantic Graph Relationships.",
+  
   "taxonomy": {
-    "N00": {
-      "label_vi": "Năng lượng",
-      "label_en": "Energy",
-      "items": [
-        { "code": "N00.01", "label_vi": "Năng lượng", "label_en": "Energy", "nutrient_key": "NUT_energy" }
-      ]
-    },
-    "N01": {
-      "label_vi": "Đa lượng",
-      "label_en": "Macronutrients",
-      "items": [
-        { "code": "N01.01", "label_vi": "Tổng Carbohydrate", "label_en": "Total Carbohydrate", "nutrient_key": "NUT_carbohydrate_total" },
-        { "code": "N01.02", "label_vi": "Tổng Đường", "label_en": "Total Sugars", "nutrient_key": "NUT_sugar_total" },
-        { "code": "N01.03", "label_vi": "Tinh bột", "label_en": "Starch", "nutrient_key": "NUT_starch" },
-        { "code": "N01.04", "label_vi": "Chất xơ", "label_en": "Dietary Fiber", "nutrient_key": "NUT_fiber" },
-        { "code": "N01.05", "label_vi": "Protein", "label_en": "Protein", "nutrient_key": "NUT_protein" },
-        { "code": "N01.06", "label_vi": "Tổng Chất béo", "label_en": "Total Fat", "nutrient_key": "NUT_fat_total" }
-      ]
-    },
-    "N02": {
-      "label_vi": "Vitamin",
-      "label_en": "Vitamins",
-      "items": [
-        { "code": "N02.01", "label_vi": "Vitamin A", "label_en": "Vitamin A", "nutrient_key": "NUT_vitamin_a", "solubility": "fat_soluble" },
-        { "code": "N02.02", "label_vi": "Vitamin D", "label_en": "Vitamin D", "nutrient_key": "NUT_vitamin_d", "solubility": "fat_soluble" },
-        { "code": "N02.03", "label_vi": "Vitamin E", "label_en": "Vitamin E", "nutrient_key": "NUT_vitamin_e", "solubility": "fat_soluble" },
-        { "code": "N02.04", "label_vi": "Vitamin K", "label_en": "Vitamin K", "nutrient_key": "NUT_vitamin_k", "solubility": "fat_soluble" },
-        { "code": "N02.05", "label_vi": "Vitamin C", "label_en": "Vitamin C", "nutrient_key": "NUT_vitamin_c", "solubility": "water_soluble" },
-        { "code": "N02.06", "label_vi": "Vitamin B1 (Thiamine)", "label_en": "Vitamin B1 (Thiamine)", "nutrient_key": "NUT_vitamin_b1", "solubility": "water_soluble" },
-        { "code": "N02.07", "label_vi": "Vitamin B2 (Riboflavin)", "label_en": "Vitamin B2 (Riboflavin)", "nutrient_key": "NUT_vitamin_b2", "solubility": "water_soluble" },
-        { "code": "N02.08", "label_vi": "Vitamin B3 (Niacin)", "label_en": "Vitamin B3 (Niacin)", "nutrient_key": "NUT_vitamin_b3", "solubility": "water_soluble" },
-        { "code": "N02.09", "label_vi": "Vitamin B5 (Pantothenic Acid)", "label_en": "Vitamin B5 (Pantothenic Acid)", "nutrient_key": "NUT_vitamin_b5", "solubility": "water_soluble" },
-        { "code": "N02.10", "label_vi": "Vitamin B6", "label_en": "Vitamin B6", "nutrient_key": "NUT_vitamin_b6", "solubility": "water_soluble" },
-        { "code": "N02.11", "label_vi": "Vitamin B7 (Biotin)", "label_en": "Vitamin B7 (Biotin)", "nutrient_key": "NUT_vitamin_b7", "solubility": "water_soluble" },
-        { "code": "N02.12", "label_vi": "Vitamin B9 (Folate)", "label_en": "Vitamin B9 (Folate)", "nutrient_key": "NUT_vitamin_b9", "solubility": "water_soluble" },
-        { "code": "N02.13", "label_vi": "Vitamin B12 (Cobalamin)", "label_en": "Vitamin B12 (Cobalamin)", "nutrient_key": "NUT_vitamin_b12", "solubility": "water_soluble" }
-      ]
-    },
     "N03": {
       "label_vi": "Khoáng chất",
-      "label_en": "Minerals",
       "items": [
-        { "code": "N03.01", "label_vi": "Calcium", "label_en": "Calcium", "nutrient_key": "NUT_calcium", "mineral_class": "macro" },
-        { "code": "N03.02", "label_vi": "Sắt", "label_en": "Iron", "nutrient_key": "NUT_iron", "mineral_class": "trace" },
-        { "code": "N03.03", "label_vi": "Magie", "label_en": "Magnesium", "nutrient_key": "NUT_magnesium", "mineral_class": "macro" },
-        { "code": "N03.04", "label_vi": "Phốt pho", "label_en": "Phosphorus", "nutrient_key": "NUT_phosphorus", "mineral_class": "macro" },
-        { "code": "N03.05", "label_vi": "Kali", "label_en": "Potassium", "nutrient_key": "NUT_potassium", "mineral_class": "macro" },
-        { "code": "N03.06", "label_vi": "Natri", "label_en": "Sodium", "nutrient_key": "NUT_sodium", "mineral_class": "macro" },
-        { "code": "N03.07", "label_vi": "Kẽm", "label_en": "Zinc", "nutrient_key": "NUT_zinc", "mineral_class": "trace" },
-        { "code": "N03.08", "label_vi": "Đồng", "label_en": "Copper", "nutrient_key": "NUT_copper", "mineral_class": "trace" },
-        { "code": "N03.09", "label_vi": "Mangan", "label_en": "Manganese", "nutrient_key": "NUT_manganese", "mineral_class": "trace" },
-        { "code": "N03.10", "label_vi": "Selen", "label_en": "Selenium", "nutrient_key": "NUT_selenium", "mineral_class": "trace" },
-        { "code": "N03.11", "label_vi": "Iốt", "label_en": "Iodine", "nutrient_key": "NUT_iodine", "mineral_class": "trace" },
-        { "code": "N03.12", "label_vi": "Crom", "label_en": "Chromium", "nutrient_key": "NUT_chromium", "mineral_class": "trace" },
-        { "code": "N03.13", "label_vi": "Molybden", "label_en": "Molybdenum", "nutrient_key": "NUT_molybdenum", "mineral_class": "trace" },
-        { "code": "N03.14", "label_vi": "Lưu huỳnh", "label_en": "Sulfur", "nutrient_key": "NUT_sulfur", "mineral_class": "macro" },
-        { "code": "N03.15", "label_vi": "Clorua", "label_en": "Chloride", "nutrient_key": "NUT_chloride", "mineral_class": "macro" },
-        { "code": "N03.16", "label_vi": "Florua", "label_en": "Fluoride", "nutrient_key": "NUT_fluoride", "mineral_class": "trace" }
-      ]
-    },
-    "N04": {
-      "label_vi": "Acid amin thiết yếu (EAAs)",
-      "label_en": "Essential Amino Acids (EAAs)",
-      "items": [
-        { "code": "N04.01", "label_vi": "Histidine", "label_en": "Histidine", "nutrient_key": "NUT_histidine" },
-        { "code": "N04.02", "label_vi": "Isoleucine", "label_en": "Isoleucine", "nutrient_key": "NUT_isoleucine" },
-        { "code": "N04.03", "label_vi": "Leucine", "label_en": "Leucine", "nutrient_key": "NUT_leucine" },
-        { "code": "N04.04", "label_vi": "Lysine", "label_en": "Lysine", "nutrient_key": "NUT_lysine" },
-        { "code": "N04.05", "label_vi": "Methionine", "label_en": "Methionine", "nutrient_key": "NUT_methionine" },
-        { "code": "N04.06", "label_vi": "Phenylalanine", "label_en": "Phenylalanine", "nutrient_key": "NUT_phenylalanine" },
-        { "code": "N04.07", "label_vi": "Threonine", "label_en": "Threonine", "nutrient_key": "NUT_threonine" },
-        { "code": "N04.08", "label_vi": "Tryptophan", "label_en": "Tryptophan", "nutrient_key": "NUT_tryptophan" },
-        { "code": "N04.09", "label_vi": "Valine", "label_en": "Valine", "nutrient_key": "NUT_valine" }
+        { 
+          "code": "N03.02", 
+          "nutrient_key": "NUT_iron_total", 
+          "mineral_class": "trace",
+          "ontology_ids": { "chebi": "CHEBI:24873" },
+          "chemical_subforms": {
+            "HEME_IRON": { 
+              "nutrient_key": "NUT_iron_heme", 
+              "ontology_id": "CHEBI:30413",
+              "relationships": [
+                { 
+                  "predicate": "is_subform_of", 
+                  "object_target": "NUT_iron_total",
+                  "inheritance_rules": ["RDA_contribution", "toxicity_limits"]
+                }
+              ]
+            },
+            "NON_HEME_IRON": { 
+              "nutrient_key": "NUT_iron_non_heme", 
+              "ontology_id": "CHEBI:29033",
+              "relationships": [
+                { "predicate": "is_subform_of", "object_target": "NUT_iron_total" },
+                { 
+                  "predicate": "antagonized_by", 
+                  "object_target": "NUT_calcium", 
+                  "linked_interaction_id": "INT_042_ca_iron_advanced" 
+                }
+              ]
+            }
+          },
+          "relationships": [
+            { 
+              "predicate": "required_for_process", 
+              "object_target": "METABOLISM_erythropoiesis",
+              "ontology_ref": "GO:0042552" 
+            },
+            {
+              "predicate": "deficiency_causes_symptom",
+              "object_target": "SYMPTOM_fatigue",
+              "ontology_ref": "HP:0012378"
+            }
+          ]
+        },
+        { 
+          "code": "N03.06", 
+          "nutrient_key": "NUT_sodium", 
+          "mineral_class": "macro",
+          "ontology_ids": { "chebi": "CHEBI:26708" },
+          "relationships": [
+            { 
+              "predicate": "elevates_biomarker", 
+              "object_target": "BIOMARKER_systolic_bp",
+              "clinical_significance": "HIGH",
+              "mathematical_gradient": "POSITIVE"
+            }
+          ]
+        }
       ]
     }
-  },
-
-  "summary": {
-    "total_major_groups": 5,
-    "groups_list": ["N00", "N01", "N02", "N03", "N04"],
-    "total_items": 1,
-    "by_group": {
-      "N00": 1,
-      "N01": 6,
-      "N02": 13,
-      "N03": 16,
-      "N04": 9
-    },
-    "grand_total": 45
-  },
-
-  "cross_reference": {
-    "units": "standards/nutrient-units.json",
-    "rda": "standards/nutrient-rda.json",
-    "ul": "standards/nutrient-ul.json",
-    "dv": "standards/nutrient-dv.json",
-    "amdr": "standards/nutrient_amdr.json"
   }
 }
