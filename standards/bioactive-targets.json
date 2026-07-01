@@ -1,69 +1,66 @@
 {
-  "$schema": "https://smartnutri.org/schemas/standards",
-  "version": "1.0.0",
-  "description": "Cơ quan/hệ thống sinh học đích mà từng nhóm hoạt chất sinh học (Bioactive) tác động đến — dùng để xây dựng quan hệ sn:targetOrgan",
-  "source": "Tổng hợp từ PubMed reviews, Phenol-Explorer, Linus Pauling Institute",
+  "$schema": "https://smartnutri.org/schemas/bioactive-targets-v3.4",
+  "version": "3.4.0",
+  "description": "Clinical-grade Bioactive-to-Target Contextual Mapping Schema.",
+
   "targets": {
-    "flavonoid": {
-      "label_vi": "Flavonoid",
-      "primary_targets": [
-        { "organ": "Tim mạch", "effect": "Chống oxy hóa, cải thiện chức năng nội mô mạch máu", "evidence": "A" },
-        { "organ": "Não", "effect": "Bảo vệ thần kinh, cải thiện nhận thức", "evidence": "B" },
-        { "organ": "Hệ miễn dịch", "effect": "Điều hòa phản ứng viêm", "evidence": "B" }
-      ]
-    },
-    "carotenoid": {
-      "label_vi": "Carotenoid",
-      "primary_targets": [
-        { "organ": "Mắt (võng mạc)", "effect": "Lutein & Zeaxanthin bảo vệ điểm vàng, giảm thoái hóa hoàng điểm", "evidence": "A" },
-        { "organ": "Da", "effect": "Chống oxy hóa, bảo vệ khỏi tia UV", "evidence": "B" },
-        { "organ": "Hệ miễn dịch", "effect": "Beta-carotene hỗ trợ miễn dịch qua chuyển hóa Vitamin A", "evidence": "A" }
-      ]
-    },
-    "glucosinolate": {
-      "label_vi": "Glucosinolate",
-      "primary_targets": [
-        { "organ": "Gan", "effect": "Sulforaphane kích hoạt enzyme giải độc pha II (Nrf2 pathway)", "evidence": "A" },
-        { "organ": "Tế bào (chống ung thư)", "effect": "Indole-3-carbinol điều hòa chuyển hóa estrogen", "evidence": "B" }
-      ]
-    },
-    "terpenoid": {
-      "label_vi": "Terpenoid",
-      "primary_targets": [
-        { "organ": "Hệ tiêu hóa", "effect": "Monoterpene (Limonene) hỗ trợ tiêu hóa, kháng viêm", "evidence": "C" },
-        { "organ": "Hệ thần kinh", "effect": "Một số terpenoid có tác dụng an thần nhẹ", "evidence": "C" }
-      ]
-    },
-    "alkaloid_purine": {
-      "label_vi": "Alkaloid Purine (Caffeine)",
-      "primary_targets": [
-        { "organ": "Hệ thần kinh trung ương", "effect": "Kích thích tỉnh táo qua đối kháng thụ thể Adenosine", "evidence": "A" },
-        { "organ": "Tim mạch", "effect": "Tăng nhịp tim, tăng huyết áp tạm thời ở liều cao", "evidence": "A" },
-        { "organ": "Chuyển hóa", "effect": "Tăng nhẹ tỉ lệ trao đổi chất (thermogenesis)", "evidence": "B" }
-      ]
-    },
-    "organosulfur_allicin": {
-      "label_vi": "Allicin (từ Tỏi)",
-      "primary_targets": [
-        { "organ": "Tim mạch", "effect": "Giảm cholesterol LDL, kháng kết tập tiểu cầu", "evidence": "B" },
-        { "organ": "Hệ miễn dịch", "effect": "Kháng khuẩn, kháng virus phổ rộng", "evidence": "B" }
-      ]
-    },
-    "prebiotic": {
-      "label_vi": "Prebiotic (Inulin, FOS, GOS)",
-      "primary_targets": [
-        { "organ": "Đại tràng", "effect": "Nuôi dưỡng vi khuẩn có lợi, tăng sản xuất SCFA (Short-Chain Fatty Acids)", "evidence": "A" },
-        { "organ": "Hệ miễn dịch ruột", "effect": "Tăng cường hàng rào niêm mạc ruột", "evidence": "B" }
-      ]
-    },
-    "probiotic": {
-      "label_vi": "Probiotic (Lactobacillus, Bifidobacterium)",
-      "primary_targets": [
-        { "organ": "Đại tràng", "effect": "Cân bằng hệ vi sinh đường ruột", "evidence": "A" },
-        { "organ": "Hệ miễn dịch", "effect": "Điều hòa đáp ứng miễn dịch qua trục ruột-miễn dịch", "evidence": "B" },
-        { "organ": "Não (trục ruột-não)", "effect": "Ảnh hưởng tâm trạng qua trục Gut-Brain Axis", "evidence": "C" }
+    "B07.10": {
+      "node_metadata": {
+        "label_vi": "Alkaloid Xanthine (Caffeine...)",
+        "label_en": "Xanthine Alkaloids"
+      },
+      "target_mappings": [
+        {
+          "target_id": "BIOMARKER_heart_rate",
+          "target_type": "BIOMARKER",
+          "relationships": [
+            {
+              "predicate": "modulates_biomarker",
+              "effect_direction": "POSITIVE",
+              "effect_strength": "STRONG",
+              "dose_dependency": {
+                "threshold_value": 200,
+                "unit": "mg",
+                "frequency": "SINGLE_DOSE",
+                "condition": "EXCEEDED",
+                "outcome_state": "TACHYCARDIA_RISK"
+              },
+              "population_context": {
+                "critical_groups": ["PATIENTS_WITH_ARRHYTHMIA", "PREGNANT_WOMEN"],
+                "sensitivity_multiplier": 1.5
+              },
+              "evidence_level": "A",
+              "references": [
+                { "source": "PubMed", "id": "PMID_31163124", "url": "https://pubmed.ncbi.nlm.nih.gov/31163124" }
+              ],
+              "mechanism_note": "Ứch chế Phosphodiesterase dẫn đến tích lũy cAMP, kích thích trực tiếp nút xoang tim."
+            }
+          ]
+        },
+        {
+          "target_id": "ANAT_central_nervous_system",
+          "target_type": "ANATOMY",
+          "relationships": [
+            {
+              "predicate": "stimulates_system",
+              "effect_direction": "POSITIVE",
+              "effect_strength": "MODERATE",
+              "dose_dependency": {
+                "optimum_range_min": 50,
+                "optimum_range_max": 100,
+                "unit": "mg"
+              },
+              "population_context": {
+                "excluded_groups": ["INFANTS"]
+              },
+              "evidence_level": "A",
+              "references": [
+                { "source": "DOI", "id": "10.1016/j.neuro.2025.01.002" }
+              ]
+            }
+          ]
+        }
       ]
     }
-  },
-  "evidence_note": "Xem standards/evidence-levels.json để hiểu thang đo A/B/C/D"
+  }
 }
