@@ -1,53 +1,72 @@
 {
-  "$schema": "https://smartnutri.org/schemas/standards",
-  "version": "1.0.0",
-  "description": "Quy tắc chuyển đổi Meal Score (0-100, từ meal_scoring_rules.json) thành Grade chữ (A-E) — tương tự Nutri-Score EU, dùng hiển thị trực quan cho người dùng.",
-  "source": "Lấy cảm hứng từ Nutri-Score (EU), Health Star Rating (Úc)",
+  "$schema": "https://smartnutri.org/schemas/advanced-meal-governance-v2.4",
+  "version": "2.4.0",
+  "description": "SmartNutri Core Infrastructure, Mathematical Scoring, Conflict Resolution & Quality Audit Engine",
+  "last_updated": "2026-07-01",
 
-  "grade_scale": {
-    "description_vi": "Thang điểm chữ A (tốt nhất) đến E (kém nhất)",
-    "grades": [
-      { "grade": "A", "score_min": 85, "score_max": 100, "label_vi": "Xuất sắc", "label_en": "Excellent", "color": "#1a7f37", "icon": "🟢" },
-      { "grade": "B", "score_min": 70, "score_max": 84,  "label_vi": "Tốt", "label_en": "Good", "color": "#3fb950", "icon": "🟢" },
-      { "grade": "C", "score_min": 50, "score_max": 69,  "label_vi": "Trung bình", "label_en": "Fair", "color": "#e3b341", "icon": "🟡" },
-      { "grade": "D", "score_min": 30, "score_max": 49,  "label_vi": "Kém", "label_en": "Poor", "color": "#f0883e", "icon": "🟠" },
-      { "grade": "E", "score_min": 0,  "score_max": 29,  "label_vi": "Rất kém", "label_en": "Very Poor", "color": "#f85149", "icon": "🔴" }
-    ]
-  },
-
-  "automatic_grade_e": {
-    "description_vi": "Tự động xếp E bất kể điểm số nếu vi phạm điều kiện nghiêm trọng",
-    "conditions": [
-      { "condition": "allergen_penalty_triggered", "reason": "Chứa allergen người dùng dị ứng" },
-      { "condition": "ul_exceeded_count >= 3", "reason": "Vượt UL từ 3 nutrient trở lên" },
-      { "condition": "contraindicated_drug_interaction", "reason": "Tương tác chống chỉ định với thuốc đang dùng" }
-    ]
-  },
-
-  "grade_modifiers": {
-    "description_vi": "Điều chỉnh grade theo bối cảnh đặc biệt của người dùng",
-    "modifiers": [
-      { "context": "pregnant", "rule": "Hạ 1 cấp nếu chứa nguyên liệu trong danh sách chống chỉ định thai kỳ" },
-      { "context": "diabetic", "rule": "Hạ 1 cấp nếu Glycemic Load > 20" },
-      { "context": "hypertension", "rule": "Hạ 1 cấp nếu Sodium > 40% DV trong 1 bữa" },
-      { "context": "ckd", "rule": "Hạ 1 cấp nếu Potassium hoặc Phosphorus vượt ngưỡng CKD an toàn" }
-    ]
-  },
-
-  "display_format": {
-    "show_grade": true,
-    "show_score": true,
-    "show_breakdown": true,
-    "example": {
-      "grade": "B",
-      "score": 78,
-      "label_vi": "Tốt",
-      "breakdown_visible": ["macronutrient_balance_score", "micronutrient_adequacy_score", "fiber_score"]
+  "----------------------------------------------------------------": "1. MATHEMATICAL SCORING & REWARD MATRIX (Mô hình toán học chấm điểm)",
+  "scoring_math_engine": {
+    "score_components": {
+      "COMP_macro_ratio": { "description": "Độ lệch phân bổ Carbs:Protein:Fat mục tiêu", "data_type": "float", "range": "[0, 100]" },
+      "COMP_micro_adequacy": { "description": "Tỷ lệ phủ đầy các vi chất thuộc Tier 1 và Tier 2", "data_type": "float", "range": "[0, 100]" },
+      "COMP_clinical_safety": { "description": "Điểm trừ dựa trên mức độ vi phạm các trần độc tính (UL) hoặc cảnh báo bệnh lý", "data_type": "float", "range": "[-100, 0]" },
+      "COMP_behavioral_match": { "description": "Mức độ phù hợp với trình tự ăn (meal_sequence) và giờ giấc sinh hoạt", "data_type": "float", "range": "[0, 100]" }
+    },
+    "score_weights": {
+      "clinical_tier":    { "COMP_clinical_safety": 0.50, "COMP_micro_adequacy": 0.25, "COMP_macro_ratio": 0.15, "COMP_behavioral_match": 0.10 },
+      "fitness_tier":     { "COMP_macro_ratio": 0.40, "COMP_micro_adequacy": 0.30, "COMP_behavioral_match": 0.20, "COMP_clinical_safety": 0.10 },
+      "preventive_tier":  { "COMP_micro_adequacy": 0.40, "COMP_clinical_safety": 0.30, "COMP_macro_ratio": 0.15, "COMP_behavioral_match": 0.15 }
+    },
+    "reward_rules": {
+      "agent_reinforcement_learning": {
+        "positive_rewards": [
+          { "trigger": "user_biomarker_improved_HbA1c", "reward_value": 500, "action": "anchor_current_macro_distribution" },
+          { "trigger": "user_menu_adherence_streak_7days", "reward_value": 100, "action": "lock_current_food_diversity_index" }
+        ],
+        "negative_penalties": [
+          { "trigger": "user_rejects_meal_due_to_taste", "penalty_value": -50, "action": "decay_food_node_palatability_score" }
+        ]
+      }
     }
   },
 
-  "comparison_reference": {
-    "nutri_score_eu": { "A": "Tốt nhất", "B": "Tốt", "C": "Trung bình", "D": "Kém", "E": "Kém nhất" },
-    "note": "SmartNutri Grade tương đương Nutri-Score nhưng tính dựa trên RDA cá nhân hóa thay vì giá trị cố định trên 100g"
+  "----------------------------------------------------------------": "2. CLINICAL CONFLICT RESOLUTION (Bộ giải quyết xung đột logic y khoa)",
+  "conflict_resolution": {
+    "priority_matrix": {
+      "rules": [
+        { "conflict_id": "DIABETIC_VS_CKD", "condition_1": "COND_diabetic", "condition_2": "COND_ckd_stage3_4", "resolution_strategy": "OVERRIDE_BY_CONDITION_2", "justification": "Bệnh thận mạn giai đoạn muộn yêu cầu thắt chặt Kali/Phốt pho/Đạm để tránh suy thận cấp, mục tiêu này nguy cấp hơn kiểm soát đường huyết ngắn hạn." },
+        { "conflict_id": "PREGNANT_VS_WEIGHTLOSS", "condition_1": "PHYS_pregnant", "condition_2": "GOAL_weight_loss", "resolution_strategy": "ABORT_CONDITION_2", "justification": "Tuyệt đối không áp dụng thuật toán thâm hụt calo (Caloric deficit) cho phụ nữ mang thai." }
+      ],
+      "fallback_default": "SAFETY_FIRST_THEN_NUTRIENT_ADEQUACY"
+    }
+  },
+
+  "----------------------------------------------------------------": "3. POPULATION & KNOWLEDGE BASE BASELINES (Dữ liệu quần thể gốc)",
+  "population_profiles": {
+    "standards_by_demographics": {
+      "VN_ADULT_MALE": { "age_range": [19, 50], "base_dri_ref": "NIN_2020_M19", "default_activity_multiplier": 1.2 },
+      "VN_ADULT_FEMALE": { "age_range": [19, 50], "base_dri_ref": "NIN_2020_F19", "default_activity_multiplier": 1.15 },
+      "VN_PREGNANT_TRIMESTER3": { "age_range": [15, 49], "base_dri_ref": "NIN_2020_P3", "extra_caloric_allowance_kcal": 450 }
+    }
+  },
+
+  "----------------------------------------------------------------": "4. GOVERNANCE, VERSIONING & AUDIT (Quản trị y khoa, Phiên bản & Kiểm toán)",
+  "versioned_guidelines": {
+    "active_knowledge_bases": [
+      { "guideline_id": "NIN_VN_2020", "version": "1.2.0", "status": "PRIMARY", "scope": "Vietnamese_Local_Population" },
+      { "guideline_id": "WHO_NUTRITION_2023", "version": "3.0.0", "status": "SHADOW_RUNNING", "note": "Chạy ngầm để so sánh độ lệch thuật toán trước khi cập nhật chính thức." },
+      { "guideline_id": "IOM_DRI_2001_2005", "version": "4.1.0", "status": "FALLBACK", "scope": "Micronutrient_UL_Thresholds" }
+    ]
+  },
+  "quality_audit": {
+    "automated_qa_pipeline": {
+      "run_frequency": "Every_Menu_Generation_Batch",
+      "assertions": [
+        { "assert_id": "QA_01_allergic_leak", "expression": "generated_menu.contains(user.allergens) == false", "severity": "CRITICAL_HALT" },
+        { "assert_id": "QA_02_caloric_overflow", "expression": "abs(generated_menu.total_calories - target.calories) <= 100", "severity": "WARNING_RE_SOLVE" },
+        { "assert_id": "QA_03_macro_mathematics", "expression": "abs((menu.carbs*4 + menu.protein*4 + menu.fat*9) - menu.total_calories) <= 5", "severity": "CRITICAL_HALT" }
+      ],
+      "audit_log_routing": "db://logs/clinical_audit"
+    }
   }
 }
